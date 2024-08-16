@@ -1,0 +1,37 @@
+@import '../../assets/styles/variables.scss'; // Importa las variables de color
+
+.topbar {
+  background-color: $light-green-400; // Fondo oscuro como en el SideBar
+  color: $white; // Color del texto
+  
+  .topbar-button {
+    border-color: $green-900; // Color del borde del botón
+    color: $white; // Color del texto del botón
+    background-color: $green-800;
+
+    &:hover {
+      background-color: $green-700; // Color de fondo al pasar el ratón
+      border-color: $green-900; // Color del borde al pasar el ratón
+    }
+
+    .topbar-icon {
+      font-size: 1.5rem; // Aumenta el tamaño del ícono
+    }
+  }
+
+  .topbar-brand {
+    color: $black-1000; // Color del texto de la marca
+    font-size: 1.5rem; // Tamaño del texto de la marca
+  }
+
+  .topbar-login {
+    border-color: $green-900; // Color del borde del botón de login
+    color: $white; // Color del texto del botón de login
+    background-color: $green-800;
+
+    &:hover {
+      background-color: $green-700; // Color de fondo al pasar el ratón
+      border-color: $green-900; // Color del borde al pasar el ratón
+    }
+  }
+}

@@ -1,0 +1,49 @@
+// SideBar.scss
+@import '../../assets/styles/variables.scss'; // Ajusta la ruta según tu estructura de carpetas
+
+.sidebar {
+  width: 0;
+  transition: width 0.3s;
+  overflow-x: hidden;
+  background-color: $light-green-50; // Color de fondo de la sidebar
+  height: 100vh;
+
+  &.open {
+    width: 200px; // Ancho cuando está abierto
+  }
+
+  .nav-link {
+    color: $green-800; // Color del texto de los enlaces
+    display: flex;
+    align-items: center;
+    padding: 10px 15px; // Espaciado para los enlaces
+
+    &:hover {
+      color: $green-1000; // Color del texto al pasar el ratón
+    }
+
+    &.active {
+      color: $green-1000; // Color del texto para el enlace activo
+    }
+  }
+
+  .submenu {
+    margin-left: 20px; // Desplazamiento hacia la derecha para los submenús
+    padding-left: 0; // Elimina el padding adicional en los submenús
+    border-left: 2px solid $black-600; // Línea de separación para submenús
+    margin-bottom: 10px; // Espacio entre submenús
+  }
+
+  .submenu .nav-link {
+    color: $green-800; // Color del texto en el submenú
+
+    &:hover {
+      color: $green-1000; // Color del texto en el submenú al pasar el ratón
+    }
+  }
+   // Estilo para los íconos
+   .sidebar-icon {
+    font-size: 1.20rem; // Tamaño de los íconos
+    margin-right: 10px; // Espacio entre el ícono y el texto
+  }
+}

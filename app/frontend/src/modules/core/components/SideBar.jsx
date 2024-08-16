@@ -7,6 +7,7 @@ import {
   FaChevronUp 
 } from 'react-icons/fa';
 import { MdDevicesOther } from 'react-icons/md';
+import '../design-system/components/SideBar.scss';
 
 const SideBar = ({ isOpen }) => {
   const [openPatients, setOpenPatients] = useState(false);
@@ -17,120 +18,101 @@ const SideBar = ({ isOpen }) => {
   const toggleDevice = () => setOpenDevice(!openDevice);
   const toggleDashboard = () => setOpenDashboard(!openDashboard);
 
-  const submenuStyle = {
-    marginLeft: '20px', // Desplazamiento hacia la derecha para los submenús
-  };
-
   return (
-    <div
-      style={{
-        width: isOpen ? '250px' : '0',
-        transition: 'width 0.3s',
-        overflowX: 'hidden',
-        backgroundColor: '#343a40',
-        height: '100vh',
-        color: 'white'
-      }}
-    >
-      <Nav className="flex-column text-white p-3">
+    <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+      <Nav className="flex-column">
         <Nav.Item>
-          <Nav.Link className="text-white" href="#">
-            <FaUserCog /> Admin Panel
+          <Nav.Link href="#">
+            <FaUserCog className="sidebar-icon" /> Admin Panel
           </Nav.Link>
         </Nav.Item>
 
         {/* Patients Section */}
         <Nav.Item>
           <Nav.Link 
-            className="text-white d-flex justify-content-between align-items-center" 
+            className="d-flex align-items-center" 
             onClick={togglePatients}
             href="#"
           >
-            <div><FaUser /> Patients</div>
+            <FaUser className="sidebar-icon" /> Patients
             {openPatients ? <FaChevronUp /> : <FaChevronDown />}
           </Nav.Link>
+          {openPatients && (
+            <Nav className="flex-column submenu">
+              <Nav.Item>
+                <Nav.Link href="#">
+                  <FaUserPlus className="sidebar-icon" /> Add Patient
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link href="#">
+                  <FaRegEdit className="sidebar-icon" /> Edit Patient
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link href="#">
+                  <FaRegEye className="sidebar-icon" /> See Patient
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link 
+                  className="d-flex align-items-center" 
+                  onClick={toggleDashboard}
+                  href="#"
+                >
+                  <FaTachometerAlt className="sidebar-icon" /> Dashboard
+                  {openDashboard ? <FaChevronUp /> : <FaChevronDown />}
+                </Nav.Link>
+                {openDashboard && (
+                  <Nav className="flex-column submenu">
+                    <Nav.Item>
+                      <Nav.Link href="#">a</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link href="#">b</Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                )}
+              </Nav.Item>
+            </Nav>
+          )}
         </Nav.Item>
-        {openPatients && (
-          <Nav className="flex-column" style={submenuStyle}>
-            <Nav.Item>
-              <Nav.Link className="text-white" href="#">
-                <FaUserPlus /> Create New Patient
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link className="text-white" href="#">
-                <FaRegEdit /> Edit Patient
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link className="text-white" href="#">
-                <FaRegEye /> See Patient
-              </Nav.Link>
-            </Nav.Item>
-
-            {/* Dashboard Subsection */}
-            <Nav.Item>
-              <Nav.Link 
-                className="text-white d-flex justify-content-between align-items-center" 
-                onClick={toggleDashboard}
-                href="#"
-              >
-                <div><FaTachometerAlt /> Dashboard</div>
-                {openDashboard ? <FaChevronUp /> : <FaChevronDown />}
-              </Nav.Link>
-            </Nav.Item>
-            {openDashboard && (
-              <Nav className="flex-column" style={submenuStyle}>
-                <Nav.Item>
-                  <Nav.Link className="text-white" href="#">
-                    a
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link className="text-white" href="#">
-                    b
-                  </Nav.Link>
-                </Nav.Item>
-              </Nav>
-            )}
-          </Nav>
-        )}
 
         {/* Device Section */}
         <Nav.Item>
           <Nav.Link 
-            className="text-white d-flex justify-content-between align-items-center" 
+            className="d-flex align-items-center" 
             onClick={toggleDevice}
             href="#"
           >
-            <div><MdDevicesOther /> Device</div>
+            <MdDevicesOther className="sidebar-icon" /> Device
             {openDevice ? <FaChevronUp /> : <FaChevronDown />}
           </Nav.Link>
+          {openDevice && (
+            <Nav className="flex-column submenu">
+              <Nav.Item>
+                <Nav.Link href="#">
+                  <FaStethoscope className="sidebar-icon" /> Add Device
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link href="#">
+                  <FaRegEdit className="sidebar-icon" /> Edit Device
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link href="#">
+                  <FaRegEye className="sidebar-icon" /> See All Devices
+                </Nav.Link>
+              </Nav.Item>
+            </Nav>
+          )}
         </Nav.Item>
-        {openDevice && (
-          <Nav className="flex-column" style={submenuStyle}>
-            <Nav.Item>
-              <Nav.Link className="text-white" href="#">
-                <FaStethoscope /> Add Device
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link className="text-white" href="#">
-                <FaRegEdit /> Edit Device
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link className="text-white" href="#">
-                <FaRegEye /> See All Devices
-              </Nav.Link>
-            </Nav.Item>
-          </Nav>
-        )}
 
         {/* Personal Section */}
         <Nav.Item>
-          <Nav.Link className="text-white" href="#">
-            <FaUserFriends /> Personal
+          <Nav.Link href="#">
+            <FaUserFriends className="sidebar-icon" /> Personal
           </Nav.Link>
         </Nav.Item>
       </Nav>
