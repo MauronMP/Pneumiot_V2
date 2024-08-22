@@ -1,4 +1,4 @@
-const { SensorLog } = require('../models/SensorLog');  // Asegúrate de que la conexión a Sequelize y el modelo estén correctamente configurados
+const SensorLog = require('../models/SensorLog');
 
 const getAllSensorLogs = async () => {
     return await SensorLog.findAll();
@@ -8,14 +8,18 @@ const getSensorLogById = async (id) => {
     return await SensorLog.findByPk(id);
 };
 
-const createSensorLog = async (logData) => {
-    return await SensorLog.create(logData);
+const createSensorLog = async (board_id, sensor_id, log_message) => {
+    return await SensorLog.create({ board_id, sensor_id, log_message });
 };
 
-const updateSensorLog = async (id, logData) => {
+const updateSensorLog = async (id, board_id, sensor_id, log_message) => {
     const sensorLog = await SensorLog.findByPk(id);
     if (sensorLog) {
-        return await sensorLog.update(logData);
+        sensorLog.board_id = board_id;
+        sensorLog.sensor_id = sensor_id;
+        sensorLog.log_message = log_message;
+        await sensorLog.save();
+        return sensorLog;
     }
     return null;
 };

@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const sensorController = require('../../services/sensorService');
+const sensorService = require('../../services/sensorService');
 
-// Definir las rutas y asociarlas con los métodos del controlador
-router.get('/', sensorController.getAllSensors);
-router.get('/:id', sensorController.getSensorById);
-router.post('/', sensorController.createSensor);
-router.put('/:id', sensorController.updateSensor);
-router.delete('/:id', sensorController.deleteSensor);
+router.get('/', sensorService.getAllSensors);
+router.get('/:id', sensorService.getSensorById);
+router.post('/', sensorService.createSensor);
+router.put('/:id', sensorService.updateSensor);
+router.delete('/:id', sensorService.deleteSensor);
 
 module.exports = router;
