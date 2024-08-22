@@ -1,4 +1,4 @@
-const { IndexRate } = require('../models/IndexRate');
+const IndexRate = require('../models/IndexRate');
 
 const getAllIndexRates = async () => {
     return await IndexRate.findAll();
@@ -8,14 +8,17 @@ const getIndexRateById = async (id) => {
     return await IndexRate.findByPk(id);
 };
 
-const createIndexRate = async (indexRateData) => {
-    return await IndexRate.create(indexRateData);
+const createIndexRate = async (rate, rate_description) => {
+    return await IndexRate.create({ rate, rate_description });
 };
 
-const updateIndexRate = async (id, indexRateData) => {
+const updateIndexRate = async (id, rate, rate_description) => {
     const indexRate = await IndexRate.findByPk(id);
     if (indexRate) {
-        return await indexRate.update(indexRateData);
+        indexRate.rate = rate;
+        indexRate.rate_description = rate_description;
+        await indexRate.save();
+        return indexRate;
     }
     return null;
 };
