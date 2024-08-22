@@ -1,4 +1,4 @@
-const { ErrorLog } = require('../models/ErrorLog');
+const ErrorLog = require('../models/ErrorLog');
 
 const getAllErrorLogs = async () => {
     return await ErrorLog.findAll();
@@ -8,14 +8,16 @@ const getErrorLogById = async (id) => {
     return await ErrorLog.findByPk(id);
 };
 
-const createErrorLog = async (errorLogData) => {
-    return await ErrorLog.create(errorLogData);
+const createErrorLog = async (log_message) => {
+    return await ErrorLog.create({ log_message });
 };
 
-const updateErrorLog = async (id, errorLogData) => {
+const updateErrorLog = async (id, log_message) => {
     const errorLog = await ErrorLog.findByPk(id);
     if (errorLog) {
-        return await errorLog.update(errorLogData);
+        errorLog.log_message = log_message;
+        await errorLog.save();
+        return errorLog;
     }
     return null;
 };

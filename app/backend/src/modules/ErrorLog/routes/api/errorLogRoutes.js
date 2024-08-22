@@ -1,9 +1,8 @@
-// src/routes/errorLogRoutes.js
 const express = require('express');
 const router = express.Router();
 const errorLogController = require('../../controllers/errorLogController');
 
-// Definir las rutas y asociarlas con los métodos del controlador
+// Definición de las rutas y asociación con los métodos del controlador
 router.get('/', errorLogController.getAllErrorLogs);
 router.get('/:id', errorLogController.getErrorLogById);
 router.post('/', errorLogController.createErrorLog);
