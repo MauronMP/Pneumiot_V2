@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const measurementController = require('../../controllers/measurementController');
+const measurementService = require('../../services/measurementService');
 
-// Definir las rutas y asociarlas con los métodos del controlador
-router.get('/', measurementController.getAllMeasurements);
-router.get('/:id', measurementController.getMeasurementById);
-router.post('/', measurementController.createMeasurement);
-router.put('/:id', measurementController.updateMeasurement);
-router.delete('/:id', measurementController.deleteMeasurement);
+// Definir las rutas para el servicio de Measurement
+router.get('/', measurementService.getAllMeasurements);
+router.get('/:measurement_id', measurementService.getMeasurementById);
+router.post('/', measurementService.createMeasurement);
+router.put('/:measurement_id', measurementService.updateMeasurement);
+router.delete('/:measurement_id', measurementService.deleteMeasurement);
 
 module.exports = router;
