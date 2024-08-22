@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const hourlyAverageController = require('../../controllers/hourlyAverageController');
 
+// Definición de las rutas frontend
 router.get('/', hourlyAverageController.getAllHourlyAverages);
 router.get('/:id', hourlyAverageController.getHourlyAverageById);
 router.post('/', hourlyAverageController.createHourlyAverage);

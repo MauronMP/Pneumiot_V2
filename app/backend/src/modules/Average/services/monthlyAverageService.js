@@ -1,39 +1,37 @@
-const HourlyAverage = require('../models/HourlyAverage');
-const Patient = require('../../Patient/models/Patient');
-const Board = require('../../Board/models/Board');
-const Sensor = require('../../Sensor/models/Sensor');
-const IndexRate = require('../../IndexRate/models/IndexRate');
+const MonthlyAverage = require('../models/MonthlyAverage');
 
 const getAllMonthlyAverages = async () => {
-    return await MonthlyAverage.findAll({
-        include: [
-            { model: Patient, attributes: ['patient_id', 'patient_dni'] },
-            { model: Board, attributes: ['board_id', 'board_code'] },
-            { model: Sensor, attributes: ['sensor_id', 'sensor_code'] },
-            { model: IndexRate, attributes: ['index_rate_id', 'rate'] }
-        ]
-    });
+    return await MonthlyAverage.findAll();
 };
 
 const getMonthlyAverageById = async (id) => {
-    return await MonthlyAverage.findByPk(id, {
-        include: [
-            { model: Patient, attributes: ['patient_id', 'patient_dni'] },
-            { model: Board, attributes: ['board_id', 'board_code'] },
-            { model: Sensor, attributes: ['sensor_id', 'sensor_code'] },
-            { model: IndexRate, attributes: ['index_rate_id', 'rate'] }
-        ]
+    return await MonthlyAverage.findByPk(id);
+};
+
+const createMonthlyAverage = async (patient_id, board_id, sensor_id, average_measure, index_rate_id, month_number, year_date) => {
+    return await MonthlyAverage.create({
+        patient_id,
+        board_id,
+        sensor_id,
+        average_measure,
+        index_rate_id,
+        month_number,
+        year_date
     });
 };
 
-const createMonthlyAverage = async (monthlyAverageData) => {
-    return await MonthlyAverage.create(monthlyAverageData);
-};
-
-const updateMonthlyAverage = async (id, monthlyAverageData) => {
+const updateMonthlyAverage = async (id, patient_id, board_id, sensor_id, average_measure, index_rate_id, month_number, year_date) => {
     const monthlyAverage = await MonthlyAverage.findByPk(id);
     if (monthlyAverage) {
-        return await monthlyAverage.update(monthlyAverageData);
+        monthlyAverage.patient_id = patient_id;
+        monthlyAverage.board_id = board_id;
+        monthlyAverage.sensor_id = sensor_id;
+        monthlyAverage.average_measure = average_measure;
+        monthlyAverage.index_rate_id = index_rate_id;
+        monthlyAverage.month_number = month_number;
+        monthlyAverage.year_date = year_date;
+        await monthlyAverage.save();
+        return monthlyAverage;
     }
     return null;
 };

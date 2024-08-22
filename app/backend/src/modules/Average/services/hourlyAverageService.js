@@ -1,39 +1,37 @@
 const HourlyAverage = require('../models/HourlyAverage');
-const Patient = require('../../Patient/models/Patient');
-const Board = require('../../Board/models/Board');
-const Sensor = require('../../Sensor/models/Sensor');
-const IndexRate = require('../../IndexRate/models/IndexRate');
 
 const getAllHourlyAverages = async () => {
-    return await HourlyAverage.findAll({
-        include: [
-            { model: Patient, attributes: ['patient_id', 'patient_dni'] },
-            { model: Board, attributes: ['board_id', 'board_code'] },
-            { model: Sensor, attributes: ['sensor_id', 'sensor_code'] },
-            { model: IndexRate, attributes: ['index_rate_id', 'rate'] }
-        ]
-    });
+    return await HourlyAverage.findAll();
 };
 
 const getHourlyAverageById = async (id) => {
-    return await HourlyAverage.findByPk(id, {
-        include: [
-            { model: Patient, attributes: ['patient_id', 'patient_dni'] },
-            { model: Board, attributes: ['board_id', 'board_code'] },
-            { model: Sensor, attributes: ['sensor_id', 'sensor_code'] },
-            { model: IndexRate, attributes: ['index_rate_id', 'rate'] }
-        ]
+    return await HourlyAverage.findByPk(id);
+};
+
+const createHourlyAverage = async (patient_id, board_id, sensor_id, average_measure, index_rate_id, hour_time, day_date) => {
+    return await HourlyAverage.create({
+        patient_id,
+        board_id,
+        sensor_id,
+        average_measure,
+        index_rate_id,
+        hour_time,
+        day_date
     });
 };
 
-const createHourlyAverage = async (hourlyAverageData) => {
-    return await HourlyAverage.create(hourlyAverageData);
-};
-
-const updateHourlyAverage = async (id, hourlyAverageData) => {
+const updateHourlyAverage = async (id, patient_id, board_id, sensor_id, average_measure, index_rate_id, hour_time, day_date) => {
     const hourlyAverage = await HourlyAverage.findByPk(id);
     if (hourlyAverage) {
-        return await hourlyAverage.update(hourlyAverageData);
+        hourlyAverage.patient_id = patient_id;
+        hourlyAverage.board_id = board_id;
+        hourlyAverage.sensor_id = sensor_id;
+        hourlyAverage.average_measure = average_measure;
+        hourlyAverage.index_rate_id = index_rate_id;
+        hourlyAverage.hour_time = hour_time;
+        hourlyAverage.day_date = day_date;
+        await hourlyAverage.save();
+        return hourlyAverage;
     }
     return null;
 };

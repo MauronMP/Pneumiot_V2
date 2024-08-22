@@ -1,40 +1,37 @@
 const DailyAverage = require('../models/DailyAverage');
-const Patient = require('../../Patient/models/Patient');
-const Board = require('../../Board/models/Board');
-const Sensor = require('../../Sensor/models/Sensor');
-const IndexRate = require('../../IndexRate/models/IndexRate');
-
 
 const getAllDailyAverages = async () => {
-    return await DailyAverage.findAll({
-        include: [
-            { model: Patient, attributes: ['patient_id', 'patient_dni'] },
-            { model: Board, attributes: ['board_id', 'board_code'] },
-            { model: Sensor, attributes: ['sensor_id', 'sensor_code'] },
-            { model: IndexRate, attributes: ['index_rate_id', 'rate'] }
-        ]
-    });
+    return await DailyAverage.findAll();
 };
 
 const getDailyAverageById = async (id) => {
-    return await DailyAverage.findByPk(id, {
-        include: [
-            { model: Patient, attributes: ['patient_id', 'patient_dni'] },
-            { model: Board, attributes: ['board_id', 'board_code'] },
-            { model: Sensor, attributes: ['sensor_id', 'sensor_code'] },
-            { model: IndexRate, attributes: ['index_rate_id', 'rate'] }
-        ]
+    return await DailyAverage.findByPk(id);
+};
+
+const createDailyAverage = async (patient_id, board_id, sensor_id, average_measure, index_rate_id, daily_day, month_id) => {
+    return await DailyAverage.create({
+        patient_id,
+        board_id,
+        sensor_id,
+        average_measure,
+        index_rate_id,
+        daily_day,
+        month_id
     });
 };
 
-const createDailyAverage = async (dailyAverageData) => {
-    return await DailyAverage.create(dailyAverageData);
-};
-
-const updateDailyAverage = async (id, dailyAverageData) => {
+const updateDailyAverage = async (id, patient_id, board_id, sensor_id, average_measure, index_rate_id, daily_day, month_id) => {
     const dailyAverage = await DailyAverage.findByPk(id);
     if (dailyAverage) {
-        return await dailyAverage.update(dailyAverageData);
+        dailyAverage.patient_id = patient_id;
+        dailyAverage.board_id = board_id;
+        dailyAverage.sensor_id = sensor_id;
+        dailyAverage.average_measure = average_measure;
+        dailyAverage.index_rate_id = index_rate_id;
+        dailyAverage.daily_day = daily_day;
+        dailyAverage.month_id = month_id;
+        await dailyAverage.save();
+        return dailyAverage;
     }
     return null;
 };

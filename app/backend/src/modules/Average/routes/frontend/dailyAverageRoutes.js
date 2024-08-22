@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const dailyAverageController = require('../../controllers/dailyAverageController');
 
+// Definición de las rutas frontend
 router.get('/', dailyAverageController.getAllDailyAverages);
 router.get('/:id', dailyAverageController.getDailyAverageById);
 router.post('/', dailyAverageController.createDailyAverage);

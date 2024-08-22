@@ -3,7 +3,7 @@ const hourlyAverageService = require('../services/hourlyAverageService');
 const getAllHourlyAverages = async (req, res) => {
     try {
         const hourlyAverages = await hourlyAverageService.getAllHourlyAverages();
-        res.json(hourlyAverages);
+        res.status(200).json(hourlyAverages);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -11,11 +11,12 @@ const getAllHourlyAverages = async (req, res) => {
 
 const getHourlyAverageById = async (req, res) => {
     try {
-        const hourlyAverage = await hourlyAverageService.getHourlyAverageById(req.params.id);
+        const { id } = req.params;
+        const hourlyAverage = await hourlyAverageService.getHourlyAverageById(id);
         if (hourlyAverage) {
-            res.json(hourlyAverage);
+            res.status(200).json(hourlyAverage);
         } else {
-            res.status(404).json({ message: 'Hourly Average not found' });
+            res.status(404).json({ message: "Hourly Average not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -24,7 +25,8 @@ const getHourlyAverageById = async (req, res) => {
 
 const createHourlyAverage = async (req, res) => {
     try {
-        const newHourlyAverage = await hourlyAverageService.createHourlyAverage(req.body);
+        const { patient_id, board_id, sensor_id, average_measure, index_rate_id, hour_time, day_date } = req.body;
+        const newHourlyAverage = await hourlyAverageService.createHourlyAverage(patient_id, board_id, sensor_id, average_measure, index_rate_id, hour_time, day_date);
         res.status(201).json(newHourlyAverage);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -33,11 +35,13 @@ const createHourlyAverage = async (req, res) => {
 
 const updateHourlyAverage = async (req, res) => {
     try {
-        const updatedHourlyAverage = await hourlyAverageService.updateHourlyAverage(req.params.id, req.body);
+        const { id } = req.params;
+        const { patient_id, board_id, sensor_id, average_measure, index_rate_id, hour_time, day_date } = req.body;
+        const updatedHourlyAverage = await hourlyAverageService.updateHourlyAverage(id, patient_id, board_id, sensor_id, average_measure, index_rate_id, hour_time, day_date);
         if (updatedHourlyAverage) {
-            res.json(updatedHourlyAverage);
+            res.status(200).json(updatedHourlyAverage);
         } else {
-            res.status(404).json({ message: 'Hourly Average not found' });
+            res.status(404).json({ message: "Hourly Average not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -46,11 +50,12 @@ const updateHourlyAverage = async (req, res) => {
 
 const deleteHourlyAverage = async (req, res) => {
     try {
-        const result = await hourlyAverageService.deleteHourlyAverage(req.params.id);
+        const { id } = req.params;
+        const result = await hourlyAverageService.deleteHourlyAverage(id);
         if (result) {
-            res.json({ message: 'Hourly Average deleted successfully' });
+            res.status(200).json({ message: "Hourly Average deleted successfully" });
         } else {
-            res.status(404).json({ message: 'Hourly Average not found' });
+            res.status(404).json({ message: "Hourly Average not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });

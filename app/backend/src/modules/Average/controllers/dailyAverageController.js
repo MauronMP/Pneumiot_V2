@@ -3,7 +3,7 @@ const dailyAverageService = require('../services/dailyAverageService');
 const getAllDailyAverages = async (req, res) => {
     try {
         const dailyAverages = await dailyAverageService.getAllDailyAverages();
-        res.json(dailyAverages);
+        res.status(200).json(dailyAverages);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -11,11 +11,12 @@ const getAllDailyAverages = async (req, res) => {
 
 const getDailyAverageById = async (req, res) => {
     try {
-        const dailyAverage = await dailyAverageService.getDailyAverageById(req.params.id);
+        const { id } = req.params;
+        const dailyAverage = await dailyAverageService.getDailyAverageById(id);
         if (dailyAverage) {
-            res.json(dailyAverage);
+            res.status(200).json(dailyAverage);
         } else {
-            res.status(404).json({ message: 'Daily Average not found' });
+            res.status(404).json({ message: "Daily Average not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -24,7 +25,8 @@ const getDailyAverageById = async (req, res) => {
 
 const createDailyAverage = async (req, res) => {
     try {
-        const newDailyAverage = await dailyAverageService.createDailyAverage(req.body);
+        const { patient_id, board_id, sensor_id, average_measure, index_rate_id, daily_day, month_id } = req.body;
+        const newDailyAverage = await dailyAverageService.createDailyAverage(patient_id, board_id, sensor_id, average_measure, index_rate_id, daily_day, month_id);
         res.status(201).json(newDailyAverage);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -33,11 +35,13 @@ const createDailyAverage = async (req, res) => {
 
 const updateDailyAverage = async (req, res) => {
     try {
-        const updatedDailyAverage = await dailyAverageService.updateDailyAverage(req.params.id, req.body);
+        const { id } = req.params;
+        const { patient_id, board_id, sensor_id, average_measure, index_rate_id, daily_day, month_id } = req.body;
+        const updatedDailyAverage = await dailyAverageService.updateDailyAverage(id, patient_id, board_id, sensor_id, average_measure, index_rate_id, daily_day, month_id);
         if (updatedDailyAverage) {
-            res.json(updatedDailyAverage);
+            res.status(200).json(updatedDailyAverage);
         } else {
-            res.status(404).json({ message: 'Daily Average not found' });
+            res.status(404).json({ message: "Daily Average not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -46,11 +50,12 @@ const updateDailyAverage = async (req, res) => {
 
 const deleteDailyAverage = async (req, res) => {
     try {
-        const result = await dailyAverageService.deleteDailyAverage(req.params.id);
+        const { id } = req.params;
+        const result = await dailyAverageService.deleteDailyAverage(id);
         if (result) {
-            res.json({ message: 'Daily Average deleted successfully' });
+            res.status(200).json({ message: "Daily Average deleted successfully" });
         } else {
-            res.status(404).json({ message: 'Daily Average not found' });
+            res.status(404).json({ message: "Daily Average not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
