@@ -1,68 +1,67 @@
-const Sensor = require("../models/Sensor");
+const sensorService = require('../services/sensorService');
 
-// Obtener todos los sensores
-exports.getAllSensors = async (req, res) => {
-  try {
-    const sensors = await Sensor.findAll();
-    res.status(200).json(sensors);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Obtener un sensor por ID
-exports.getSensorById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const sensor = await Sensor.findByPk(id);
-    if (!sensor) {
-      return res.status(404).json({ message: "Sensor not found" });
+const getAllSensors = async (req, res) => {
+    try {
+        const sensors = await sensorService.getAllSensors();
+        res.json(sensors);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    res.status(200).json(sensor);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
 };
 
-// Crear un nuevo sensor
-exports.createSensor = async (req, res) => {
-  try {
-    const { sensor_code, sensor_type, unit_id, min_value, max_value } = req.body;
-    const newSensor = await Sensor.create({ sensor_code, sensor_type, unit_id, min_value, max_value });
-    res.status(201).json(newSensor);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Actualizar un sensor existente
-exports.updateSensor = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { sensor_code, sensor_type, unit_id, min_value, max_value } = req.body;
-    const updatedSensor = await Sensor.update(
-      { sensor_code, sensor_type, unit_id, min_value, max_value },
-      { where: { sensor_id: id } }
-    );
-    if (updatedSensor[0] === 0) {
-      return res.status(404).json({ message: "Sensor not found" });
+const getSensorById = async (req, res) => {
+    try {
+        const sensor = await sensorService.getSensorById(req.params.id);
+        if (sensor) {
+            res.json(sensor);
+        } else {
+            res.status(404).json({ message: 'Sensor not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    res.status(200).json({ message: "Sensor updated successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
 };
 
-// Eliminar un sensor
-exports.deleteSensor = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleted = await Sensor.destroy({ where: { sensor_id: id } });
-    if (!deleted) {
-      return res.status(404).json({ message: "Sensor not found" });
+const createSensor = async (req, res) => {
+    try {
+        const { sensor_code, sensor_type, unit_id, min_value, max_value } = req.body;
+        const newSensor = await sensorService.createSensor({ sensor_code, sensor_type, unit_id, min_value, max_value });
+        res.status(201).json(newSensor);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    res.status(200).json({ message: "Sensor deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+};
+
+const updateSensor = async (req, res) => {
+    try {
+        const updatedSensor = await sensorService.updateSensor(req.params.id, req.body);
+        if (updatedSensor) {
+            res.json(updatedSensor);
+        } else {
+            res.status(404).json({ message: 'Sensor not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const deleteSensor = async (req, res) => {
+    try {
+        const result = await sensorService.deleteSensor(req.params.id);
+        if (result) {
+            res.json({ message: 'Sensor deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'Sensor not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = {
+    getAllSensors,
+    getSensorById,
+    createSensor,
+    updateSensor,
+    deleteSensor
 };
