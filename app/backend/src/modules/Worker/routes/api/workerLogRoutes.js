@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const workerLogController = require('../../controllers/workerLogController');
+const workerRoleController = require('../../controllers/workerRoleController');
 
-// Definir las rutas y asociarlas con los métodos del controlador
-router.get('/', workerLogController.getAllWorkerLogs);
-router.get('/:id', workerLogController.getWorkerLogById);
-router.post('/', workerLogController.createWorkerLog);
-router.put('/:id', workerLogController.updateWorkerLog);
-router.delete('/:id', workerLogController.deleteWorkerLog);
+// Definición de las rutas y asociación con los métodos del controlador
+router.get('/', workerRoleController.getAllWorkerRoles);
+router.get('/:id', workerRoleController.getWorkerRoleById);
+router.post('/', workerRoleController.createWorkerRole);
+router.put('/:id', workerRoleController.updateWorkerRole);
+router.delete('/:id', workerRoleController.deleteWorkerRole);
 
 module.exports = router;

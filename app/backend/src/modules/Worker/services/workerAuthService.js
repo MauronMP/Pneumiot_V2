@@ -1,29 +1,24 @@
-const { WorkerAuth, Worker } = require('../models/WorkerAuth');
+const WorkerAuth = require('../models/WorkerAuth');
 
 const getAllWorkerAuths = async () => {
-    return await WorkerAuth.findAll({
-        include: [
-            { model: Worker, attributes: ['worker_id', 'worker_name', 'worker_surname'] }
-        ]
-    });
+    return await WorkerAuth.findAll();
 };
 
 const getWorkerAuthById = async (id) => {
-    return await WorkerAuth.findByPk(id, {
-        include: [
-            { model: Worker, attributes: ['worker_id', 'worker_name', 'worker_surname'] }
-        ]
-    });
+    return await WorkerAuth.findByPk(id);
 };
 
-const createWorkerAuth = async (workerAuthData) => {
-    return await WorkerAuth.create(workerAuthData);
+const createWorkerAuth = async (worker_id, passwd_auth) => {
+    return await WorkerAuth.create({ worker_id, passwd_auth });
 };
 
-const updateWorkerAuth = async (id, workerAuthData) => {
+const updateWorkerAuth = async (id, worker_id, passwd_auth) => {
     const workerAuth = await WorkerAuth.findByPk(id);
     if (workerAuth) {
-        return await workerAuth.update(workerAuthData);
+        workerAuth.worker_id = worker_id;
+        workerAuth.passwd_auth = passwd_auth;
+        await workerAuth.save();
+        return workerAuth;
     }
     return null;
 };

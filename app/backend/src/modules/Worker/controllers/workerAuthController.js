@@ -3,7 +3,7 @@ const workerAuthService = require('../services/workerAuthService');
 const getAllWorkerAuths = async (req, res) => {
     try {
         const workerAuths = await workerAuthService.getAllWorkerAuths();
-        res.json(workerAuths);
+        res.status(200).json(workerAuths);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -11,11 +11,12 @@ const getAllWorkerAuths = async (req, res) => {
 
 const getWorkerAuthById = async (req, res) => {
     try {
-        const workerAuth = await workerAuthService.getWorkerAuthById(req.params.id);
+        const { id } = req.params;
+        const workerAuth = await workerAuthService.getWorkerAuthById(id);
         if (workerAuth) {
-            res.json(workerAuth);
+            res.status(200).json(workerAuth);
         } else {
-            res.status(404).json({ message: 'WorkerAuth not found' });
+            res.status(404).json({ message: "WorkerAuth not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -24,7 +25,8 @@ const getWorkerAuthById = async (req, res) => {
 
 const createWorkerAuth = async (req, res) => {
     try {
-        const newWorkerAuth = await workerAuthService.createWorkerAuth(req.body);
+        const { worker_id, passwd_auth } = req.body;
+        const newWorkerAuth = await workerAuthService.createWorkerAuth(worker_id, passwd_auth);
         res.status(201).json(newWorkerAuth);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -33,11 +35,13 @@ const createWorkerAuth = async (req, res) => {
 
 const updateWorkerAuth = async (req, res) => {
     try {
-        const updatedWorkerAuth = await workerAuthService.updateWorkerAuth(req.params.id, req.body);
+        const { id } = req.params;
+        const { worker_id, passwd_auth } = req.body;
+        const updatedWorkerAuth = await workerAuthService.updateWorkerAuth(id, worker_id, passwd_auth);
         if (updatedWorkerAuth) {
-            res.json(updatedWorkerAuth);
+            res.status(200).json(updatedWorkerAuth);
         } else {
-            res.status(404).json({ message: 'WorkerAuth not found' });
+            res.status(404).json({ message: "WorkerAuth not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -46,11 +50,12 @@ const updateWorkerAuth = async (req, res) => {
 
 const deleteWorkerAuth = async (req, res) => {
     try {
-        const result = await workerAuthService.deleteWorkerAuth(req.params.id);
+        const { id } = req.params;
+        const result = await workerAuthService.deleteWorkerAuth(id);
         if (result) {
-            res.json({ message: 'WorkerAuth deleted successfully' });
+            res.status(200).json({ message: "WorkerAuth deleted successfully" });
         } else {
-            res.status(404).json({ message: 'WorkerAuth not found' });
+            res.status(404).json({ message: "WorkerAuth not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });

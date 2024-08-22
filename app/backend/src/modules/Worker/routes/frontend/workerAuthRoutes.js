@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const workerAuthController = require('../../controllers/workerAuthController');
+const workerRoleController = require('../../controllers/workerRoleController');
 
-router.get('/', workerAuthController.getAllWorkerAuths);
-router.get('/:id', workerAuthController.getWorkerAuthById);
-router.post('/', workerAuthController.createWorkerAuth);
-router.put('/:id', workerAuthController.updateWorkerAuth);
-router.delete('/:id', workerAuthController.deleteWorkerAuth);
+// Definición de las rutas frontend
+router.get('/', workerRoleController.getAllWorkerRoles);
+router.get('/:id', workerRoleController.getWorkerRoleById);
+router.post('/', workerRoleController.createWorkerRole);
+router.put('/:id', workerRoleController.updateWorkerRole);
+router.delete('/:id', workerRoleController.deleteWorkerRole);
 
 module.exports = router;

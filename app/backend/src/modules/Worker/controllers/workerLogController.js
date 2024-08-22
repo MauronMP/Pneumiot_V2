@@ -1,56 +1,61 @@
-const workerLogService = require('../services/workerLogService');
+const workerRoleService = require('../services/workerRoleService');
 
-const getAllWorkerLogs = async (req, res) => {
+const getAllWorkerRoles = async (req, res) => {
     try {
-        const workerLogs = await workerLogService.getAllWorkerLogs();
-        res.json(workerLogs);
+        const workerRoles = await workerRoleService.getAllWorkerRoles();
+        res.status(200).json(workerRoles);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-const getWorkerLogById = async (req, res) => {
+const getWorkerRoleById = async (req, res) => {
     try {
-        const workerLog = await workerLogService.getWorkerLogById(req.params.id);
-        if (workerLog) {
-            res.json(workerLog);
+        const { id } = req.params;
+        const workerRole = await workerRoleService.getWorkerRoleById(id);
+        if (workerRole) {
+            res.status(200).json(workerRole);
         } else {
-            res.status(404).json({ message: 'WorkerLog not found' });
+            res.status(404).json({ message: "WorkerRole not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-const createWorkerLog = async (req, res) => {
+const createWorkerRole = async (req, res) => {
     try {
-        const newWorkerLog = await workerLogService.createWorkerLog(req.body);
-        res.status(201).json(newWorkerLog);
+        const { worker_role_name, worker_role_description } = req.body;
+        const newWorkerRole = await workerRoleService.createWorkerRole(worker_role_name, worker_role_description);
+        res.status(201).json(newWorkerRole);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-const updateWorkerLog = async (req, res) => {
+const updateWorkerRole = async (req, res) => {
     try {
-        const updatedWorkerLog = await workerLogService.updateWorkerLog(req.params.id, req.body);
-        if (updatedWorkerLog) {
-            res.json(updatedWorkerLog);
+        const { id } = req.params;
+        const { worker_role_name, worker_role_description } = req.body;
+        const updatedWorkerRole = await workerRoleService.updateWorkerRole(id, worker_role_name, worker_role_description);
+        if (updatedWorkerRole) {
+            res.status(200).json(updatedWorkerRole);
         } else {
-            res.status(404).json({ message: 'WorkerLog not found' });
+            res.status(404).json({ message: "WorkerRole not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-const deleteWorkerLog = async (req, res) => {
+const deleteWorkerRole = async (req, res) => {
     try {
-        const result = await workerLogService.deleteWorkerLog(req.params.id);
+        const { id } = req.params;
+        const result = await workerRoleService.deleteWorkerRole(id);
         if (result) {
-            res.json({ message: 'WorkerLog deleted successfully' });
+            res.status(200).json({ message: "WorkerRole deleted successfully" });
         } else {
-            res.status(404).json({ message: 'WorkerLog not found' });
+            res.status(404).json({ message: "WorkerRole not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -58,9 +63,9 @@ const deleteWorkerLog = async (req, res) => {
 };
 
 module.exports = {
-    getAllWorkerLogs,
-    getWorkerLogById,
-    createWorkerLog,
-    updateWorkerLog,
-    deleteWorkerLog
+    getAllWorkerRoles,
+    getWorkerRoleById,
+    createWorkerRole,
+    updateWorkerRole,
+    deleteWorkerRole
 };

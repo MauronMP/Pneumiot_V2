@@ -1,32 +1,56 @@
-const { WorkerRole } = require('../models');
+// src/services/workerRoleService.js
+const WorkerRole = require('../models/WorkerRole');
 
 const getAllWorkerRoles = async () => {
-    return await WorkerRole.findAll();
+    try {
+        return await WorkerRole.findAll();
+    } catch (error) {
+        throw new Error(`Error fetching worker roles: ${error.message}`);
+    }
 };
 
 const getWorkerRoleById = async (id) => {
-    return await WorkerRole.findByPk(id);
-};
-
-const createWorkerRole = async (workerRoleData) => {
-    return await WorkerRole.create(workerRoleData);
-};
-
-const updateWorkerRole = async (id, workerRoleData) => {
-    const workerRole = await WorkerRole.findByPk(id);
-    if (workerRole) {
-        return await workerRole.update(workerRoleData);
+    try {
+        return await WorkerRole.findByPk(id);
+    } catch (error) {
+        throw new Error(`Error fetching worker role by ID: ${error.message}`);
     }
-    return null;
+};
+
+const createWorkerRole = async (worker_role_name, worker_role_description) => {
+    try {
+        return await WorkerRole.create({ worker_role_name, worker_role_description });
+    } catch (error) {
+        throw new Error(`Error creating worker role: ${error.message}`);
+    }
+};
+
+const updateWorkerRole = async (id, worker_role_name, worker_role_description) => {
+    try {
+        const workerRole = await WorkerRole.findByPk(id);
+        if (workerRole) {
+            workerRole.worker_role_name = worker_role_name;
+            workerRole.worker_role_description = worker_role_description;
+            await workerRole.save();
+            return workerRole;
+        }
+        return null;
+    } catch (error) {
+        throw new Error(`Error updating worker role: ${error.message}`);
+    }
 };
 
 const deleteWorkerRole = async (id) => {
-    const workerRole = await WorkerRole.findByPk(id);
-    if (workerRole) {
-        await workerRole.destroy();
-        return true;
+    try {
+        const workerRole = await WorkerRole.findByPk(id);
+        if (workerRole) {
+            await workerRole.destroy();
+            return true;
+        }
+        return false;
+    } catch (error) {
+        throw new Error(`Error deleting worker role: ${error.message}`);
     }
-    return false;
 };
 
 module.exports = {

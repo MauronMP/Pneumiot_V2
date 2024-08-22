@@ -1,46 +1,41 @@
-const { WorkerLog, Worker } = require('../models');
+const WorkerRole = require('../models/WorkerRole');
 
-const getAllWorkerLogs = async () => {
-    return await WorkerLog.findAll({
-        include: [
-            { model: Worker, attributes: ['worker_id', 'worker_name', 'worker_surname'] }
-        ]
-    });
+const getAllWorkerRoles = async () => {
+    return await WorkerRole.findAll();
 };
 
-const getWorkerLogById = async (id) => {
-    return await WorkerLog.findByPk(id, {
-        include: [
-            { model: Worker, attributes: ['worker_id', 'worker_name', 'worker_surname'] }
-        ]
-    });
+const getWorkerRoleById = async (id) => {
+    return await WorkerRole.findByPk(id);
 };
 
-const createWorkerLog = async (workerLogData) => {
-    return await WorkerLog.create(workerLogData);
+const createWorkerRole = async (worker_role_name, worker_role_description) => {
+    return await WorkerRole.create({ worker_role_name, worker_role_description });
 };
 
-const updateWorkerLog = async (id, workerLogData) => {
-    const workerLog = await WorkerLog.findByPk(id);
-    if (workerLog) {
-        return await workerLog.update(workerLogData);
+const updateWorkerRole = async (id, worker_role_name, worker_role_description) => {
+    const workerRole = await WorkerRole.findByPk(id);
+    if (workerRole) {
+        workerRole.worker_role_name = worker_role_name;
+        workerRole.worker_role_description = worker_role_description;
+        await workerRole.save();
+        return workerRole;
     }
     return null;
 };
 
-const deleteWorkerLog = async (id) => {
-    const workerLog = await WorkerLog.findByPk(id);
-    if (workerLog) {
-        await workerLog.destroy();
+const deleteWorkerRole = async (id) => {
+    const workerRole = await WorkerRole.findByPk(id);
+    if (workerRole) {
+        await workerRole.destroy();
         return true;
     }
     return false;
 };
 
 module.exports = {
-    getAllWorkerLogs,
-    getWorkerLogById,
-    createWorkerLog,
-    updateWorkerLog,
-    deleteWorkerLog
+    getAllWorkerRoles,
+    getWorkerRoleById,
+    createWorkerRole,
+    updateWorkerRole,
+    deleteWorkerRole
 };

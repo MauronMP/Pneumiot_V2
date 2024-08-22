@@ -3,7 +3,7 @@ const workerService = require('../services/workerService');
 const getAllWorkers = async (req, res) => {
     try {
         const workers = await workerService.getAllWorkers();
-        res.json(workers);
+        res.status(200).json(workers);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -11,11 +11,12 @@ const getAllWorkers = async (req, res) => {
 
 const getWorkerById = async (req, res) => {
     try {
-        const worker = await workerService.getWorkerById(req.params.id);
+        const { id } = req.params;
+        const worker = await workerService.getWorkerById(id);
         if (worker) {
-            res.json(worker);
+            res.status(200).json(worker);
         } else {
-            res.status(404).json({ message: 'Worker not found' });
+            res.status(404).json({ message: "Worker not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -24,7 +25,8 @@ const getWorkerById = async (req, res) => {
 
 const createWorker = async (req, res) => {
     try {
-        const newWorker = await workerService.createWorker(req.body);
+        const { worker_dni, worker_email, worker_name, worker_surname, worker_role_id } = req.body;
+        const newWorker = await workerService.createWorker(worker_dni, worker_email, worker_name, worker_surname, worker_role_id);
         res.status(201).json(newWorker);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -33,11 +35,13 @@ const createWorker = async (req, res) => {
 
 const updateWorker = async (req, res) => {
     try {
-        const updatedWorker = await workerService.updateWorker(req.params.id, req.body);
+        const { id } = req.params;
+        const { worker_dni, worker_email, worker_name, worker_surname, worker_role_id } = req.body;
+        const updatedWorker = await workerService.updateWorker(id, worker_dni, worker_email, worker_name, worker_surname, worker_role_id);
         if (updatedWorker) {
-            res.json(updatedWorker);
+            res.status(200).json(updatedWorker);
         } else {
-            res.status(404).json({ message: 'Worker not found' });
+            res.status(404).json({ message: "Worker not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -46,11 +50,12 @@ const updateWorker = async (req, res) => {
 
 const deleteWorker = async (req, res) => {
     try {
-        const result = await workerService.deleteWorker(req.params.id);
+        const { id } = req.params;
+        const result = await workerService.deleteWorker(id);
         if (result) {
-            res.json({ message: 'Worker deleted successfully' });
+            res.status(200).json({ message: "Worker deleted successfully" });
         } else {
-            res.status(404).json({ message: 'Worker not found' });
+            res.status(404).json({ message: "Worker not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });

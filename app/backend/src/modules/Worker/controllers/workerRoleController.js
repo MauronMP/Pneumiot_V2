@@ -1,9 +1,10 @@
+// src/controllers/workerRoleController.js
 const workerRoleService = require('../services/workerRoleService');
 
 const getAllWorkerRoles = async (req, res) => {
     try {
         const workerRoles = await workerRoleService.getAllWorkerRoles();
-        res.json(workerRoles);
+        res.status(200).json(workerRoles);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -11,11 +12,12 @@ const getAllWorkerRoles = async (req, res) => {
 
 const getWorkerRoleById = async (req, res) => {
     try {
-        const workerRole = await workerRoleService.getWorkerRoleById(req.params.id);
+        const { id } = req.params;
+        const workerRole = await workerRoleService.getWorkerRoleById(id);
         if (workerRole) {
-            res.json(workerRole);
+            res.status(200).json(workerRole);
         } else {
-            res.status(404).json({ message: 'WorkerRole not found' });
+            res.status(404).json({ message: "WorkerRole not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -24,7 +26,8 @@ const getWorkerRoleById = async (req, res) => {
 
 const createWorkerRole = async (req, res) => {
     try {
-        const newWorkerRole = await workerRoleService.createWorkerRole(req.body);
+        const { worker_role_name, worker_role_description } = req.body;
+        const newWorkerRole = await workerRoleService.createWorkerRole(worker_role_name, worker_role_description);
         res.status(201).json(newWorkerRole);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -33,11 +36,13 @@ const createWorkerRole = async (req, res) => {
 
 const updateWorkerRole = async (req, res) => {
     try {
-        const updatedWorkerRole = await workerRoleService.updateWorkerRole(req.params.id, req.body);
+        const { id } = req.params;
+        const { worker_role_name, worker_role_description } = req.body;
+        const updatedWorkerRole = await workerRoleService.updateWorkerRole(id, worker_role_name, worker_role_description);
         if (updatedWorkerRole) {
-            res.json(updatedWorkerRole);
+            res.status(200).json(updatedWorkerRole);
         } else {
-            res.status(404).json({ message: 'WorkerRole not found' });
+            res.status(404).json({ message: "WorkerRole not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -46,11 +51,12 @@ const updateWorkerRole = async (req, res) => {
 
 const deleteWorkerRole = async (req, res) => {
     try {
-        const result = await workerRoleService.deleteWorkerRole(req.params.id);
+        const { id } = req.params;
+        const result = await workerRoleService.deleteWorkerRole(id);
         if (result) {
-            res.json({ message: 'WorkerRole deleted successfully' });
+            res.status(200).json({ message: "WorkerRole deleted successfully" });
         } else {
-            res.status(404).json({ message: 'WorkerRole not found' });
+            res.status(404).json({ message: "WorkerRole not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
