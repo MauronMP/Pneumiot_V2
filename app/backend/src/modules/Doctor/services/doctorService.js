@@ -1,33 +1,27 @@
 const Doctor = require('../models/Doctor');
-const Patient = require('../../Patient/models/Patient');
-const Worker = require('../../Worker/models/Worker');
 
 const getAllDoctors = async () => {
-    return await Doctor.findAll({
-        include: [
-            { model: Patient, attributes: ['patient_id', 'patient_dni'] },
-            { model: Worker, attributes: ['worker_id', 'worker_name', 'worker_surname'] }
-        ]
-    });
+    return await Doctor.findAll();
 };
 
 const getDoctorById = async (id) => {
-    return await Doctor.findByPk(id, {
-        include: [
-            { model: Patient, attributes: ['patient_id', 'patient_dni'] },
-            { model: Worker, attributes: ['worker_id', 'worker_name', 'worker_surname'] }
-        ]
+    return await Doctor.findByPk(id);
+};
+
+const createDoctor = async (patient_id, worker_id) => {
+    return await Doctor.create({
+        patient_id,
+        worker_id
     });
 };
 
-const createDoctor = async (doctorData) => {
-    return await Doctor.create(doctorData);
-};
-
-const updateDoctor = async (id, doctorData) => {
+const updateDoctor = async (id, patient_id, worker_id) => {
     const doctor = await Doctor.findByPk(id);
     if (doctor) {
-        return await doctor.update(doctorData);
+        doctor.patient_id = patient_id;
+        doctor.worker_id = worker_id;
+        await doctor.save();
+        return doctor;
     }
     return null;
 };
