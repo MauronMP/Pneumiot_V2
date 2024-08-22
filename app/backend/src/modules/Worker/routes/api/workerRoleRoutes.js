@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const workerRoleController = require('../controllers/workerRoleController');
+const workerRoleController = require('../../controllers/workerRoleController');
 
 // Definir las rutas y asociarlas con los métodos del controlador
 router.get('/', workerRoleController.getAllWorkerRoles);

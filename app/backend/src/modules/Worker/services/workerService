@@ -1,0 +1,46 @@
+const { Worker, WorkerRole } = require('../models/Worker');
+
+const getAllWorkers = async () => {
+    return await Worker.findAll({
+        include: [
+            { model: WorkerRole, attributes: ['worker_role_id', 'worker_role_name'] }
+        ]
+    });
+};
+
+const getWorkerById = async (id) => {
+    return await Worker.findByPk(id, {
+        include: [
+            { model: WorkerRole, attributes: ['worker_role_id', 'worker_role_name'] }
+        ]
+    });
+};
+
+const createWorker = async (workerData) => {
+    return await Worker.create(workerData);
+};
+
+const updateWorker = async (id, workerData) => {
+    const worker = await Worker.findByPk(id);
+    if (worker) {
+        return await worker.update(workerData);
+    }
+    return null;
+};
+
+const deleteWorker = async (id) => {
+    const worker = await Worker.findByPk(id);
+    if (worker) {
+        await worker.destroy();
+        return true;
+    }
+    return false;
+};
+
+module.exports = {
+    getAllWorkers,
+    getWorkerById,
+    createWorker,
+    updateWorker,
+    deleteWorker
+};
