@@ -1,7 +1,6 @@
-// src/routes/dailyAverageRoutes.js
 const express = require('express');
 const router = express.Router();
-const dailyAverageController = require('../controllers/dailyAverageController');
+const dailyAverageController = require('../../controllers/dailyAverageController');
 
 // Definir las rutas y asociarlas con los métodos del controlador
 router.get('/', dailyAverageController.getAllDailyAverages);

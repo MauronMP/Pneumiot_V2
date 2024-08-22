@@ -1,7 +1,6 @@
-// src/routes/hourlyAverageRoutes.js
 const express = require('express');
 const router = express.Router();
-const hourlyAverageController = require('../../../controllers/hourlyAverageController');
+const hourlyAverageController = require('../../controllers/hourlyAverageController');
 
 // Definir las rutas y asociarlas con los métodos del controlador
 router.get('/', hourlyAverageController.getAllHourlyAverages);
