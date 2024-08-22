@@ -1,4 +1,4 @@
-const { Permission } = require('../models/Permission');  // Asegúrate de que la conexión a Sequelize y el modelo estén correctamente configurados
+const Permission = require('../models/Permission');
 
 const getAllPermissions = async () => {
     return await Permission.findAll();
@@ -8,14 +8,17 @@ const getPermissionById = async (id) => {
     return await Permission.findByPk(id);
 };
 
-const createPermission = async (permissionData) => {
-    return await Permission.create(permissionData);
+const createPermission = async (permission_name, permission_description) => {
+    return await Permission.create({ permission_name, permission_description });
 };
 
-const updatePermission = async (id, permissionData) => {
+const updatePermission = async (id, permission_name, permission_description) => {
     const permission = await Permission.findByPk(id);
     if (permission) {
-        return await permission.update(permissionData);
+        permission.permission_name = permission_name;
+        permission.permission_description = permission_description;
+        await permission.save();
+        return permission;
     }
     return null;
 };

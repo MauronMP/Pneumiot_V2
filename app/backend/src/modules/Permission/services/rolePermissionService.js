@@ -1,4 +1,4 @@
-const { RolePermission } = require('../models/RolePermission');  // Asegúrate de que la conexión a Sequelize y el modelo estén correctamente configurados
+const RolePermission = require('../models/RolePermission');
 
 const getAllRolePermissions = async () => {
     return await RolePermission.findAll();
@@ -8,14 +8,20 @@ const getRolePermissionById = async (id) => {
     return await RolePermission.findByPk(id);
 };
 
-const createRolePermission = async (rolePermissionData) => {
-    return await RolePermission.create(rolePermissionData);
+const createRolePermission = async (worker_role_id, permission_id) => {
+    return await RolePermission.create({
+        worker_role_id,
+        permission_id
+    });
 };
 
-const updateRolePermission = async (id, rolePermissionData) => {
+const updateRolePermission = async (id, worker_role_id, permission_id) => {
     const rolePermission = await RolePermission.findByPk(id);
     if (rolePermission) {
-        return await rolePermission.update(rolePermissionData);
+        rolePermission.worker_role_id = worker_role_id;
+        rolePermission.permission_id = permission_id;
+        await rolePermission.save();
+        return rolePermission;
     }
     return null;
 };
