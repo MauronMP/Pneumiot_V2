@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const patientController = require('../../controllers/patientController');
+const patientService = require('../../services/patientService');
 
-// Definir las rutas y asociarlas con los métodos del controlador
-router.get('/', patientController.getAllPatients);
-router.get('/:id', patientController.getPatientById);
-router.post('/', patientController.createPatient);
-router.put('/:id', patientController.updatePatient);
-router.delete('/:id', patientController.deletePatient);
+// Definir las rutas para el servicio de pacientes
+router.get('/', patientService.getAllPatients);
+router.get('/:id', patientService.getPatientById);
+router.post('/', patientService.createPatient);
+router.put('/:id', patientService.updatePatient);
+router.delete('/:id', patientService.deletePatient);
 
 module.exports = router;

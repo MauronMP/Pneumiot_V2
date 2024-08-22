@@ -3,7 +3,7 @@ const permissionService = require('../services/permissionService');
 const getAllPermissions = async (req, res) => {
     try {
         const permissions = await permissionService.getAllPermissions();
-        res.json(permissions);
+        res.status(200).json(permissions);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -11,11 +11,12 @@ const getAllPermissions = async (req, res) => {
 
 const getPermissionById = async (req, res) => {
     try {
-        const permission = await permissionService.getPermissionById(req.params.id);
+        const { id } = req.params;
+        const permission = await permissionService.getPermissionById(id);
         if (permission) {
-            res.json(permission);
+            res.status(200).json(permission);
         } else {
-            res.status(404).json({ message: 'Permission not found' });
+            res.status(404).json({ message: "Permission not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -25,7 +26,7 @@ const getPermissionById = async (req, res) => {
 const createPermission = async (req, res) => {
     try {
         const { permission_name, permission_description } = req.body;
-        const newPermission = await permissionService.createPermission({ permission_name, permission_description });
+        const newPermission = await permissionService.createPermission(permission_name, permission_description);
         res.status(201).json(newPermission);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -34,11 +35,13 @@ const createPermission = async (req, res) => {
 
 const updatePermission = async (req, res) => {
     try {
-        const updatedPermission = await permissionService.updatePermission(req.params.id, req.body);
+        const { id } = req.params;
+        const { permission_name, permission_description } = req.body;
+        const updatedPermission = await permissionService.updatePermission(id, permission_name, permission_description);
         if (updatedPermission) {
-            res.json(updatedPermission);
+            res.status(200).json(updatedPermission);
         } else {
-            res.status(404).json({ message: 'Permission not found' });
+            res.status(404).json({ message: "Permission not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -47,11 +50,12 @@ const updatePermission = async (req, res) => {
 
 const deletePermission = async (req, res) => {
     try {
-        const result = await permissionService.deletePermission(req.params.id);
+        const { id } = req.params;
+        const result = await permissionService.deletePermission(id);
         if (result) {
-            res.json({ message: 'Permission deleted successfully' });
+            res.status(200).json({ message: "Permission deleted successfully" });
         } else {
-            res.status(404).json({ message: 'Permission not found' });
+            res.status(404).json({ message: "Permission not found" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
