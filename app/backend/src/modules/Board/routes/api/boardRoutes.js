@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const boardServices = require('../../services/boardServices');
+const boardService = require('../../services/boardServices');
 
-// Definir las rutas y asociarlas con los métodos del controlador
-router.get('/', boardServices.getAllBoards);
-router.get('/:id', boardServices.getBoardById);
-router.post('/', boardServices.createBoard);
-router.put('/:id', boardServices.updateBoard);
-router.delete('/:id', boardServices.deleteBoard);
+// Definir las rutas para el servicio de boards
+router.get('/', boardService.getAllBoards);
+router.get('/:id', boardService.getBoardById);
+router.post('/', boardService.createBoard);
+router.put('/:id', boardService.updateBoard);
+router.delete('/:id', boardService.deleteBoard);
 
 module.exports = router;

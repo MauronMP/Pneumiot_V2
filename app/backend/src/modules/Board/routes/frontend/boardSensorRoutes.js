@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const boardSensorController = require('../../controllers/boardSensorController');
 
-// Definir las rutas y asociarlas con los métodos del controlador
+// Definir las rutas para el frontend de BoardSensor
 router.get('/', boardSensorController.getAllBoardSensors);
-router.get('/:boardId/:sensorId', boardSensorController.getBoardSensorByIds);
+router.get('/:board_id/:sensor_id', boardSensorController.getBoardSensorById);
 router.post('/', boardSensorController.createBoardSensor);
-router.delete('/:boardId/:sensorId', boardSensorController.deleteBoardSensor);
+router.delete('/:board_id/:sensor_id', boardSensorController.deleteBoardSensor);
 
 module.exports = router;
