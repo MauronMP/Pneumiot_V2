@@ -1,75 +1,50 @@
 const Doctor = require('../models/Doctor');
-const Patient = require('../models/Patient');  // Importa los modelos relacionados si es necesario
-const Worker = require('../models/Worker');
+const Patient = require('../../Patient/models/Patient');
+const Worker = require('../../Worker/models/Worker');
 
-class DoctorService {
-    async getAllDoctors() {
-        try {
-            return await Doctor.findAll({
-                include: [
-                    { model: Patient, as: 'patient' }, // Incluye la relación con el modelo Patient
-                    { model: Worker, as: 'worker' }    // Incluye la relación con el modelo Worker
-                ]
-            });
-        } catch (error) {
-            throw new Error('Error retrieving doctors: ' + error.message);
-        }
+const getAllDoctors = async () => {
+    return await Doctor.findAll({
+        include: [
+            { model: Patient, attributes: ['patient_id', 'patient_dni'] },
+            { model: Worker, attributes: ['worker_id', 'worker_name', 'worker_surname'] }
+        ]
+    });
+};
+
+const getDoctorById = async (id) => {
+    return await Doctor.findByPk(id, {
+        include: [
+            { model: Patient, attributes: ['patient_id', 'patient_dni'] },
+            { model: Worker, attributes: ['worker_id', 'worker_name', 'worker_surname'] }
+        ]
+    });
+};
+
+const createDoctor = async (doctorData) => {
+    return await Doctor.create(doctorData);
+};
+
+const updateDoctor = async (id, doctorData) => {
+    const doctor = await Doctor.findByPk(id);
+    if (doctor) {
+        return await doctor.update(doctorData);
     }
+    return null;
+};
 
-    async getDoctorById(doctor_patient_id) {
-        try {
-            const doctor = await Doctor.findByPk(doctor_patient_id, {
-                include: [
-                    { model: Patient, as: 'patient' }, // Incluye la relación con el modelo Patient
-                    { model: Worker, as: 'worker' }    // Incluye la relación con el modelo Worker
-                ]
-            });
-
-            if (!doctor) {
-                throw new Error('Doctor not found');
-            }
-            return doctor;
-        } catch (error) {
-            throw new Error('Error retrieving doctor: ' + error.message);
-        }
+const deleteDoctor = async (id) => {
+    const doctor = await Doctor.findByPk(id);
+    if (doctor) {
+        await doctor.destroy();
+        return true;
     }
+    return false;
+};
 
-    async createDoctor(data) {
-        try {
-            return await Doctor.create(data);
-        } catch (error) {
-            throw new Error('Error creating doctor: ' + error.message);
-        }
-    }
-
-    async updateDoctor(doctor_patient_id, data) {
-        try {
-            const doctor = await Doctor.findByPk(doctor_patient_id);
-
-            if (!doctor) {
-                throw new Error('Doctor not found');
-            }
-
-            return await doctor.update(data);
-        } catch (error) {
-            throw new Error('Error updating doctor: ' + error.message);
-        }
-    }
-
-    async deleteDoctor(doctor_patient_id) {
-        try {
-            const doctor = await Doctor.findByPk(doctor_patient_id);
-
-            if (!doctor) {
-                throw new Error('Doctor not found');
-            }
-
-            await doctor.destroy();
-            return doctor;
-        } catch (error) {
-            throw new Error('Error deleting doctor: ' + error.message);
-        }
-    }
-}
-
-module.exports = new DoctorService();
+module.exports = {
+    getAllDoctors,
+    getDoctorById,
+    createDoctor,
+    updateDoctor,
+    deleteDoctor
+};
