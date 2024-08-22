@@ -1,69 +1,67 @@
-// src/controllers/errorLogController.js
-const ErrorLog = require("../models/ErrorLog");
+const errorLogService = require('../services/errorLogService');
 
-// Obtener todos los registros de errores
-exports.getAllErrorLogs = async (req, res) => {
-  try {
-    const errorLogs = await ErrorLog.findAll();
-    res.status(200).json(errorLogs);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Obtener un registro de error por ID
-exports.getErrorLogById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const errorLog = await ErrorLog.findByPk(id);
-    if (!errorLog) {
-      return res.status(404).json({ message: "Error log not found" });
+const getAllErrorLogs = async (req, res) => {
+    try {
+        const errorLogs = await errorLogService.getAllErrorLogs();
+        res.json(errorLogs);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    res.status(200).json(errorLog);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
 };
 
-// Crear un nuevo registro de error
-exports.createErrorLog = async (req, res) => {
-  try {
-    const { log_message } = req.body;
-    const newErrorLog = await ErrorLog.create({ log_message });
-    res.status(201).json(newErrorLog);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Actualizar un registro de error existente
-exports.updateErrorLog = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { log_message } = req.body;
-    const updatedErrorLog = await ErrorLog.update(
-      { log_message },
-      { where: { log_id: id } }
-    );
-    if (updatedErrorLog[0] === 0) {
-      return res.status(404).json({ message: "Error log not found" });
+const getErrorLogById = async (req, res) => {
+    try {
+        const errorLog = await errorLogService.getErrorLogById(req.params.id);
+        if (errorLog) {
+            res.json(errorLog);
+        } else {
+            res.status(404).json({ message: 'ErrorLog not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    res.status(200).json({ message: "Error log updated successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
 };
 
-// Eliminar un registro de error
-exports.deleteErrorLog = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleted = await ErrorLog.destroy({ where: { log_id: id } });
-    if (!deleted) {
-      return res.status(404).json({ message: "Error log not found" });
+const createErrorLog = async (req, res) => {
+    try {
+        const { log_message } = req.body;
+        const newErrorLog = await errorLogService.createErrorLog({ log_message });
+        res.status(201).json(newErrorLog);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    res.status(200).json({ message: "Error log deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+};
+
+const updateErrorLog = async (req, res) => {
+    try {
+        const updatedErrorLog = await errorLogService.updateErrorLog(req.params.id, req.body);
+        if (updatedErrorLog) {
+            res.json(updatedErrorLog);
+        } else {
+            res.status(404).json({ message: 'ErrorLog not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const deleteErrorLog = async (req, res) => {
+    try {
+        const result = await errorLogService.deleteErrorLog(req.params.id);
+        if (result) {
+            res.json({ message: 'ErrorLog deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'ErrorLog not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = {
+    getAllErrorLogs,
+    getErrorLogById,
+    createErrorLog,
+    updateErrorLog,
+    deleteErrorLog
 };
