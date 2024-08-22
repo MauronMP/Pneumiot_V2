@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const unitRoutes = require('../../modules/Unit/routes/api/unitRoutes');
+const unitRoutes = require('../../modules/Unit/routes/api/unitRoutes.js');
 const sensorRoutes = require('../../modules/Sensor/routes/api/sensorRoutes');
-const boardRoutes = require('../../modules/Board/routes/api/boardRoutes');
-const boardSensorRoutes = require('../../modules/Board/routes/api/boardSensorRoutes');
+const boardRoutes = require('../../modules/Board/routes/api/boardRoutes.js');
+const boardSensorRoutes = require('../../modules/Board/routes/api/boardSensorRoutes.js');
 const patientRoutes = require('../../modules/Patient/routes/api/patientRoutes');
 const measurementRoutes = require('../../modules/Measurements/routes/api/measurementRoutes');
 const sensorLogRoutes = require('../../modules/Sensor/routes/api/sensorLogRoutes');
@@ -14,7 +14,7 @@ const rolePermissionRoutes = require('../../modules/Permission/routes/api/rolePe
 const workerRoutes = require('../../modules/Worker/routes/api/workerRoutes');
 const workerAuthRoutes = require('../../modules/Worker/routes/api/workerAuthRoutes');
 const workerLogRoutes = require('../../modules/Worker/routes/api/workerLogRoutes');
-const doctorRoutes = require('../../modules/Doctor/routes/api/doctorRoutes');
+const doctorRoutes = require('../../modules/Doctor/routes/api/doctorRoutes.js');
 const indexRateRoutes = require('../../modules/IndexRate/routes/api/indexRateRoutes');
 const hourlyAverageRoutes = require('../../modules/Average/routes/api/hourlyAverageRoutes');
 const dailyAverageRoutes = require('../../modules/Average/routes/api/dailyAverageRoutes');
