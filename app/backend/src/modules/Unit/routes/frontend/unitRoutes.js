@@ -1,7 +1,6 @@
-// src/routes/unitRoutes.js
 const express = require('express');
 const router = express.Router();
-const unitController = require('../controllers/unitController');
+const unitController = require('../../controllers/unitController');
 
 // Definir las rutas y asociarlas con los métodos del controlador
 router.get('/', unitController.getAllUnits);
