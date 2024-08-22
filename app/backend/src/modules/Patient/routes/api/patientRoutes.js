@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const patientController = require('../controllers/patientController');
+const patientController = require('../../controllers/patientController');
 
 // Definir las rutas y asociarlas con los métodos del controlador
 router.get('/', patientController.getAllPatients);
