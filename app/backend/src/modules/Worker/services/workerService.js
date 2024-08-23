@@ -1,44 +1,49 @@
-const Worker = require('../models/Worker');
+const bcrypt = require('bcrypt');
+const WorkerAuth = require('../models/WorkerAuth');
 
-const getAllWorkers = async () => {
-    return await Worker.findAll();
+const saltRounds = 10; // Número de rondas de sal para el cifrado
+
+const getAllWorkerAuths = async () => {
+    return await WorkerAuth.findAll();
 };
 
-const getWorkerById = async (id) => {
-    return await Worker.findByPk(id);
+const getWorkerAuthById = async (id) => {
+    return await WorkerAuth.findByPk(id);
 };
 
-const createWorker = async (worker_dni, worker_email, worker_name, worker_surname, worker_role_id) => {
-    return await Worker.create({ worker_dni, worker_email, worker_name, worker_surname, worker_role_id });
+const createWorkerAuth = async (worker_id, passwd_auth) => {
+    // Cifrar la contraseña
+    const hashedPassword = await bcrypt.hash(passwd_auth, saltRounds);
+    return await WorkerAuth.create({ worker_id, passwd_auth: hashedPassword });
 };
 
-const updateWorker = async (id, worker_dni, worker_email, worker_name, worker_surname, worker_role_id) => {
-    const worker = await Worker.findByPk(id);
-    if (worker) {
-        worker.worker_dni = worker_dni;
-        worker.worker_email = worker_email;
-        worker.worker_name = worker_name;
-        worker.worker_surname = worker_surname;
-        worker.worker_role_id = worker_role_id;
-        await worker.save();
-        return worker;
+const updateWorkerAuth = async (id, worker_id, passwd_auth) => {
+    const workerAuth = await WorkerAuth.findByPk(id);
+    if (workerAuth) {
+        workerAuth.worker_id = worker_id;
+        // Si se proporciona una nueva contraseña, cifrarla antes de guardar
+        if (passwd_auth) {
+            workerAuth.passwd_auth = await bcrypt.hash(passwd_auth, saltRounds);
+        }
+        await workerAuth.save();
+        return workerAuth;
     }
     return null;
 };
 
-const deleteWorker = async (id) => {
-    const worker = await Worker.findByPk(id);
-    if (worker) {
-        await worker.destroy();
+const deleteWorkerAuth = async (id) => {
+    const workerAuth = await WorkerAuth.findByPk(id);
+    if (workerAuth) {
+        await workerAuth.destroy();
         return true;
     }
     return false;
 };
 
 module.exports = {
-    getAllWorkers,
-    getWorkerById,
-    createWorker,
-    updateWorker,
-    deleteWorker
+    getAllWorkerAuths,
+    getWorkerAuthById,
+    createWorkerAuth,
+    updateWorkerAuth,
+    deleteWorkerAuth
 };
