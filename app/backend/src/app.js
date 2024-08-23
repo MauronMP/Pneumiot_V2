@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const apiRoutes = require('./routes/api');
 const frontendRoutes = require('./routes/frontend');
-const sequelize = require('./config/db');
 
 // Middleware para parsear JSON
 app.use(express.json());
