@@ -1,5 +1,15 @@
 const workerService = require('../services/workerService');
+const workerAuthService = require('../services/workerAuthService');
 
+const getAllWorkersWithRole = async (req, res) => {
+    try {
+        const { worker_id } = req.params;
+        const workers = await workerService.fetchAllWorkersWithRole(worker_id);
+        res.status(200).json(workers);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 const getAllWorkers = async (req, res) => {
     try {
         const workers = await workerService.getAllWorkers();
@@ -25,9 +35,21 @@ const getWorkerById = async (req, res) => {
 
 const createWorker = async (req, res) => {
     try {
-        const { worker_dni, worker_email, worker_name, worker_surname, worker_role_id } = req.body;
-        const newWorker = await workerService.createWorker(worker_dni, worker_email, worker_name, worker_surname, worker_role_id);
-        res.status(201).json(newWorker);
+        const { worker_dni, worker_email, worker_name, worker_surname, worker_role_id, passwd_auth } = req.body;
+        
+        // Crea el trabajador
+        const newWorker = await workerService.createWorker({
+            worker_dni,
+            worker_email,
+            worker_name,
+            worker_surname,
+            worker_role_id
+        });
+
+        // Crea la autenticación para el trabajador
+        const newWorkerAuth = await workerAuthService.createWorkerAuth(newWorker.worker_id, passwd_auth);
+
+        res.status(201).json({ newWorker, newWorkerAuth });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -36,8 +58,9 @@ const createWorker = async (req, res) => {
 const updateWorker = async (req, res) => {
     try {
         const { id } = req.params;
-        const { worker_dni, worker_email, worker_name, worker_surname, worker_role_id } = req.body;
-        const updatedWorker = await workerService.updateWorker(id, worker_dni, worker_email, worker_name, worker_surname, worker_role_id);
+        const workerData = req.body;
+
+        const updatedWorker = await workerService.updateWorker(id, workerData);
         if (updatedWorker) {
             res.status(200).json(updatedWorker);
         } else {
@@ -63,6 +86,7 @@ const deleteWorker = async (req, res) => {
 };
 
 module.exports = {
+    getAllWorkersWithRole,
     getAllWorkers,
     getWorkerById,
     createWorker,

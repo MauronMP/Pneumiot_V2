@@ -1,0 +1,53 @@
+// src/styles/LoginForm.scss
+
+.login-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4; // Color de fondo opcional
+}
+
+.login-form {
+  background-color: #fff; // Fondo blanco para el formulario
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-form-group {
+  margin-bottom: 15px;
+}
+
+.login-form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.login-form-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.login-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login-form-button {
+  background-color: #007bff; // Color de fondo para el botón
+  color: #fff; // Color del texto en el botón
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login-form-button:hover {
+  background-color: #0056b3; // Color de fondo al pasar el ratón
+}

@@ -8,5 +8,6 @@ router.get('/:id', permissionController.getPermissionById);
 router.post('/', permissionController.createPermission);
 router.put('/:id', permissionController.updatePermission);
 router.delete('/:id', permissionController.deletePermission);
+router.get('/workers-with-permissions', permissionController.getWorkersWithPermissions);
 
 module.exports = router;

@@ -33,11 +33,15 @@ const createWorkerAuth = async (req, res) => {
     }
 };
 
+// workerAuthController.js
+
 const updateWorkerAuth = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { worker_id, passwd_auth } = req.body;
-        const updatedWorkerAuth = await workerAuthService.updateWorkerAuth(id, worker_id, passwd_auth);
+        const { id } = req.params; // Suponiendo que worker_id se pasa como un parámetro de ruta llamado 'id'
+        const { passwd_auth } = req.body;
+
+        const updatedWorkerAuth = await workerAuthService.updateWorkerAuth(id, passwd_auth);
+        
         if (updatedWorkerAuth) {
             res.status(200).json(updatedWorkerAuth);
         } else {
@@ -47,6 +51,8 @@ const updateWorkerAuth = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+
 
 const deleteWorkerAuth = async (req, res) => {
     try {

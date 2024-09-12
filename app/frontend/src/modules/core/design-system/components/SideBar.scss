@@ -47,3 +47,25 @@
     margin-right: 10px; // Espacio entre el ícono y el texto
   }
 }
+
+.sidebar-user-info {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.user-info {
+  text-align: center;
+}
+
+.user-greeting {
+  display: block;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.user-name {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: normal;
+}

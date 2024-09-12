@@ -20,18 +20,21 @@ const createWorkerAuth = async (worker_id, plainPassword) => {
 };
 
 
-const updateWorkerAuth = async (id, worker_id, passwd_auth) => {
-    const workerAuth = await WorkerAuth.findByPk(id);
+const updateWorkerAuth = async (worker_id, passwd_auth) => {
+    // Buscar el registro de WorkerAuth usando worker_id en lugar de worker_auth_id
+    const workerAuth = await WorkerAuth.findOne({ where: { worker_id } });
+    
     if (workerAuth) {
-        workerAuth.worker_id = worker_id;
         // Si se proporciona una nueva contraseña, cifrarla antes de guardar
         if (passwd_auth) {
             workerAuth.passwd_auth = await bcrypt.hash(passwd_auth, saltRounds);
         }
-        await workerAuth.save();
-        return workerAuth;
+        
+        await workerAuth.save(); // Guardar los cambios en la base de datos
+        return workerAuth; // Devolver el objeto actualizado
     }
-    return null;
+    
+    return null; // Devuelve null si no se encuentra el registro de WorkerAuth
 };
 
 const deleteWorkerAuth = async (id) => {
@@ -42,6 +45,8 @@ const deleteWorkerAuth = async (id) => {
     }
     return false;
 };
+
+
 
 module.exports = {
     getAllWorkerAuths,

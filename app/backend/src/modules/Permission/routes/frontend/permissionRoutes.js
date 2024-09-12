@@ -3,6 +3,7 @@ const router = express.Router();
 const permissionController = require('../../controllers/permissionController');
 
 // Definición de las rutas frontend
+router.get('/workers-with-permissions', permissionController.getWorkersWithPermissions);
 router.get('/', permissionController.getAllPermissions);
 router.get('/:id', permissionController.getPermissionById);
 router.post('/', permissionController.createPermission);

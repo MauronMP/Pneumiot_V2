@@ -1,49 +1,67 @@
-const bcrypt = require('bcrypt');
+const Worker = require('../models/Worker');
 const WorkerAuth = require('../models/WorkerAuth');
+const { getAllWorkersWithRoleQuery } = require('../queries/workerQueries'); // Importa la consulta
 
-const saltRounds = 10; // Número de rondas de sal para el cifrado
 
-const getAllWorkerAuths = async () => {
-    return await WorkerAuth.findAll();
+const fetchAllWorkersWithRole = async (worker_id) => {
+    try {
+        const workersWithRoles = await getAllWorkersWithRoleQuery(worker_id);
+        return workersWithRoles;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Error executing query');
+    }
 };
 
-const getWorkerAuthById = async (id) => {
-    return await WorkerAuth.findByPk(id);
+const createWorker = async (workerData) => {
+    return await Worker.create(workerData);
 };
 
-const createWorkerAuth = async (worker_id, passwd_auth) => {
-    // Cifrar la contraseña
-    const hashedPassword = await bcrypt.hash(passwd_auth, saltRounds);
-    return await WorkerAuth.create({ worker_id, passwd_auth: hashedPassword });
+const getAllWorkers = async () => {
+    return await Worker.findAll();
 };
 
-const updateWorkerAuth = async (id, worker_id, passwd_auth) => {
-    const workerAuth = await WorkerAuth.findByPk(id);
+const getWorkerById = async (id) => {
+    return await Worker.findByPk(id);
+};
+const updateWorkerAuth = async (worker_id, workerData) => {
+    // Buscar el registro de autenticación del trabajador utilizando 'worker_id'
+    const workerAuth = await WorkerAuth.findOne({ where: { worker_id: worker_id } });
+
     if (workerAuth) {
-        workerAuth.worker_id = worker_id;
-        // Si se proporciona una nueva contraseña, cifrarla antes de guardar
-        if (passwd_auth) {
-            workerAuth.passwd_auth = await bcrypt.hash(passwd_auth, saltRounds);
-        }
-        await workerAuth.save();
+        // Actualizar el registro con los nuevos datos proporcionados
+        await workerAuth.update(workerData);
         return workerAuth;
     }
     return null;
 };
-
-const deleteWorkerAuth = async (id) => {
-    const workerAuth = await WorkerAuth.findByPk(id);
-    if (workerAuth) {
-        await workerAuth.destroy();
+const deleteWorker = async (id) => {
+    const worker = await Worker.findByPk(id);
+    if (worker) {
+        await worker.destroy();
         return true;
     }
     return false;
 };
 
+const updateWorker = async (id, workerData) => {
+    // Buscar al trabajador utilizando el 'worker_id'
+    const worker = await Worker.findByPk(id);
+    if (worker) {
+        // Actualizar los datos del trabajador con la información proporcionada
+        await worker.update(workerData);
+        return worker;
+    }
+
+    return null; // Devuelve null si no se encuentra el trabajador
+};
+
 module.exports = {
-    getAllWorkerAuths,
-    getWorkerAuthById,
-    createWorkerAuth,
+    getAllWorkers,
+    getWorkerById,
+    createWorker,
     updateWorkerAuth,
-    deleteWorkerAuth
+    deleteWorker,
+    updateWorker,
+    fetchAllWorkersWithRole
 };

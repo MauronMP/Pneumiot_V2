@@ -1,8 +1,8 @@
-// /login/services/authService.js
-const bcrypt = require('bcrypt'); // Asegúrate de requerir bcrypt
+const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 const Worker = require('../../Worker/models/Worker');
 const WorkerAuth = require('../../Worker/models/WorkerAuth');
+const { getWorkerDetailsById, getWorkerPermissionsById } = require('../queries/loginQueries');
 
 const authenticateUser = async (emailOrDni, plainPassword) => {
     const worker = await Worker.findOne({
@@ -26,17 +26,23 @@ const authenticateUser = async (emailOrDni, plainPassword) => {
         throw new Error('WorkerAuth record not found');
     }
 
-    console.log("Type of plainPassword:", typeof plainPassword); // debería ser 'string'
-    console.log("Type of workerAuth.passwd_auth:", typeof workerAuth.passwd_auth); // debería ser 'string'
-    
-
-    const isPasswordValid = await bcrypt.compare(plainPassword, workerAuth.passwd_auth);
+    const isPasswordValid = await bcrypt.compare(plainPassword.trim(), workerAuth.passwd_auth.trim());
 
     if (!isPasswordValid) {
         throw new Error('Invalid password');
     }
 
-    return { message: 'Login successful', workerId: worker.worker_id };
+    // Obtener detalles del trabajador
+    const workerDetails = await getWorkerDetailsById(worker.worker_id);
+
+    // Obtener permisos del trabajador
+    const workerPermissions = await getWorkerPermissionsById(worker.worker_id);
+
+    return { 
+        message: 'Login successful', 
+        workerDetails: workerDetails[0], 
+        workerPermissions 
+    };
 };
 
 module.exports = {

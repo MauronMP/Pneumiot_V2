@@ -62,7 +62,17 @@ const deletePermission = async (req, res) => {
     }
 };
 
+const getWorkersWithPermissions = async (req, res) => {
+    try {
+        const workersWithPermissions = await permissionService.getWorkersWithPermissions();
+        res.status(200).json(workersWithPermissions);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
+    getWorkersWithPermissions,
     getAllPermissions,
     getPermissionById,
     createPermission,

@@ -1,4 +1,8 @@
 const Permission = require('../models/Permission');
+const RolePermission = require('../models/RolePermission');
+const Worker = require('../../Worker/models/Worker');
+const WorkerRole = require('../../Worker/models/WorkerRole');
+
 
 const getAllPermissions = async () => {
     return await Permission.findAll();
@@ -32,7 +36,43 @@ const deletePermission = async (id) => {
     return false;
 };
 
+
+const getWorkersWithPermissions = async () => {
+    try {
+        const workersWithPermissions = await Worker.findAll({
+            attributes: ['worker_email'], // Obtener solo el correo del trabajador
+            include: [
+                {
+                    model: WorkerRole,
+                    attributes: [],
+                    include: [
+                        {
+                            model: RolePermission,
+                            attributes: [],
+                            include: [
+                                {
+                                    model: Permission,
+                                    attributes: ['permission_name'], // Obtener el nombre del permiso
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            order: [['worker_id', 'ASC']], // Ordenar por worker_id
+            raw: true
+        });
+
+        return workersWithPermissions;
+    } catch (error) {
+        console.error('Error retrieving workers with permissions:', error);
+        throw new Error('Error retrieving workers with permissions');
+    }
+};
+
+
 module.exports = {
+    getWorkersWithPermissions,
     getAllPermissions,
     getPermissionById,
     createPermission,
