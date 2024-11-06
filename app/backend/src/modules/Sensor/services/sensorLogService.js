@@ -1,7 +1,9 @@
 const SensorLog = require('../models/SensorLog');
 
 const getAllSensorLogs = async () => {
-    return await SensorLog.findAll();
+    return await SensorLog.findAll({
+        order: [['log_id', 'DESC']] // Cambia 'createdAt' por la columna que desees ordenar
+    });
 };
 
 const getSensorLogById = async (id) => {

@@ -1,8 +1,8 @@
-// src/models/ErrorLog.js
+// src/models/Log.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../../config/db');
 
-const ErrorLog = sequelize.define('ErrorLog', {
+const Log = sequelize.define('Log', {
   log_id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -18,4 +18,4 @@ const ErrorLog = sequelize.define('ErrorLog', {
   timestamps: false,
 });
 
-module.exports = ErrorLog;
+module.exports = Log;
