@@ -3,6 +3,8 @@ const router = express.Router();
 const boardController = require('../../controllers/boardController');
 
 // Definir las rutas para el frontend de boards
+router.get('/count', boardController.countBoards);
+router.get('/with-sensors', boardController.getBoardWithSensors);
 router.get('/', boardController.getAllBoards);
 router.get('/:id', boardController.getBoardById);
 router.post('/', boardController.createBoard);
