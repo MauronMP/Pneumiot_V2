@@ -85,7 +85,12 @@ const deleteWorker = async (req, res) => {
     }
 };
 
+const countWorkers = async (req, res) => {
+    await workerService.countWorkers(req, res);
+};
+
 module.exports = {
+    countWorkers,
     getAllWorkersWithRole,
     getAllWorkers,
     getWorkerById,

@@ -3,6 +3,7 @@ const router = express.Router();
 const workerController = require('../../controllers/workerController');
 
 // Definición de las rutas y asociación con los métodos del controlador
+router.get('/count', workerController.countWorkers);
 router.get('/with-role/:worker_id', workerController.getAllWorkersWithRole);
 router.get('/', workerController.getAllWorkers);
 router.get('/:id', workerController.getWorkerById);
