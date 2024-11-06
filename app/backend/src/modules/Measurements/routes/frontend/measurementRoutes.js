@@ -3,6 +3,7 @@ const router = express.Router();
 const measurementController = require('../../controllers/measurementController');
 
 // Definir las rutas para el frontend de Measurement
+router.get('/patient/:patient_id', measurementController.getMeasurementsByPatientId);  // Nueva ruta
 router.get('/', measurementController.getAllMeasurements);
 router.get('/:measurement_id', measurementController.getMeasurementById);
 router.post('/', measurementController.createMeasurement);

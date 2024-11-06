@@ -14,6 +14,7 @@ const Measurement = sequelize.define('Measurement', {
       model: 'Patient',
       key: 'patient_id',
     },
+    onDelete: 'CASCADE',  // Elimina las mediciones si se elimina el paciente
   },
   board_id: {
     type: DataTypes.INTEGER,
@@ -22,6 +23,7 @@ const Measurement = sequelize.define('Measurement', {
       model: 'Board',
       key: 'board_id',
     },
+    onDelete: 'CASCADE',  // Elimina las mediciones si se elimina la board
   },
   sensor_id: {
     type: DataTypes.INTEGER,
@@ -30,6 +32,7 @@ const Measurement = sequelize.define('Measurement', {
       model: 'Sensor',
       key: 'sensor_id',
     },
+    onDelete: 'RESTRICT',  // No permite eliminar el sensor si hay mediciones asociadas
   },
   sensor_value: {
     type: DataTypes.DECIMAL(4, 2),
@@ -37,16 +40,18 @@ const Measurement = sequelize.define('Measurement', {
   },
   log_time_utc: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
+    allowNull: false,
+    defaultValue: sequelize.literal(`CURRENT_TIMESTAMP AT TIME ZONE 'UTC'`), // Valor por defecto en UTC
   },
   log_time_local: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,  // Valor por defecto para la hora local
   },
 }, {
   tableName: 'measurements',
   schema: 'pneumiot',
-  timestamps: false,
+  timestamps: false,  // No utiliza createdAt y updatedAt
 });
 
 module.exports = Measurement;
