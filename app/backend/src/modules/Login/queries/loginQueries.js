@@ -1,7 +1,7 @@
 const { QueryTypes } = require('sequelize');
 const sequelize = require('../../../config/db');
-
 // Consultas SQL para los detalles del trabajador
+
 const getWorkerDetailsById = async (workerId) => {
     return await sequelize.query(
         `SELECT 
