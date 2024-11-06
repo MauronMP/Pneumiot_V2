@@ -247,7 +247,7 @@ BEGIN
                     avg_measure := round((random() * 99.99)::numeric, 2);
                     index_rate_id := (random() * 2)::INT + 1;
                     
-                    INSERT INTO pneumiot.daily_average (patient_id, board_id, sensor_id, average_measure, index_rate_id, daily_day, month_id)
+                    INSERT INTO pneumiot.daily_average (patient_id, board_id, sensor_id, average_measure, index_rate_id, daily_day, month_id, year)
                     VALUES (
                         patient_id,
                         board_id,
@@ -255,7 +255,8 @@ BEGIN
                         avg_measure,
                         index_rate_id,
                         EXTRACT(DAY FROM day_date)::INT,
-                        EXTRACT(MONTH FROM day_date)::INT
+                        EXTRACT(MONTH FROM day_date)::INT,
+                        2024  -- Añadimos el año 2024 aquí
                     );
                 END LOOP;
             END LOOP;

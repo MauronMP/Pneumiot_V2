@@ -48,8 +48,8 @@ CREATE TABLE IF NOT EXISTS pneumiot.patient (
     patient_id SERIAL NOT NULL,
     patient_dni VARCHAR(10) NOT NULL,
     board_id INT NOT NULL,
-    discharge_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    admission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    discharge_date TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
+    admission_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
     PRIMARY KEY(patient_id),
     FOREIGN KEY (board_id) REFERENCES pneumiot.board(board_id) ON DELETE RESTRICT
 );
@@ -176,13 +176,14 @@ CREATE TABLE IF NOT EXISTS pneumiot.daily_average(
     index_rate_id int not null,
     daily_day int NOT NULL,
     month_id int NOT NULL,
+    year int not null,
+    day_date DATE not null,
     PRIMARY KEY(daily_average_id),
     FOREIGN KEY (patient_id) REFERENCES pneumiot.patient(patient_id) ON DELETE CASCADE,
     FOREIGN KEY (board_id) REFERENCES pneumiot.board(board_id) ON DELETE CASCADE,
     FOREIGN KEY (sensor_id) REFERENCES pneumiot.sensor(sensor_id) ON DELETE CASCADE,
     FOREIGN KEY (index_rate_id) REFERENCES pneumiot.index_rate(index_rate_id) ON DELETE RESTRICT
 );
-
 
 -- Creation of the monthly_average table --
 CREATE TABLE IF NOT EXISTS pneumiot.monthly_average(
@@ -207,4 +208,11 @@ CREATE TABLE IF NOT EXISTS pneumiot.error_log (
     log_id SERIAL NOT NULL,
     log_message CHARACTER VARYING(264),
     PRIMARY KEY(log_id)
+);
+
+-- Creation of the log table -- 
+CREATE TABLE IF NOT EXISTS pneumiot.log (
+	log_id serial4 NOT NULL,
+	log_message varchar(264) NULL,
+	PRIMARY KEY(log_id)
 );
