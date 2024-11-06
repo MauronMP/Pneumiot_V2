@@ -1,37 +1,45 @@
-@import '../../assets/styles/variables.scss'; // Importa las variables de color
+// Import color variables from a shared styles file
+@import '../../assets/styles/variables.scss'; // Imports color variables
 
+// Topbar styling
 .topbar {
-  background-color: $light-green-400; // Fondo oscuro como en el SideBar
-  color: $white; // Color del texto
+  background-color: $light-green-400; // Light green background, similar to the sidebar
+  color: $white; // White text color
   
+  // Styling for buttons inside the topbar
   .topbar-button {
-    border-color: $green-900; // Color del borde del botón
-    color: $white; // Color del texto del botón
-    background-color: $green-800;
+    border-color: $green-900; // Dark green border color for the button
+    color: $white; // White text color for the button
+    background-color: $green-800; // Dark green background for the button
 
+    // Button hover effect
     &:hover {
-      background-color: $green-700; // Color de fondo al pasar el ratón
-      border-color: $green-900; // Color del borde al pasar el ratón
+      background-color: $green-700; // Lighter green background when hovered
+      border-color: $green-900; // Dark green border when hovered
     }
 
+    // Icon inside the button
     .topbar-icon {
-      font-size: 1.5rem; // Aumenta el tamaño del ícono
+      font-size: 1.5rem; // Increases the icon size inside the button
     }
   }
 
+  // Brand name (logo or title) styling
   .topbar-brand {
-    color: $black-1000; // Color del texto de la marca
-    font-size: 1.5rem; // Tamaño del texto de la marca
+    color: $black-1000; // Black text color for the brand name
+    font-size: 1.5rem; // Font size for the brand name
   }
 
+  // Login button styling
   .topbar-login {
-    border-color: $green-900; // Color del borde del botón de login
-    color: $white; // Color del texto del botón de login
-    background-color: $green-800;
+    border-color: $green-900; // Dark green border for the login button
+    color: $white; // White text color for the login button
+    background-color: $green-800; // Dark green background for the login button
 
+    // Login button hover effect
     &:hover {
-      background-color: $green-700; // Color de fondo al pasar el ratón
-      border-color: $green-900; // Color del borde al pasar el ratón
+      background-color: $green-700; // Lighter green background when hovered
+      border-color: $green-900; // Dark green border when hovered
     }
   }
 }

@@ -1,19 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from 'react'; // Importing React to create components
+import ReactDOM from 'react-dom/client'; // Importing the ReactDOM client to render components in the DOM
+import './index.css'; // Importing custom global CSS styles
+import App from './App'; // Importing the main App component
+import reportWebVitals from './reportWebVitals'; // Importing the web vitals utility to measure performance
+import 'bootstrap/dist/css/bootstrap.min.css'; // Importing Bootstrap CSS for styling and layout
 
-
+// Creating a root DOM element where the app will be rendered
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// Rendering the React application inside the root element
 root.render(
-  <React.StrictMode>
-    <App />
+  <React.StrictMode> 
+    {/* React.StrictMode helps identify potential problems in the app during development */}
+    <App /> {/* Rendering the App component */}
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// This function is used to log or send performance metrics from your app (optional)
+reportWebVitals(); // Measure performance in the app (logs can be sent to an analytics endpoint or console)

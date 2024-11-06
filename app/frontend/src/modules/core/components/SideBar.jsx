@@ -1,31 +1,34 @@
-import React, { useState } from 'react';
-import { Nav } from 'react-bootstrap';
-import { 
-  FaUserCog, FaUserPlus, FaUser, 
-  FaStethoscope, FaRegEdit, 
-  FaRegEye, FaUserFriends, FaChevronDown, 
-  FaChevronUp, FaClipboardList
-} from 'react-icons/fa';
-import { MdDevicesOther } from 'react-icons/md';
-import '../design-system/components/SideBar.scss';
+import React, { useState } from 'react'; // Importing React and useState hook
+import { Nav } from 'react-bootstrap'; // Importing the Nav component from react-bootstrap for navigation
+import {
+  FaUserCog, FaUserPlus, FaUser,
+  FaStethoscope, FaRegEdit,
+  FaRegEye, FaUserFriends, FaChevronDown,
+  FaChevronUp, FaClipboardList, FaMicrochip
+} from 'react-icons/fa'; // Importing various icons for the sidebar links
+import { MdDevicesOther } from 'react-icons/md'; // Importing a device icon
+import '../design-system/components/SideBar.scss'; // Importing custom SCSS for styling
 
 const SideBar = ({ isOpen }) => {
+  // Managing the state for the toggling of various sections in the sidebar
   const [openPatients, setOpenPatients] = useState(false);
   const [openDevice, setOpenDevice] = useState(false);
-  const [openDashboard, setOpenDashboard] = useState(false);
   const [openAdminPanel, setOpenAdminPanel] = useState(false);
   const [openWorkers, setOpenWorkers] = useState(false);
   const [openPermissions, setOpenPermissions] = useState(false);
   const [openLogs, setOpenLogs] = useState(false);
+  const [openSensors, setOpenSensors] = useState(false); // Added state for Sensors section
 
+  // Toggle functions for expanding/collapsing sections
   const togglePatients = () => setOpenPatients(!openPatients);
   const toggleDevice = () => setOpenDevice(!openDevice);
   const toggleAdminPanel = () => setOpenAdminPanel(!openAdminPanel);
   const toggleWorkers = () => setOpenWorkers(!openWorkers);
   const togglePermissions = () => setOpenPermissions(!openPermissions);
   const toggleLogs = () => setOpenLogs(!openLogs);
+  const toggleSensors = () => setOpenSensors(!openSensors); // Added toggle for Sensors
 
-  // Recuperar datos del usuario desde sessionStorage
+  // Retrieving user data from sessionStorage to display user information and role-based navigation
   const loginData = sessionStorage.getItem('loginData');
   const user = loginData ? JSON.parse(loginData) : null;
   const workerName = user?.workerDetails?.worker_name;
@@ -33,24 +36,25 @@ const SideBar = ({ isOpen }) => {
   const workerRole = user?.workerDetails?.worker_role_name;
 
   return (
-    <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+    <div className={`sidebar ${isOpen ? 'open' : ''}`}> {/* Sidebar toggle based on 'isOpen' prop */}
       <Nav className="flex-column">
+        {/* Display user info if available */}
         {user && (
           <Nav.Item className="sidebar-user-info">
             <Nav.Link href="#">
               <div className="user-info">
-                <span className="user-greeting">Hola,</span>
+                <span className="user-greeting">Hello!,</span>
                 <span className="user-name">{workerName} {workerSurname}</span>
               </div>
             </Nav.Link>
           </Nav.Item>
         )}
 
-        {/* Admin Panel Section */}
+        {/* Admin Panel Section (Only visible if role is admin) */}
         {(workerRole === 'admin') && (
           <Nav.Item>
-            <Nav.Link 
-              className="d-flex align-items-center" 
+            <Nav.Link
+              className="d-flex align-items-center"
               onClick={toggleAdminPanel}
               href="#"
             >
@@ -61,11 +65,12 @@ const SideBar = ({ isOpen }) => {
               <Nav className="flex-column submenu">
                 {/* Workers Section */}
                 <Nav.Item>
-                  <Nav.Link 
-                    className="d-flex align-items-center" 
+                  <Nav.Link
+                    className="d-flex align-items-center"
                     onClick={toggleWorkers}
                     href="#"
-                  ><FaUser className="sidebar-icon" /> Workers
+                  >
+                    <FaUser className="sidebar-icon" /> Workers
                     {openWorkers ? <FaChevronUp /> : <FaChevronDown />}
                   </Nav.Link>
                   {openWorkers && (
@@ -84,14 +89,14 @@ const SideBar = ({ isOpen }) => {
                   )}
                 </Nav.Item>
 
-                {/* Permission Section */}
+                {/* Permissions Section */}
                 <Nav.Item>
-                  <Nav.Link 
-                    className="d-flex align-items-center" 
+                  <Nav.Link
+                    className="d-flex align-items-center"
                     onClick={togglePermissions}
                     href="#"
                   >
-                    <FaUserCog className="sidebar-icon" /> 
+                    <FaUserCog className="sidebar-icon" />
                     Permissions
                     {openPermissions ? <FaChevronUp /> : <FaChevronDown />}
                   </Nav.Link>
@@ -103,8 +108,8 @@ const SideBar = ({ isOpen }) => {
                         </Nav.Link>
                       </Nav.Item>
                       <Nav.Item>
-                        <Nav.Link href="#">
-                          <FaRegEdit className="sidebar-icon" /> Add Permissions
+                        <Nav.Link href="/create-permissions">
+                          <FaRegEdit className="sidebar-icon" /> Create Permissions
                         </Nav.Link>
                       </Nav.Item>
                     </Nav>
@@ -113,44 +118,25 @@ const SideBar = ({ isOpen }) => {
 
                 {/* Logs Section */}
                 <Nav.Item>
-                  <Nav.Link 
-                    className="d-flex align-items-center" 
+                  <Nav.Link
+                    className="d-flex align-items-center"
                     onClick={toggleLogs}
-                    href="#"
+                    href="/logs"
                   >
                     <FaClipboardList className="sidebar-icon" /> Logs
-                    {openLogs ? <FaChevronUp /> : <FaChevronDown />}
                   </Nav.Link>
-                  {openLogs && (
-                    <Nav className="flex-column submenu">
-                      <Nav.Item>
-                        <Nav.Link href="#">
-                          <FaRegEye className="sidebar-icon" /> Error Logs
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link href="#">
-                          <FaRegEye className="sidebar-icon" /> Worker Logs
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link href="#">
-                          <FaRegEye className="sidebar-icon" /> Sensor Logs
-                        </Nav.Link>
-                      </Nav.Item>
-                    </Nav>
-                  )}
+              
                 </Nav.Item>
               </Nav>
             )}
           </Nav.Item>
         )}
 
-        {/* Patients Section */}
+        {/* Patients Section (Visible for all roles) */}
         {workerRole && (
           <Nav.Item>
-            <Nav.Link 
-              className="d-flex align-items-center" 
+            <Nav.Link
+              className="d-flex align-items-center"
               onClick={togglePatients}
               href="#"
             >
@@ -159,18 +145,15 @@ const SideBar = ({ isOpen }) => {
             </Nav.Link>
             {openPatients && (
               <Nav className="flex-column submenu">
+                {workerRole === 'admin' && (
+                  <Nav.Item>
+                    <Nav.Link href="/add-patient">
+                      <FaUserPlus className="sidebar-icon" /> Add Patient
+                    </Nav.Link>
+                  </Nav.Item>
+                )}
                 <Nav.Item>
-                  <Nav.Link href="#">
-                    <FaUserPlus className="sidebar-icon" /> Add Patient
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link href="#">
-                    <FaRegEdit className="sidebar-icon" /> Edit Patient
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link href="#">
+                  <Nav.Link href="/patients">
                     <FaRegEye className="sidebar-icon" /> See Patient
                   </Nav.Link>
                 </Nav.Item>
@@ -179,44 +162,56 @@ const SideBar = ({ isOpen }) => {
           </Nav.Item>
         )}
 
-        {/* Device Section */}
+        {/* Device Section (Visible for all roles) */}
         {workerRole && (
           <Nav.Item>
-            <Nav.Link 
-              className="d-flex align-items-center" 
+            <Nav.Link
+              className="d-flex align-items-center"
               onClick={toggleDevice}
+              href="board-with-sensors"
+            >
+              <MdDevicesOther className="sidebar-icon" /> Devices
+            </Nav.Link>
+          </Nav.Item>
+        )}
+
+      {workerRole && (
+
+          <Nav.Item>
+            <Nav.Link
+              className="d-flex align-items-center"
+              onClick={toggleSensors}
               href="#"
             >
-              <MdDevicesOther className="sidebar-icon" /> Device
-              {openDevice ? <FaChevronUp /> : <FaChevronDown />}
+              <FaMicrochip className="sidebar-icon" /> Sensors
+              {openSensors ? <FaChevronUp /> : <FaChevronDown />}
             </Nav.Link>
-            {openDevice && (
+            {openSensors && (
               <Nav className="flex-column submenu">
+                {workerRole === 'admin' && (
                 <Nav.Item>
-                  <Nav.Link href="#">
-                    <FaStethoscope className="sidebar-icon" /> Add Device
+                  <Nav.Link href="/add-sensors">
+                    <FaRegEdit className="sidebar-icon" /> Add Sensor
                   </Nav.Link>
                 </Nav.Item>
+                )}
                 <Nav.Item>
-                  <Nav.Link href="#">
-                    <FaRegEdit className="sidebar-icon" /> Edit Device
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link href="#">
-                    <FaRegEye className="sidebar-icon" /> See All Devices
+                  <Nav.Link href="/sensors">
+                    <FaRegEye className="sidebar-icon" /> See Sensors
                   </Nav.Link>
                 </Nav.Item>
               </Nav>
             )}
           </Nav.Item>
         )}
+    
+        
 
-        {/* Personal Section */}
+        {/* Personal Section (Visible for all roles) */}
         {workerRole && (
           <Nav.Item>
-            <Nav.Link href="#">
-              <FaUserFriends className="sidebar-icon" /> Personal
+            <Nav.Link href="/profile">
+              <FaUserFriends className="sidebar-icon" /> Profile
             </Nav.Link>
           </Nav.Item>
         )}
@@ -225,4 +220,4 @@ const SideBar = ({ isOpen }) => {
   );
 };
 
-export default SideBar;
+export default SideBar; // Exporting the Sidebar component

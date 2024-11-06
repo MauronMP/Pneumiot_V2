@@ -1,38 +1,44 @@
+/* Main app container with centered content */
 .App {
-  text-align: center;
+  text-align: center; /* Align text to the center */
 }
 
+/* Styling for the logo with dynamic height and no pointer events */
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  height: 40vmin; /* Logo height is 40% of the viewport's minimum dimension */
+  pointer-events: none; /* Prevents the logo from being interactive (e.g., no hover or clicks) */
 }
 
+/* Media query to apply animation only if user has no preference for reduced motion */
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 20s linear; /* Spin animation for the logo if reduced motion is not preferred */
   }
 }
 
+/* Styling for the header section with full height, centered content */
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: #282c34; /* Dark background color for the header */
+  min-height: 100vh; /* Minimum height of 100% of the viewport height */
+  display: flex; /* Use flexbox for alignment */
+  flex-direction: column; /* Arrange children (logo and text) in a vertical stack */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  font-size: calc(10px + 2vmin); /* Dynamic font size based on viewport size */
+  color: white; /* White text color */
 }
 
+/* Styling for links, applying a specific color */
 .App-link {
-  color: #61dafb;
+  color: #61dafb; /* Light blue color for the link */
 }
 
+/* Keyframe animation for spinning the logo */
 @keyframes App-logo-spin {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg); /* Start at 0 degrees rotation */
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg); /* End at 360 degrees (full rotation) */
   }
 }

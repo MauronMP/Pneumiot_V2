@@ -1,53 +1,53 @@
 // src/styles/LoginForm.scss
 
 .login-form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f4f4f4; // Color de fondo opcional
+  display: flex;  // Use flexbox for centering the form container
+  justify-content: center;  // Align horizontally to the center
+  align-items: center;  // Align vertically to the center
+  height: 100vh;  // Full viewport height to center the form
+  background-color: #f4f4f4;  // Optional light gray background color for the entire page
 }
 
 .login-form {
-  background-color: #fff; // Fondo blanco para el formulario
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
+  background-color: #fff;  // White background for the form itself
+  border-radius: 8px;  // Rounded corners for the form
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  // Light shadow to create depth
+  width: 100%;  // Make the form take up full width of its container
+  max-width: 400px;  // Set maximum width of the form to 400px for better responsiveness
 }
 
 .login-form-group {
-  margin-bottom: 15px;
+  margin-bottom: 15px;  // Space between form groups (input fields)
 }
 
 .login-form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+  display: block;  // Display label as a block element to ensure it takes full width
+  margin-bottom: 5px;  // Space between label and input field
+  font-weight: bold;  // Make the label text bold
 }
 
 .login-form-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  width: 100%;  // Make input fields take up the full width of their container
+  padding: 10px;  // Add padding inside the input fields
+  border: 1px solid #ddd;  // Light gray border around the input fields
+  border-radius: 4px;  // Rounded corners for the input fields
 }
 
 .login-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: flex;  // Use flexbox for the button alignment
+  justify-content: space-between;  // Space out the elements (buttons) in the container
+  align-items: center;  // Align the buttons vertically centered
 }
 
 .login-form-button {
-  background-color: #007bff; // Color de fondo para el botón
-  color: #fff; // Color del texto en el botón
-  border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
+  background-color: #007bff;  // Blue background for the button
+  color: #fff;  // White text color for the button
+  border: none;  // Remove default border
+  padding: 10px 15px;  // Add padding inside the button
+  border-radius: 4px;  // Rounded corners for the button
+  cursor: pointer;  // Change cursor to pointer on hover
 }
 
 .login-form-button:hover {
-  background-color: #0056b3; // Color de fondo al pasar el ratón
+  background-color: #0056b3;  // Darker blue when the button is hovered
 }

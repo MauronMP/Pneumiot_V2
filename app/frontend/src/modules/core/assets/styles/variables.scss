@@ -1,4 +1,3 @@
-// variables.scss
 $white: #ffffff;
 
 $green-100: #e6f4ec;
@@ -34,3 +33,46 @@ $black-700: #736c60;
 $black-800: #5f5749;
 $black-900: #4b4233;
 $black-1000: #2e2925;
+
+
+// Aplicar colores personalizados a las tarjetas
+.card-board {
+    background-color: $light-green-200;
+    border: 1px solid $green-1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-header-board {
+    background-color: $green-500;
+    color: $white;
+    border-bottom: 2px solid $green-600;
+  }
+  
+  .card-header-sensor {
+    background-color: $green-400;
+    color: $white;
+    border-bottom: 2px solid $green-500;
+  }
+  
+  .card-body-sensor {
+    background-color: $white;
+    color: $black-600;
+  }
+  
+  .card-icon {
+    font-size: 50px;
+  }
+  
+  .card-title-sensor {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: $green-800;
+  }
+  
+  .card-min-max-values {
+    color: $green-700;
+  }
+  
+  .text-danger {
+    color: $green-900 !important;
+  }

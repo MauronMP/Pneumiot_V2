@@ -1,50 +1,43 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import TopBar from './modules/core/components/TopBar';
-import Sidebar from './modules/core/components/SideBar';
-import Dashboard from './modules/dashboard/components/Dashboard';
-import LoginForm from './modules/auth/components/LoginForm';
-import AddWorker from './modules/worker/components/AddWorker';
-import SeeWorker from './modules/worker/components/SeeWorker';
-import useToggle from './modules/core/hooks/useToggle';
-import SeePermissions from './modules/permissions/components/seePermissions';
+import { TopBar, Footer, Sidebar, useToggle } from './modules/core'; // Importing components and custom hook
+import { isSessionExpired } from './utils/authUtils'; // Importing utility function to check session expiry
+import AppRoutes from './routes/AppRoutes'; // Importing routing logic for app
 
-import { isSessionExpired } from './utils/authUtils'; // Importa la utilidad de autenticación
-
+// Component that handles the main content layout of the app
 const AppContent = () => {
-  const [sidebarOpen, toggleSidebar] = useToggle();
-  const navigate = useNavigate();
+  const [sidebarOpen, toggleSidebar] = useToggle(); // Custom hook to handle the state of the sidebar (open/close)
+  const navigate = useNavigate(); // Hook to programmatically navigate between routes
 
+  // Effect hook that runs on component mount to check if the session has expired
   useEffect(() => {
-    if (isSessionExpired()) {
-      sessionStorage.removeItem('loginData');
-      navigate('/login');
+    if (isSessionExpired()) { // If the session is expired
+      sessionStorage.removeItem('loginData'); // Remove login data from session storage
+      navigate('/login'); // Redirect user to the login page
     }
-  }, [navigate]);
+  }, [navigate]); // Depend on 'navigate' to re-run the effect when it changes
 
   return (
-    <div style={{ display: 'flex' }}>
-      <Sidebar isOpen={sidebarOpen} />
-      <div style={{ flexGrow: 1 }}>
-        <TopBar toggleSidebar={toggleSidebar} />
-        <div style={{ padding: '20px' }}>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/login" element={<LoginForm />} /> {/* Ruta para Login */}
-            <Route path="/add-worker" element={<AddWorker />} /> {/* Nueva ruta para AddWorker */}
-            <Route path="/see-worker" element={<SeeWorker />} /> {/* Nueva ruta para AddWorker */}
-            <Route path="/see-permissions" element={<SeePermissions />} /> {/* Nueva ruta para AddWorker */}
-          </Routes>
+    <div style={{ display: 'flex', flexDirection: 'column'}}> {/* Container with flex layout and full viewport height */}
+      <div style={{ display: 'flex', flexGrow: 1 }}>
+        <Sidebar isOpen={sidebarOpen} /> {/* Sidebar component that receives the state of whether it's open or not */}
+        <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}> {/* Main content container */}
+          <TopBar toggleSidebar={toggleSidebar} /> {/* Top bar component with a function to toggle the sidebar */}
+          <div style={{ padding: '20px', flexGrow: 1 }}>
+            <AppRoutes /> {/* Render the app routes and their respective components */}
+          </div>
         </div>
       </div>
+      <Footer /> {/* Footer component that remains at the bottom */}
     </div>
   );
 };
 
+// Main app component that wraps the entire app with a router for navigation
 const App = () => (
   <Router>
-    <AppContent />
+    <AppContent /> {/* Rendering the AppContent inside the Router */}
   </Router>
 );
 
-export default App;
+export default App; // Exporting the App component as the default export
