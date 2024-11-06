@@ -1,4 +1,39 @@
 const HourlyAverage = require('../models/HourlyAverage');
+const Sensor = require('../../Sensor/models/Sensor');
+
+const getHourlyAverages = async (patientId, boardId, sensorId, dayDate) => {
+    try {
+        const results = await HourlyAverage.findAll({
+            where: {
+                patient_id: patientId,
+                board_id: boardId,
+                sensor_id: sensorId,
+                day_date: dayDate,
+            },
+            include: [{
+                model: Sensor,
+                attributes: ['sensor_type'], // Obtenemos sensor_type
+            }],
+            order: [
+                ['hour_time', 'ASC'], // Ordenar por hour_time
+            ],
+            attributes: ['sensor_id', 'hour_time', 'average_measure', 'index_rate_id', 'day_date'],
+        });
+
+        // Mapeo para devolver en el orden deseado
+        return results.map(result => ({
+            sensor_type: result.Sensor.sensor_type, // Primero sensor_type
+            sensor_id: result.sensor_id,            // Luego sensor_id
+            hour_time: result.hour_time,            // Luego hour_time
+            average_measure: result.average_measure, // Luego average_measure
+            index_rate_id: result.index_rate_id,    // Luego index_rate_id
+            day_date: result.day_date,              // Finalmente day_date
+        }));
+    } catch (error) {
+        throw new Error(`Error fetching hourly averages: ${error.message}`);
+    }
+};
+
 
 const getAllHourlyAverages = async () => {
     return await HourlyAverage.findAll();
@@ -46,6 +81,7 @@ const deleteHourlyAverage = async (id) => {
 };
 
 module.exports = {
+    getHourlyAverages,
     getAllHourlyAverages,
     getHourlyAverageById,
     createHourlyAverage,

@@ -1,6 +1,10 @@
 // src/models/HourlyAverage.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../../config/db');
+const Patient = require('../../Patient/models/Patient');
+const Board = require('../../Board/models/Board');
+const Sensor = require('../../Sensor/models/Sensor');
+const IndexRate = require('../../IndexRate/models/IndexRate');
 
 const HourlyAverage = sequelize.define('HourlyAverage', {
   hourly_average_id: {
@@ -33,7 +37,7 @@ const HourlyAverage = sequelize.define('HourlyAverage', {
     },
   },
   average_measure: {
-    type: DataTypes.NUMERIC(4, 2),
+    type: DataTypes.DECIMAL(4, 2),
     allowNull: false,
   },
   index_rate_id: {
@@ -49,7 +53,7 @@ const HourlyAverage = sequelize.define('HourlyAverage', {
     allowNull: false,
   },
   day_date: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false,
   },
 }, {
@@ -57,5 +61,11 @@ const HourlyAverage = sequelize.define('HourlyAverage', {
   schema: 'pneumiot',
   timestamps: false,
 });
+
+// Definir relaciones
+HourlyAverage.belongsTo(Patient, { foreignKey: 'patient_id' });
+HourlyAverage.belongsTo(Board, { foreignKey: 'board_id' });
+HourlyAverage.belongsTo(Sensor, { foreignKey: 'sensor_id' });
+HourlyAverage.belongsTo(IndexRate, { foreignKey: 'index_rate_id' });
 
 module.exports = HourlyAverage;

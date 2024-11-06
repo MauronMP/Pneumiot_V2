@@ -1,5 +1,28 @@
 const monthlyAverageService = require('../services/monthlyAverageService');
 
+const getMonthlyAveragesWithConditions = async (req, res) => {
+    const { patientId, boardId, sensorId, yearNumber } = req.query;
+  
+    try {
+      // Llamamos al servicio con los parámetros correctos
+      const averages = await monthlyAverageService.getMonthlyAveragesWithConditions(
+        patientId,
+        boardId,
+        sensorId,
+        yearNumber
+      );
+  
+      if (averages.length === 0) {
+        return res.status(404).json({ message: 'No se encontraron resultados' });
+      }
+  
+      res.json(averages);
+    } catch (error) {
+      console.error('Error al obtener los promedios mensuales:', error);
+      res.status(500).json({ error: 'Error al obtener los promedios mensuales' });
+    }
+  };
+
 const getAllMonthlyAverages = async (req, res) => {
     try {
         const monthlyAverages = await monthlyAverageService.getAllMonthlyAverages();
@@ -63,6 +86,7 @@ const deleteMonthlyAverage = async (req, res) => {
 };
 
 module.exports = {
+    getMonthlyAveragesWithConditions,
     getAllMonthlyAverages,
     getMonthlyAverageById,
     createMonthlyAverage,

@@ -1,5 +1,37 @@
 const MonthlyAverage = require('../models/MonthlyAverage');
+const Sensor = require('../../Sensor/models/Sensor');
+const { Op } = require('sequelize'); // Asegúrate de importar Op
 
+const getMonthlyAveragesWithConditions = async (patientId, boardId, sensorId, yearNumber) => {
+    try {
+      const results = await MonthlyAverage.findAll({
+        where: {
+          patient_id: patientId, // Filtro por patientId
+          board_id: boardId,     // Filtro por boardId
+          sensor_id: sensorId,   // Filtro por sensorId
+          year_date: yearNumber
+        },
+        include: [{
+          model: Sensor, // Relación con el modelo Sensor
+          attributes: ['sensor_type'],
+        }],
+        attributes: ['average_measure', 'index_rate_id', 'month_number', 'year_date'],
+      });
+  
+      // Mapeamos los resultados para devolver en el formato deseado
+      return results.map(result => ({
+        sensor_type: result.Sensor.sensor_type,
+        sensor_id: result.sensor_id,
+        average_measure: result.average_measure,
+        index_rate_id: result.index_rate_id,
+        month_number: result.month_number,
+        year_date: result.year_date,
+      }));
+    } catch (error) {
+      throw new Error(`Error fetching monthly averages: ${error.message}`);
+    }
+  };
+  
 const getAllMonthlyAverages = async () => {
     return await MonthlyAverage.findAll();
 };
@@ -46,6 +78,7 @@ const deleteMonthlyAverage = async (id) => {
 };
 
 module.exports = {
+    getMonthlyAveragesWithConditions,
     getAllMonthlyAverages,
     getMonthlyAverageById,
     createMonthlyAverage,

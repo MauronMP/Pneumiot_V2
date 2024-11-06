@@ -1,5 +1,17 @@
 const hourlyAverageService = require('../services/hourlyAverageService');
 
+const getHourlyAverages = async (req, res) => {
+    const { patientId, boardId, sensorId, dayDate } = req.query; // Asegúrate de que estás extrayendo los parámetros de la consulta
+
+    try {
+        const averages = await hourlyAverageService.getHourlyAverages(patientId, boardId, sensorId, dayDate);
+        res.status(200).json(averages);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 const getAllHourlyAverages = async (req, res) => {
     try {
         const hourlyAverages = await hourlyAverageService.getAllHourlyAverages();
@@ -63,6 +75,7 @@ const deleteHourlyAverage = async (req, res) => {
 };
 
 module.exports = {
+    getHourlyAverages,
     getAllHourlyAverages,
     getHourlyAverageById,
     createHourlyAverage,

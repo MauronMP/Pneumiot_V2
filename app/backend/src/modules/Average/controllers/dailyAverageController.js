@@ -1,5 +1,15 @@
 const dailyAverageService = require('../services/dailyAverageService');
 
+const getDailyAveragesController = async (req, res) => {
+    try {
+        const { patientId, boardId, sensorId, startDate, endDate } = req.query;
+        const dailyAverages = await dailyAverageService.getDailyAverages(patientId, boardId, sensorId, startDate, endDate);
+        res.status(200).json(dailyAverages);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 const getAllDailyAverages = async (req, res) => {
     try {
         const dailyAverages = await dailyAverageService.getAllDailyAverages();
@@ -63,6 +73,7 @@ const deleteDailyAverage = async (req, res) => {
 };
 
 module.exports = {
+    getDailyAveragesController,
     getAllDailyAverages,
     getDailyAverageById,
     createDailyAverage,
