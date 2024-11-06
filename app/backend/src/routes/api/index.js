@@ -19,7 +19,7 @@ const indexRateRoutes = require('../../modules/IndexRate/routes/api/indexRateRou
 const hourlyAverageRoutes = require('../../modules/Average/routes/api/hourlyAverageRoutes');
 const dailyAverageRoutes = require('../../modules/Average/routes/api/dailyAverageRoutes');
 const monthlyAverageRoutes = require('../../modules/Average/routes/api/monthlyAverageRoutes');
-const errorLogRoutes = require('../../modules/ErrorLog/routes/api/errorLogRoutes');
+const LogRoutes = require('../../modules/Log/routes/api/LogRoutes.js');
 
 // Define routes
 router.use('/units', unitRoutes);
@@ -40,6 +40,6 @@ router.use('/index-rates', indexRateRoutes);
 router.use('/hourly-averages', hourlyAverageRoutes);
 router.use('/daily-averages', dailyAverageRoutes);
 router.use('/monthly-averages', monthlyAverageRoutes);
-router.use('/error-logs', errorLogRoutes);
+router.use('/logs', LogRoutes);
 
 module.exports = router;
