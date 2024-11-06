@@ -1,83 +1,141 @@
 const Sensor = require('../models/Sensor');
+const { createLog } = require('../../Log/services/LogService'); // Import log creation service
 
-// Obtener todos los sensores
-const getAllSensors = async (req, res) => {
+// Get all Sensor records
+const getAllSensors = async () => {
     try {
         const sensors = await Sensor.findAll();
-        res.status(200).json(sensors);
+        const currentTime = new Date().toISOString(); // Get current time
+        await createLog(`[${
+            currentTime
+        }] Successfully retrieved all Sensor records.`); // Log creation for successful retrieval
+        return sensors;
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        const currentTime = new Date().toISOString();
+        await createLog(`[${
+            currentTime
+        }] Error retrieving all Sensor records: ${error.message}`); // Log creation for error
+        throw error; // Rethrow the error after logging it
     }
 };
 
-// Obtener un sensor por ID
-const getSensorById = async (req, res) => {
+// Get a Sensor record by its ID
+const getSensorById = async (sensor_id) => {
     try {
-        const { id } = req.params;
-        const sensor = await Sensor.findByPk(id);
+        const sensor = await Sensor.findByPk(sensor_id);
+        const currentTime = new Date().toISOString();
         if (sensor) {
-            res.status(200).json(sensor);
+            await createLog(`[${
+                currentTime
+            }] Sensor with ID ${sensor_id} found successfully.`); // Log creation for successful retrieval
+            return sensor;
         } else {
-            res.status(404).json({ message: "Sensor not found" });
+            await createLog(`[${
+                currentTime
+            }] Sensor with ID ${sensor_id} not found.`); // Log creation when sensor is not found
+            return null;
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        const currentTime = new Date().toISOString();
+        await createLog(`[${
+            currentTime
+        }] Error retrieving Sensor with ID ${sensor_id}: ${error.message}`); // Log creation for error
+        throw error; // Rethrow the error after logging it
     }
 };
 
-// Crear un nuevo sensor
-const createSensor = async (req, res) => {
+// Create a new Sensor record
+const createSensor = async (sensorData) => {
     try {
-        const { sensor_code, sensor_type, unit_id, min_value, max_value } = req.body;
-        const newSensor = await Sensor.create({ sensor_code, sensor_type, unit_id, min_value, max_value });
-        res.status(201).json(newSensor);
+        const newSensor = await Sensor.create(sensorData);
+        const currentTime = new Date().toISOString();
+        await createLog(`[${
+            currentTime
+        }] Sensor with ID ${newSensor.sensor_id} created successfully.`); // Log creation for successful creation
+        return newSensor;
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        const currentTime = new Date().toISOString();
+        await createLog(`[${
+            currentTime
+        }] Error creating Sensor: ${error.message}`); // Log creation for error
+        throw error; // Rethrow the error after logging it
     }
 };
 
-// Actualizar un sensor existente
-const updateSensor = async (req, res) => {
+// Update an existing Sensor record by its ID
+const updateSensor = async (sensor_id, sensorData) => {
     try {
-        const { id } = req.params;
-        const { sensor_code, sensor_type, unit_id, min_value, max_value } = req.body;
-        const sensor = await Sensor.findByPk(id);
+        const sensor = await Sensor.findByPk(sensor_id);
+        const currentTime = new Date().toISOString();
         if (sensor) {
-            sensor.sensor_code = sensor_code;
-            sensor.sensor_type = sensor_type;
-            sensor.unit_id = unit_id;
-            sensor.min_value = min_value;
-            sensor.max_value = max_value;
-            await sensor.save();
-            res.status(200).json(sensor);
+            await sensor.update(sensorData); // Update the sensor record
+            await createLog(`[${
+                currentTime
+            }] Sensor with ID ${sensor_id} updated successfully.`); // Log creation for successful update
+            return sensor;
         } else {
-            res.status(404).json({ message: "Sensor not found" });
+            await createLog(`[${
+                currentTime
+            }] Sensor with ID ${sensor_id} not found for update.`); // Log creation when sensor is not found for update
+            return null;
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        const currentTime = new Date().toISOString();
+        await createLog(`[${
+            currentTime
+        }] Error updating Sensor with ID ${sensor_id}: ${error.message}`); // Log creation for error
+        throw error; // Rethrow the error after logging it
     }
 };
 
-// Eliminar un sensor
-const deleteSensor = async (req, res) => {
+// Delete a Sensor record by its ID
+const deleteSensor = async (sensor_id) => {
     try {
-        const { id } = req.params;
-        const sensor = await Sensor.findByPk(id);
-        if (sensor) {
-            await sensor.destroy();
-            res.status(200).json({ message: "Sensor deleted successfully" });
+        const result = await Sensor.destroy({ where: { sensor_id } });
+        const currentTime = new Date().toISOString();
+        if (result === 1) {
+            await createLog(`[${
+                currentTime
+            }] Sensor with ID ${sensor_id} deleted successfully.`); // Log creation for successful deletion
+            return true;
         } else {
-            res.status(404).json({ message: "Sensor not found" });
+            await createLog(`[${
+                currentTime
+            }] Sensor with ID ${sensor_id} not found for deletion.`); // Log creation when sensor is not found for deletion
+            return false;
         }
     } catch (error) {
+        const currentTime = new Date().toISOString();
+        await createLog(`[${
+            currentTime
+        }] Error deleting Sensor with ID ${sensor_id}: ${error.message}`); // Log creation for error
+        throw error; // Rethrow the error after logging it
+    }
+};
+
+// Count total number of Sensor records
+const countSensors = async (req, res) => {
+    try {
+        const count = await Sensor.count(); // Use the Sequelize count method
+        const currentTime = new Date().toISOString();
+        await createLog(`[${
+            currentTime
+        }] Total number of Sensors: ${count}.`); // Log creation for successful count
+        res.status(200).json({ count });
+    } catch (error) {
+        const currentTime = new Date().toISOString();
+        await createLog(`[${
+            currentTime
+        }] Error counting Sensors: ${error.message}`); // Log creation for error
         res.status(500).json({ message: error.message });
     }
 };
 
 module.exports = {
+    countSensors,
     getAllSensors,
     getSensorById,
     createSensor,
     updateSensor,
-    deleteSensor
+    deleteSensor,
 };

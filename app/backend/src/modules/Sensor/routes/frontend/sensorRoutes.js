@@ -1,20 +1,13 @@
 const express = require('express');
-const router = express.Router();
 const sensorController = require('../../controllers/sensorController');
 
-// Obtener todos los sensores
-router.get('/', sensorController.getAllSensors);
+const router = express.Router();
 
-// Obtener un sensor por su ID
-router.get('/:id', sensorController.getSensorById);
-
-// Crear un nuevo sensor
-router.post('/', sensorController.createSensor);
-
-// Actualizar un sensor por su ID
-router.put('/:id', sensorController.updateSensor);
-
-// Eliminar un sensor por su ID
-router.delete('/:id', sensorController.deleteSensor);
+router.get('/count', sensorController.countSensors);
+router.get('/', sensorController.getAllSensors);         // Obtener todos los sensores
+router.get('/:id', sensorController.getSensorById);     // Obtener un sensor por ID
+router.post('', sensorController.createSensor);         // Crear un nuevo sensor
+router.put('/:id', sensorController.updateSensor);      // Actualizar un sensor existente
+router.delete('/:id', sensorController.deleteSensor);   // Eliminar un sensor
 
 module.exports = router;

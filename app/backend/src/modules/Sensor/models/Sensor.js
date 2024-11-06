@@ -1,5 +1,7 @@
+// src/models/Sensor.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../../config/db');
+const Unit = require('../../Unit/models/Unit');
 
 const Sensor = sequelize.define('Sensor', {
   sensor_id: {
@@ -24,11 +26,11 @@ const Sensor = sequelize.define('Sensor', {
     },
   },
   min_value: {
-    type: DataTypes.NUMERIC(4, 2),
+    type: DataTypes.DECIMAL(4, 2),
     allowNull: false,
   },
   max_value: {
-    type: DataTypes.NUMERIC(4, 2),
+    type: DataTypes.DECIMAL(4, 2),
     allowNull: false,
   },
 }, {
@@ -36,5 +38,7 @@ const Sensor = sequelize.define('Sensor', {
   schema: 'pneumiot',
   timestamps: false,
 });
+
+Sensor.belongsTo(Unit, { foreignKey: 'unit_id' });
 
 module.exports = Sensor;
