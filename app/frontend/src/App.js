@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, useNavigate } from 'react-router-dom';
 import { TopBar, Footer, Sidebar, useToggle } from './modules/core'; // Importing components and custom hook
 import { isSessionExpired } from './utils/authUtils'; // Importing utility function to check session expiry
 import AppRoutes from './routes/AppRoutes'; // Importing routing logic for app
