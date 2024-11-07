@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const WorkerAuth = require('../models/WorkerAuth');
 const { createLog } = require('../../Log/services/LogService'); // Import log creation service
 
