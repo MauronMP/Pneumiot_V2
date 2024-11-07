@@ -4,8 +4,11 @@ import { FaBox, FaTag, FaRupeeSign, FaChevronDown, FaSpinner } from 'react-icons
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid'; // GUID for sensor code
 import config from '../../../config/config';  // API configuration
+import { useTranslation } from 'react-i18next'; // Importamos el hook useTranslation para las traducciones
 
 const CreateSensor = () => {
+  const { t } = useTranslation('addSensor'); // Inicializamos el hook de traducción
+
   const [formData, setFormData] = useState({
     sensor_code: uuidv4(), // Generate a GUID for the sensor code
     sensor_type: '',
@@ -50,7 +53,7 @@ const CreateSensor = () => {
       parseFloat(formData.min_value) >= parseFloat(formData.max_value)
     ) {
       setAlert({
-        message: 'Please complete all fields correctly. The minimum value must be less than the maximum value.',
+        message: t('alertInvalidForm'), // Mensaje de alerta con traducción
         variant: 'danger'
       });
       return;
@@ -61,7 +64,7 @@ const CreateSensor = () => {
     try {
       const response = await axios.post(`${config.frontendBaseUrl}sensors`, formData);
       setAlert({
-        message: 'Sensor created successfully',
+        message: t('alertSensorCreated'), // Mensaje de éxito con traducción
         variant: 'success'
       });
 
@@ -75,7 +78,7 @@ const CreateSensor = () => {
     } catch (error) {
       console.error('Error creating sensor:', error);
       setAlert({
-        message: 'Error creating the sensor',
+        message: t('alertError'), // Mensaje de error con traducción
         variant: 'danger'
       });
     }
@@ -92,7 +95,7 @@ const CreateSensor = () => {
         <Card.Body>
           <Card.Title className="text-center mb-4">
             <FaBox className="mr-5" size={30} />
-            <span className='mx-2'>Sensor Creation Form</span>
+            <span className='mx-2'>{t('formTitle')}</span> {/* Título del formulario con traducción */}
           </Card.Title>
 
           {/* Form */}
@@ -101,7 +104,7 @@ const CreateSensor = () => {
             <Row className="mb-4">
               <Col md={6}>
                 <Form.Group controlId="sensor_code">
-                  <Form.Label><FaBox className="mr-2" size={20} /> Sensor Code (GUID)</Form.Label>
+                  <Form.Label><FaBox className="mr-2" size={20} /> {t('sensorCodeLabel')}</Form.Label> {/* Etiqueta para el código del sensor con traducción */}
                   <Form.Control
                     type="text"
                     name="sensor_code"
@@ -117,7 +120,7 @@ const CreateSensor = () => {
             <Row className="mb-4">
               <Col md={6}>
                 <Form.Group controlId="sensor_type">
-                  <Form.Label><FaTag className="mr-2" size={20} /> Sensor Name</Form.Label>
+                  <Form.Label><FaTag className="mr-2" size={20} /> {t('sensorNameLabel')}</Form.Label> {/* Etiqueta para el nombre del sensor con traducción */}
                   <Form.Control
                     type="text"
                     name="sensor_type"
@@ -125,14 +128,14 @@ const CreateSensor = () => {
                     onChange={handleChange}
                     required
                     className="shadow-sm"
-                    placeholder="Enter the sensor name"
+                    placeholder={t('sensorNamePlaceholder')} // Placeholder con traducción
                   />
                 </Form.Group>
               </Col>
 
               <Col md={6}>
                 <Form.Group controlId="unit_id">
-                  <Form.Label><FaChevronDown className="mr-2" size={20} /> Unit</Form.Label>
+                  <Form.Label><FaChevronDown className="mr-2" size={20} /> {t('unitLabel')}</Form.Label> {/* Etiqueta para unidad con traducción */}
                   <Form.Control
                     as="select"
                     name="unit_id"
@@ -141,7 +144,7 @@ const CreateSensor = () => {
                     required
                     className="shadow-sm"
                   >
-                    <option value="">Select a unit</option>
+                    <option value="">{t('selectUnit')}</option> {/* Opción por defecto con traducción */}
                     {units.map(unit => (
                       <option key={unit.unit_id} value={unit.unit_id}>
                         {unit.unit_abbreviation} - {unit.unit_description}
@@ -156,7 +159,7 @@ const CreateSensor = () => {
             <Row className="mb-4">
               <Col md={6}>
                 <Form.Group controlId="min_value">
-                  <Form.Label><FaRupeeSign className="mr-2" size={20} /> Minimum Value</Form.Label>
+                  <Form.Label><FaRupeeSign className="mr-2" size={20} /> {t('minValueLabel')}</Form.Label> {/* Etiqueta para valor mínimo con traducción */}
                   <Form.Control
                     type="number"
                     step="0.01"
@@ -165,14 +168,14 @@ const CreateSensor = () => {
                     onChange={handleChange}
                     required
                     className="shadow-sm"
-                    placeholder="Minimum value"
+                    placeholder={t('minValuePlaceholder')} // Placeholder con traducción
                   />
                 </Form.Group>
               </Col>
 
               <Col md={6}>
                 <Form.Group controlId="max_value">
-                  <Form.Label><FaRupeeSign className="mr-2" size={20} /> Maximum Value</Form.Label>
+                  <Form.Label><FaRupeeSign className="mr-2" size={20} /> {t('maxValueLabel')}</Form.Label> {/* Etiqueta para valor máximo con traducción */}
                   <Form.Control
                     type="number"
                     step="0.01"
@@ -181,7 +184,7 @@ const CreateSensor = () => {
                     onChange={handleChange}
                     required
                     className="shadow-sm"
-                    placeholder="Maximum value"
+                    placeholder={t('maxValuePlaceholder')} // Placeholder con traducción
                   />
                 </Form.Group>
               </Col>
@@ -191,10 +194,10 @@ const CreateSensor = () => {
             <Button variant="success" type="submit" disabled={loading} className="w-100 mt-4">
               {loading ? (
                 <>
-                  <FaSpinner className="spin mr-2" /> Creating...
+                  <FaSpinner className="spin mr-2" /> {t('creatingSensor')}
                 </>
               ) : (
-                'Create Sensor'
+                t('createSensorButton')
               )}
             </Button>
           </Form>

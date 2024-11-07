@@ -1,5 +1,3 @@
-// src/modules/dashboard/charts/barChart.jsx
-
 import React from 'react';
 // Importing the ResponsiveBar component from Nivo to render the bar chart
 import { ResponsiveBar } from '@nivo/bar';
@@ -7,8 +5,11 @@ import { ResponsiveBar } from '@nivo/bar';
 import { getColor } from '../../../utils/colorUtils'; // Ensure the import path is correct
 // Importing the Legend component to display the chart legend
 import Legend from './legend'; 
+import { useTranslation } from 'react-i18next'; // Import useTranslation for translations
 
 const BarChart = ({ data }) => {
+    const { t } = useTranslation('barChart'); // Initialize the translation function
+
     // Format the data for Nivo, adapting the structure to what Nivo expects
     const formattedData = data.map(item => ({
         hour: item.hour_time, // The X-axis represents the hour (hour_time)
@@ -31,7 +32,7 @@ const BarChart = ({ data }) => {
                     tickSize: 5, // Size of ticks on the X-axis
                     tickPadding: 5, // Padding between ticks and labels
                     tickRotation: 0, // No rotation for tick labels on the X-axis
-                    legend: 'Measures by hour', // Label for the X-axis (Hour in Spanish)
+                    legend: t('measuresByHour'), // Translated label for the X-axis
                     legendPosition: 'middle', // Position the X-axis legend in the middle
                     legendOffset: 50, // Offset the X-axis legend from the axis
                 }}
@@ -39,13 +40,13 @@ const BarChart = ({ data }) => {
                     tickSize: 5, // Size of ticks on the Y-axis
                     tickPadding: 5, // Padding between ticks and labels
                     tickRotation: 0, // No rotation for tick labels on the Y-axis
-                    legend: 'Average', // Label for the Y-axis (Average in Spanish)
+                    legend: t('average'), // Translated label for the Y-axis
                     legendPosition: 'middle', // Position the Y-axis legend in the middle
                     legendOffset: -50, // Offset the Y-axis legend from the axis
                 }}
                 enableLabel={true} // Enable labels on the bars (set to false if labels are not needed)
                 role="application" // Define the role for accessibility (helps screen readers)
-                ariaLabel="Bar chart showing average measures per hour" // Aria label for better accessibility
+                ariaLabel={t('barChartDescription')} // Translated aria label for better accessibility
             />
         </div>
     );

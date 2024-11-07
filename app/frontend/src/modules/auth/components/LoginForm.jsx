@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';  // Import useNavigate hook to h
 import { Container, Form, Button, Alert, Card } from 'react-bootstrap';  // Import Bootstrap components for UI
 import 'bootstrap/dist/css/bootstrap.min.css';  // Ensure Bootstrap CSS is applied
 import config from '../../../config/config';  // Import URL paths for apis
+import { useTranslation } from 'react-i18next'; 
 
 const LOGIN_EXPIRY_TIME = 60 * 60 * 1000;  // 1 hour in milliseconds (used to track login session expiry)
 
@@ -11,6 +12,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');  // State to store the password entered by the user
   const [error, setError] = useState('');  // State to store any error message that occurs during login
   const navigate = useNavigate();  // useNavigate hook for redirecting to another route (home after login)
+  const { t } = useTranslation('login');
 
   // Handle the form submission
   const handleSubmit = async (e) => {
@@ -45,11 +47,11 @@ const LoginForm = () => {
         navigate('/');
       } else {
         // If login fails, display the error message returned from the server
-        setError(data.message || 'Login failed. Please try again.');
+        setError(data.message || t('loginFailed'));
       }
     } catch (error) {
       console.error('Error:', error);  // Log any errors that occur during the request
-      setError('An error occurred. Please try again.');  // Display a generic error message
+      setError(t('errorOccurred')); // Display a generic error message
     }
   };
 
@@ -66,10 +68,10 @@ const LoginForm = () => {
           {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email/DNI</Form.Label>
+              <Form.Label>{t('emailOrDni')}</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter email or DNI"
+                placeholder={t('enterEmailOrDni')}
                 value={emailOrDni}
                 onChange={(e) => setemailOrDni(e.target.value)}
                 required
@@ -77,10 +79,10 @@ const LoginForm = () => {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Contraseña</Form.Label>
+              <Form.Label>{t('password')}</Form.Label> 
               <Form.Control
                 type="password"
-                placeholder="Password"
+                placeholder={t('enterPassword')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -88,7 +90,7 @@ const LoginForm = () => {
             </Form.Group>
 
             <Button variant="primary" type="submit" className="w-100 mb-3">
-              Login
+             {t('login')}
             </Button>
           </Form>
         </Card>

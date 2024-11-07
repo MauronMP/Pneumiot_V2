@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom'; // For navigation after form sub
 import axios from 'axios'; // Axios to handle HTTP requests
 import { FaUser, FaEnvelope, FaIdCard, FaLock, FaKey, FaUsers } from 'react-icons/fa'; // FontAwesome icons for UI
 import config from '../../../config/config';  // Import configuration (API paths)
+import { useTranslation } from 'react-i18next'; // Import the useTranslation hook for translations
 
 // Component to add a new worker
 const AddWorker = () => {
+  const { t } = useTranslation('addWorker'); // Use the 'addWorker' namespace for translations
   // State to store roles for workers (e.g., admin, staff, etc.)
   const [roles, setRoles] = useState([]);
   
@@ -34,7 +36,7 @@ const AddWorker = () => {
   useEffect(() => {
     axios.get(`${config.frontendBaseUrl}worker-roles/`) // Get roles from the API
       .then(response => setRoles(response.data)) // Store roles in the state
-      .catch(err => setError('Error fetching worker roles')); // Handle errors
+      .catch(err => setError(t('errorFetchingRoles'))); // Use translated error message
   }, []);
 
   // Function to handle form input changes
@@ -56,25 +58,25 @@ const AddWorker = () => {
 
     // Check for empty fields
     if (!worker_name || !worker_surname || !worker_email || !worker_dni || !worker_role_id || !passwd || !passwd_confirm) {
-      setError('All fields are required!');
+      setError(t('allFieldsRequired'));
       return false;
     }
 
     // Validate email format
     if (!emailRegex.test(worker_email)) {
-      setError('Invalid email!');
+      setError(t('invalidEmail'));
       return false;
     }
 
     // Validate DNI format
     if (!dniRegex.test(worker_dni)) {
-      setError('Wrong DNI. It must have 8 digits and one character.');
+      setError(t('invalidDni'));
       return false;
     }
 
     // Check if passwords match
     if (passwd !== passwd_confirm) {
-      setError('Passwords do not match!');
+      setError(t('passwordsDoNotMatch'));
       return false;
     }
 
@@ -106,14 +108,14 @@ const AddWorker = () => {
             navigate('/'); 
           }, 2000);
         })
-        .catch(err => setError('There was an error creating the new worker')); // Handle errors
+        .catch(err => setError(t('errorCreatingWorker'))); // Use translated error message
     }
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center mt-5">
       <Card className="p-4 w-75 shadow-sm">
-        <h2 className='mb-4 text-center'>Add New Worker</h2>
+        <h2 className='mb-4 text-center'>{t('addWorker')}</h2> {/* Translated title */}
         {error && <Alert variant="danger">{error}</Alert>} {/* Display error messages */}
 
         {/* Form to capture worker details */}
@@ -125,7 +127,7 @@ const AddWorker = () => {
                   <InputGroup.Text><FaUser /></InputGroup.Text> {/* Icon for worker name */}
                   <Form.Control
                     type="text"
-                    placeholder="Enter Name"
+                    placeholder={t('enterName')}  // Translated placeholder text
                     name="worker_name"
                     value={formData.worker_name}
                     onChange={handleChange}
@@ -141,7 +143,7 @@ const AddWorker = () => {
                   <InputGroup.Text><FaUser /></InputGroup.Text> {/* Icon for worker surname */}
                   <Form.Control
                     type="text"
-                    placeholder="Enter Surname"
+                    placeholder={t('enterSurname')}  // Translated placeholder text
                     name="worker_surname"
                     value={formData.worker_surname}
                     onChange={handleChange}
@@ -159,7 +161,7 @@ const AddWorker = () => {
                   <InputGroup.Text><FaEnvelope /></InputGroup.Text> {/* Icon for email */}
                   <Form.Control
                     type="email"
-                    placeholder="Enter Email"
+                    placeholder={t('enterEmail')}  // Translated placeholder text
                     name="worker_email"
                     value={formData.worker_email}
                     onChange={handleChange}
@@ -175,7 +177,7 @@ const AddWorker = () => {
                   <InputGroup.Text><FaIdCard /></InputGroup.Text> {/* Icon for DNI */}
                   <Form.Control
                     type="text"
-                    placeholder="Enter DNI"
+                    placeholder={t('enterDni')}  // Translated placeholder text
                     name="worker_dni"
                     value={formData.worker_dni}
                     onChange={handleChange}
@@ -196,7 +198,7 @@ const AddWorker = () => {
                 onChange={handleChange}
                 required
               >
-                <option value="">Choose a role</option>
+                <option value="">{t('chooseRole')}</option> {/* Translated option */}
                 {/* Populate roles dropdown */}
                 {roles.map(role => (
                   <option key={role.worker_role_id} value={role.worker_role_id}>
@@ -214,7 +216,7 @@ const AddWorker = () => {
                   <InputGroup.Text><FaLock /></InputGroup.Text> {/* Icon for password */}
                   <Form.Control
                     type="password"
-                    placeholder="Enter Password"
+                    placeholder={t('enterPassword')}  // Translated placeholder text
                     name="passwd"
                     value={formData.passwd}
                     onChange={handleChange}
@@ -230,7 +232,7 @@ const AddWorker = () => {
                   <InputGroup.Text><FaKey /></InputGroup.Text> {/* Icon for password confirmation */}
                   <Form.Control
                     type="password"
-                    placeholder="Confirm Password"
+                    placeholder={t('confirmPassword')}  // Translated placeholder text
                     name="passwd_confirm"
                     value={formData.passwd_confirm}
                     onChange={handleChange}
@@ -243,7 +245,7 @@ const AddWorker = () => {
 
           {/* Submit button */}
           <Button variant="primary" type="submit" className="w-100 mt-3">
-            Add Worker
+            {t('addWorkerButton')} {/* Translated button text */}
           </Button>
         </Form>
       </Card>
@@ -252,9 +254,9 @@ const AddWorker = () => {
       <ToastContainer position="top-center">
         <Toast onClose={() => setShowToast(false)} show={showToast} delay={2000} autohide>
           <Toast.Header>
-            <strong className="me-auto">Success</strong>
+            <strong className="me-auto">{t('success')}</strong>
           </Toast.Header>
-          <Toast.Body>Worker added successfully!</Toast.Body>
+          <Toast.Body>{t('workerAddedSuccess')}</Toast.Body> {/* Translated success message */}
         </Toast>
       </ToastContainer>
     </div>

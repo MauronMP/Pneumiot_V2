@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Form, InputGroup, Modal, Col, Row } from 'react-bootstrap';
 import axios from 'axios';
 import config from '../../../config/config';  // Import URL paths for APIs
+import { useTranslation } from 'react-i18next';  // Import i18next
 
 const SeeWorkers = () => {
+  const { t } = useTranslation('seeWorker');  // Hook for translations
+  
   // State to manage workers data, search term, filtered workers, modals, and form data
   const [workers, setWorkers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -84,41 +87,41 @@ const SeeWorkers = () => {
 
     // Validate DNI: must be 8 digits followed by a letter
     if (!/^\d{8}[A-Za-z]$/.test(worker_dni)) {
-      errors.worker_dni = 'DNI must be 8 digits followed by a letter';
+      errors.worker_dni = t('dniValidationError');
     }
 
     // Validate Name
     if (!worker_name.trim()) {
-      errors.worker_name = 'Name is required';
+      errors.worker_name = t('nameRequired');
     }
 
     // Validate Surname
     if (!worker_surname.trim()) {
-      errors.worker_surname = 'Surname is required';
+      errors.worker_surname = t('surnameRequired');
     }
 
     // Validate Email
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(worker_email)) {
-      errors.worker_email = 'Invalid email address';
+      errors.worker_email = t('emailValidationError');
     }
 
     // Validate Password
     if (!password.trim()) {
-      errors.password = 'Password is required';
+      errors.password = t('passwordRequired');
     }
 
     // Validate Confirm Password
     if (!confirmPassword.trim()) {
-      errors.confirmPassword = 'Confirm Password is required';
+      errors.confirmPassword = t('confirmPasswordRequired');
     }
 
     if (password !== confirmPassword) {
-      errors.password = 'Passwords do not match';
+      errors.password = t('passwordMismatch');
     }
 
     // Validate Role
     if (!worker_role_id) {
-      errors.worker_role_id = 'Role is required';
+      errors.worker_role_id = t('roleRequired');
     }
 
     setErrors(errors);
@@ -209,15 +212,15 @@ const SeeWorkers = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="text-center mb-4">All Workers</h2>
+      <h2 className="text-center mb-4">{t('allWorkers')}</h2>
 
       {/* Search Bar */}
       <Row className="justify-content-center">
         <Col xs={12} sm={8} md={6}>
           <InputGroup className="mb-4">
             <Form.Control
-              placeholder="Search by email or DNI"
-              aria-label="Search by email or DNI"
+              placeholder={t('searchPlaceholder')}
+              aria-label={t('searchAriaLabel')}
               aria-describedby="basic-addon2"
               value={searchTerm}
               onChange={handleSearch}  // Search handler
@@ -230,12 +233,12 @@ const SeeWorkers = () => {
       <Table striped bordered hover responsive="md">
         <thead className="table-dark">
           <tr>
-            <th>DNI</th>
-            <th>Email</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Role</th>
-            <th>Actions</th>
+            <th>{t('dni')}</th>
+            <th>{t('email')}</th>
+            <th>{t('name')}</th>
+            <th>{t('surname')}</th>
+            <th>{t('role')}</th>
+            <th>{t('actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -249,10 +252,10 @@ const SeeWorkers = () => {
               <td>
                 <div className="d-flex gap-2">
                   <Button variant="primary" onClick={() => handleEdit(worker)} className="mx-1 w-100">
-                    Edit
+                    {t('edit')}
                   </Button>
                   <Button variant="danger" onClick={() => handleDelete(worker)} className="mx-1 w-100">
-                    Delete
+                    {t('delete')}
                   </Button>
                 </div>
               </td>
@@ -262,135 +265,134 @@ const SeeWorkers = () => {
       </Table>
 
       {/* Delete Confirmation Modal */}
-      <Modal show={showDeleteModal} onHide={handleCancelDelete} centered>
+      <Modal show={showDeleteModal} onHide={handleCancelDelete}>
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Deletion</Modal.Title>
+          <Modal.Title>{t('deleteConfirmation')}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to delete this worker?
-        </Modal.Body>
+        <Modal.Body>{t('deleteWorkerConfirmation')}</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCancelDelete}>Cancel</Button>
-          <Button variant="danger" onClick={handleConfirmDelete}>Delete</Button>
+          <Button variant="secondary" onClick={handleCancelDelete}>
+            {t('cancel')}
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            {t('delete')}
+          </Button>
         </Modal.Footer>
       </Modal>
 
       {/* Edit Worker Modal */}
-      <Modal show={showEditModal} onHide={handleCancelEdit} centered>
+      <Modal show={showEditModal} onHide={handleCancelEdit}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Worker</Modal.Title>
+          <Modal.Title>{t('editWorker')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group controlId="formWorkerDni">
-              <Form.Label>DNI</Form.Label>
+            {/* Worker DNI */}
+            <Form.Group controlId="worker_dni">
+              <Form.Label>{t('dni')}</Form.Label>
               <Form.Control
                 type="text"
                 name="worker_dni"
                 value={formData.worker_dni}
                 onChange={handleFormChange}
-                isInvalid={errors.worker_dni}
+                isInvalid={!!errors.worker_dni}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.worker_dni}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.worker_dni}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="formWorkerName">
-              <Form.Label>Name</Form.Label>
+            {/* Worker Name */}
+            <Form.Group controlId="worker_name">
+              <Form.Label>{t('name')}</Form.Label>
               <Form.Control
                 type="text"
                 name="worker_name"
                 value={formData.worker_name}
                 onChange={handleFormChange}
-                isInvalid={errors.worker_name}
+                isInvalid={!!errors.worker_name}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.worker_name}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.worker_name}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="formWorkerSurname">
-              <Form.Label>Surname</Form.Label>
+            {/* Worker Surname */}
+            <Form.Group controlId="worker_surname">
+              <Form.Label>{t('surname')}</Form.Label>
               <Form.Control
                 type="text"
                 name="worker_surname"
                 value={formData.worker_surname}
                 onChange={handleFormChange}
-                isInvalid={errors.worker_surname}
+                isInvalid={!!errors.worker_surname}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.worker_surname}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.worker_surname}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="formWorkerEmail">
-              <Form.Label>Email</Form.Label>
+            {/* Worker Email */}
+            <Form.Group controlId="worker_email">
+              <Form.Label>{t('email')}</Form.Label>
               <Form.Control
                 type="email"
                 name="worker_email"
                 value={formData.worker_email}
                 onChange={handleFormChange}
-                isInvalid={errors.worker_email}
+                isInvalid={!!errors.worker_email}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.worker_email}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.worker_email}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="formWorkerPassword">
-              <Form.Label>Password</Form.Label>
+            {/* Password */}
+            <Form.Group controlId="password">
+              <Form.Label>{t('password')}</Form.Label>
               <Form.Control
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleFormChange}
-                isInvalid={errors.password}
+                isInvalid={!!errors.password}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.password}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="formConfirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
+            {/* Confirm Password */}
+            <Form.Group controlId="confirmPassword">
+              <Form.Label>{t('confirmPassword')}</Form.Label>
               <Form.Control
                 type="password"
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleFormChange}
-                isInvalid={errors.confirmPassword}
+                isInvalid={!!errors.confirmPassword}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.confirmPassword}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="formWorkerRole">
-              <Form.Label>Role</Form.Label>
+            {/* Worker Role */}
+            <Form.Group controlId="worker_role_id">
+              <Form.Label>{t('role')}</Form.Label>
               <Form.Control
                 as="select"
                 name="worker_role_id"
                 value={formData.worker_role_id}
                 onChange={handleFormChange}
-                isInvalid={errors.worker_role_id}
+                isInvalid={!!errors.worker_role_id}
               >
-                <option value="">Select a role</option>
+                <option value="">{t('selectRole')}</option>
                 {roles.map(role => (
                   <option key={role.worker_role_id} value={role.worker_role_id}>
                     {role.worker_role_name}
                   </option>
                 ))}
               </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {errors.worker_role_id}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.worker_role_id}</Form.Control.Feedback>
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCancelEdit}>Cancel</Button>
-          <Button variant="primary" onClick={handleSaveChanges}>Save Changes</Button>
+          <Button variant="secondary" onClick={handleCancelEdit}>
+            {t('cancel')}
+          </Button>
+          <Button variant="primary" onClick={handleSaveChanges}>
+            {t('saveChanges')}
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>

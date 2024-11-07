@@ -3,42 +3,45 @@ import axios from 'axios';
 import { Button, Table, Form, Pagination, Alert, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import config from '../../../config/config';  // Import URL paths for APIs
+import { useTranslation } from 'react-i18next'; // Importa el hook useTranslation
 
 const PatientsPage = () => {
-    // States to store the patient data, filtered patients, and search query
-    const [patients, setPatients] = useState([]);  // All patients data
-    const [filteredPatients, setFilteredPatients] = useState([]);  // Patients filtered by search query
-    const [currentPage, setCurrentPage] = useState(1);  // Current page for pagination
-    const [itemsPerPage] = useState(5);  // Set constant for items per page (pagination)
-    const [searchQuery, setSearchQuery] = useState('');  // The search query entered by the user
-    const [exportMessage, setExportMessage] = useState('');  // State for export message to notify users
-    const [showModal, setShowModal] = useState(false);  // Modal visibility for confirmation
-    const [patientToDelete, setPatientToDelete] = useState(null);  // Patient to be discharged
+    const { t } = useTranslation('patients'); // Usa el espacio de nombres 'patientsPage' para las traducciones
+
+    // Estados para almacenar los datos de los pacientes, pacientes filtrados, y la consulta de búsqueda
+    const [patients, setPatients] = useState([]);  // Todos los datos de los pacientes
+    const [filteredPatients, setFilteredPatients] = useState([]);  // Pacientes filtrados por la consulta de búsqueda
+    const [currentPage, setCurrentPage] = useState(1);  // Página actual para la paginación
+    const [itemsPerPage] = useState(5);  // Constante para los elementos por página (paginación)
+    const [searchQuery, setSearchQuery] = useState('');  // Consulta de búsqueda ingresada por el usuario
+    const [exportMessage, setExportMessage] = useState('');  // Estado para el mensaje de exportación para notificar a los usuarios
+    const [showModal, setShowModal] = useState(false);  // Visibilidad del modal para confirmación
+    const [patientToDelete, setPatientToDelete] = useState(null);  // Paciente que se va a dar de alta
     const navigate = useNavigate();
 
-    // Function to navigate to a patient's dashboard (view measurements)
+    // Función para navegar al panel de mediciones de un paciente
     const handleViewMeasurements = (patientId) => {
         navigate(`/patientDashboard/${patientId}`);
     };
 
-    // Function to navigate to a page for editing a patient's information
+    // Función para navegar a la página de edición de los datos de un paciente
     const handleEditPatient = (patientId) => {
         navigate(`/edit-patient/${patientId}`);
     };
 
-    // Function to handle exporting patient data to CSV
+    // Función para manejar la exportación de datos de un paciente a CSV
     const handleExportData = async (patientId) => {
         try {
             const response = await axios.get(`${config.frontendBaseUrl}measurements/patient/${patientId}`);
             const measurements = response.data;
 
-            // If no data exists for the patient, notify the user
+            // Si no hay datos para el paciente, notificar al usuario
             if (measurements.length === 0) {
-                setExportMessage('Currently, the patient has no data.');
+                setExportMessage(t('noDataForExport'));
                 return;
             }
 
-            // Create CSV data structure with headers and rows
+            // Crear estructura de datos para el CSV con encabezados y filas
             const csvHeader = 'Measurement ID,Patient ID,Board ID,Sensor ID,Sensor Value,Log Time UTC,Log Time Local\n';
             const csvRows = measurements.map(measurement => {
                 return `${measurement.measurement_id},${measurement.patient_id},${measurement.board_id},${measurement.sensor_id},${measurement.sensor_value},${measurement.log_time_utc},${measurement.log_time_local}`;
@@ -46,38 +49,38 @@ const PatientsPage = () => {
 
             const csvData = csvHeader + csvRows;
 
-            // Create a downloadable CSV file
+            // Crear archivo CSV descargable
             const blob = new Blob([csvData], { type: 'text/csv' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = `Patient_${patientId}_Measurements.csv`;
             link.click();
         } catch (err) {
-            console.error('Error exporting data:', err);
+            console.error(t('errorExportingData'), err);
         }
     };
 
-    // Function to handle patient discharge (deleting a patient)
+    // Función para manejar la alta de un paciente (eliminación del paciente)
     const handleDeletePatient = async () => {
         try {
             if (!patientToDelete) return;
 
-            // Fetch current data for the patient before updating
+            // Obtener los datos actuales del paciente antes de actualizar
             const response = await axios.get(`${config.frontendBaseUrl}patients/${patientToDelete}`);
             const patientData = response.data;
 
-            // Check if the patient already has a discharge date (if already discharged)
+            // Verificar si el paciente ya tiene una fecha de alta (si ya está dado de alta)
             if (!patientData.discharge_date) {
-                // Set discharge date as current time if not already set
+                // Establecer la fecha de alta como la hora actual si no está configurada
                 const updatedPatientData = {
                     ...patientData,
-                    discharge_date: new Date().toISOString()  // Format as ISO string
+                    discharge_date: new Date().toISOString()  // Formato ISO string
                 };
 
-                // Send PUT request to update patient discharge date
+                // Enviar solicitud PUT para actualizar la fecha de alta del paciente
                 await axios.put(`${config.frontendBaseUrl}patients/${patientToDelete}`, updatedPatientData);
                 
-                // Update local state to reflect changes
+                // Actualizar el estado local para reflejar los cambios
                 setPatients(patients.map(patient => 
                     patient.patient_id === patientToDelete ? { ...patient, discharge_date: updatedPatientData.discharge_date } : patient
                 ));
@@ -86,38 +89,38 @@ const PatientsPage = () => {
                 ));
             }
 
-            // Close modal after discharging the patient
+            // Cerrar el modal después de dar de alta al paciente
             setShowModal(false);
         } catch (err) {
-            console.error('Error giving patient discharge:', err);
+            console.error(t('errorDischargingPatient'), err);
         }
     };
 
-    // Function to open the confirmation modal for deleting a patient
+    // Función para abrir el modal de confirmación para dar de alta a un paciente
     const openModal = (patientId) => {
         setPatientToDelete(patientId);
         setShowModal(true);
     };
 
-    // Function to close the confirmation modal
+    // Función para cerrar el modal de confirmación
     const closeModal = () => {
         setShowModal(false);
         setPatientToDelete(null);
     };
 
     useEffect(() => {
-        // Fetch the list of patients when the component is mounted
+        // Obtener la lista de pacientes cuando se monta el componente
         axios.get(`${config.frontendBaseUrl}patients/`)
             .then(response => {
                 setPatients(response.data);
-                setFilteredPatients(response.data);  // Initially, filtered patients are the same as all patients
+                setFilteredPatients(response.data);  // Inicialmente, los pacientes filtrados son los mismos que todos los pacientes
             })
             .catch(err => {
-                console.error('Error fetching patients:', err);
+                console.error(t('errorFetchingPatients'), err);
             });
     }, []);
 
-    // Function to format date in "dd-mm-yyyy" format
+    // Función para formatear la fecha en formato "dd-mm-yyyy"
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = date.getDate().toString().padStart(2, '0');
@@ -126,14 +129,14 @@ const PatientsPage = () => {
         return `${day}-${month}-${year}`;
     };
 
-    // Function to handle searching patients by DNI or date (admission/discharge)
+    // Función para manejar la búsqueda de pacientes por DNI o fecha (admisión/alta)
     const handleSearch = (e) => {
         const query = e.target.value.toLowerCase();
         setSearchQuery(query);
 
-        // Filter patients by matching DNI, admission date, or discharge date
+        // Filtrar los pacientes que coincidan con el DNI, la fecha de admisión o la fecha de alta
         const filtered = patients.filter(patient => {
-            const dischargeDate = patient.discharge_date ? formatDate(patient.discharge_date) : 'Not yet!';
+            const dischargeDate = patient.discharge_date ? formatDate(patient.discharge_date) : t('notYet');
             const admissionDate = formatDate(patient.admission_date);
 
             return patient.patient_dni.toLowerCase().includes(query) ||
@@ -144,15 +147,15 @@ const PatientsPage = () => {
         setFilteredPatients(filtered);
     };
 
-    // Pagination logic - slice the filtered patients based on current page
+    // Lógica de paginación - cortar los pacientes filtrados según la página actual
     const indexOfLastPatient = currentPage * itemsPerPage;
     const indexOfFirstPatient = indexOfLastPatient - itemsPerPage;
     const currentPatients = filteredPatients.slice(indexOfFirstPatient, indexOfLastPatient);
 
-    // Function to handle page change in pagination
+    // Función para manejar el cambio de página en la paginación
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    // Pagination buttons rendering logic based on the total number of patients
+    // Lógica de botones de paginación según el número total de pacientes
     const pageNumbers = [];
     for (let i = 1; i <= Math.ceil(filteredPatients.length / itemsPerPage); i++) {
         pageNumbers.push(i);
@@ -160,28 +163,28 @@ const PatientsPage = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="mb-4">Patients List</h2>
+            <h2 className="mb-4">{t('patientsList')}</h2>
 
-            {/* Message for exporting data */}
+            {/* Mensaje para la exportación de datos */}
             {exportMessage && <Alert variant="info" className="mb-4">{exportMessage}</Alert>}
 
-            {/* Search Bar */}
+            {/* Barra de búsqueda */}
             <Form.Control
                 type="text"
-                placeholder="Search by DNI or date (dd-mm-yyyy)"
+                placeholder={t('searchByDniOrDate')}
                 value={searchQuery}
                 onChange={handleSearch}
                 className="mb-4"
             />
 
-            {/* Patients Table */}
+            {/* Tabla de pacientes */}
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>DNI</th>
-                        <th>Admission Date</th>
-                        <th>Discharge Date</th>
-                        <th className="text-center">Actions</th>
+                        <th>{t('dni')}</th>
+                        <th>{t('admissionDate')}</th>
+                        <th>{t('dischargeDate')}</th>
+                        <th className="text-center">{t('actions')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -189,37 +192,24 @@ const PatientsPage = () => {
                         <tr key={patient.patient_id}>
                             <td>{patient.patient_dni}</td>
                             <td>{formatDate(patient.admission_date)}</td>
-                            <td>{patient.discharge_date ? formatDate(patient.discharge_date) : 'Not yet!'}</td>
+                            <td>{patient.discharge_date ? formatDate(patient.discharge_date) : t('notYet')}</td>
                             <td className="text-center">
                                 <div className="d-flex gap-2">
-                                    {/* Buttons to view measurements, edit patient, export data, and discharge patient */}
-                                    <Button
-                                        variant="info"
-                                        className="w-100"
-                                        onClick={() => handleViewMeasurements(patient.patient_id)}>
-                                        View Measurements  
+                                    {/* Botones para ver mediciones, editar paciente, exportar datos y dar de alta al paciente */}
+                                    <Button variant="info" className="w-100" onClick={() => handleViewMeasurements(patient.patient_id)}>
+                                        {t('viewMeasurements')}
                                     </Button>
-                                    <Button 
-                                        variant="primary" 
-                                        className="w-100"
-                                        onClick={() => handleEditPatient(patient.patient_id)}>
-                                        View Record
+                                    <Button variant="primary" className="w-100" onClick={() => handleEditPatient(patient.patient_id)}>
+                                        {t('viewRecord')}
                                     </Button>
-                                    <Button 
-                                        variant="success" 
-                                        className="w-100" 
-                                        onClick={() => handleExportData(patient.patient_id)}>
-                                        Export Data
+                                    <Button variant="success" className="w-100" onClick={() => handleExportData(patient.patient_id)}>
+                                        {t('exportData')}
                                     </Button>
-                                    {/* Only show "Discharge" if patient does not have a discharge date */}
-                                    {!patient.discharge_date ? 
-                                        <Button 
-                                            variant="danger" 
-                                            className="w-100"
-                                            onClick={() => openModal(patient.patient_id)}>
-                                            Discharge
-                                        </Button> 
-                                    : ''}
+                                    {!patient.discharge_date && 
+                                        <Button variant="danger" className="w-100" onClick={() => openModal(patient.patient_id)}>
+                                            {t('discharge')}
+                                        </Button>
+                                    }
                                 </div>
                             </td>
                         </tr>
@@ -227,28 +217,24 @@ const PatientsPage = () => {
                 </tbody>
             </Table>
 
-            {/* Pagination */}
+            {/* Paginación */}
             <Pagination className="d-flex justify-content-center">
                 {pageNumbers.map((number) => (
-                    <Pagination.Item
-                        key={number}
-                        active={number === currentPage}
-                        onClick={() => paginate(number)}
-                    >
+                    <Pagination.Item key={number} active={number === currentPage} onClick={() => paginate(number)}>
                         {number}
                     </Pagination.Item>
                 ))}
             </Pagination>
 
-            {/* Confirmation Modal */}
+            {/* Modal para confirmar el alta del paciente */}
             <Modal show={showModal} onHide={closeModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Confirm Discharge</Modal.Title>
+                    <Modal.Title>{t('confirmDischarge')}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Do you want to discharge this patient?</Modal.Body>
+                <Modal.Body>{t('dischargeConfirmation')}</Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={closeModal}>Cancel</Button>
-                    <Button variant="danger" onClick={handleDeletePatient}>Yes, Discharge</Button>
+                    <Button variant="secondary" onClick={closeModal}>{t('cancel')}</Button>
+                    <Button variant="danger" onClick={handleDeletePatient}>{t('yesDischarge')}</Button>
                 </Modal.Footer>
             </Modal>
         </div>

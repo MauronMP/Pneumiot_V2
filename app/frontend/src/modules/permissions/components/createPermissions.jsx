@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
-import config from '../../../config/config';  // Import URL paths for apis
+import config from '../../../config/config';  // Import URL paths for APIs
+import { useTranslation } from 'react-i18next'; // Import useTranslation hook
 
 const CreatePermission = () => {
+  const { t } = useTranslation('createPermission'); // Use the 'createPermission' namespace for translations
+
   const [formData, setFormData] = useState({
     permission_name: '',
     permission_description: '',
@@ -46,17 +49,17 @@ const CreatePermission = () => {
     );
 
     if (!permission_name.trim()) {
-      setErrorMessage('Permission name cannot be empty.');
+      setErrorMessage(t('permissionNameRequired'));
       return false;
     }
 
     if (permissionExists) {
-      setErrorMessage('Permission name already exists. Please choose a different name.');
+      setErrorMessage(t('permissionNameExists'));
       return false;
     }
 
     if (!worker_role_id) {
-      setErrorMessage('Please select a role to assign this permission.');
+      setErrorMessage(t('roleRequired'));
       return false;
     }
 
@@ -85,13 +88,13 @@ const CreatePermission = () => {
         });
       })
       .then(() => {
-        setSuccessMessage('Permission created and assigned to role successfully!');
+        setSuccessMessage(t('permissionCreatedSuccess'));
         setFormData({
           permission_name: '',
           permission_description: '',
           worker_role_id: ''
         });
-        
+
         // Refresh the list of existing permissions
         return axios.get(`${config.apiV1}permissions`);
       })
@@ -100,25 +103,25 @@ const CreatePermission = () => {
       })
       .catch(err => {
         console.error('Error creating or assigning permission', err);
-        setErrorMessage('Failed to create and assign permission. Please try again.');
+        setErrorMessage(t('permissionCreateError'));
       });
     }
   };
 
   return (
     <div className="container mt-4">
-      <h2>Create New Permission</h2>
+      <h2>{t('createNewPermission')}</h2>
       {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formPermissionName">
-          <Form.Label>Permission Name</Form.Label>
+          <Form.Label>{t('permissionName')}</Form.Label>
           <Form.Control
             type="text"
             name="permission_name"
             value={formData.permission_name}
             onChange={handleInputChange}
-            placeholder="Enter permission name"
+            placeholder={t('enterPermissionName')}
             isInvalid={!!errorMessage}
           />
           <Form.Control.Feedback type="invalid">
@@ -127,20 +130,20 @@ const CreatePermission = () => {
         </Form.Group>
 
         <Form.Group controlId="formPermissionDescription" className="mt-3">
-          <Form.Label>Permission Description</Form.Label>
+          <Form.Label>{t('permissionDescription')}</Form.Label>
           <Form.Control
             as="textarea"
             name="permission_description"
             rows={3}
             value={formData.permission_description}
             onChange={handleInputChange}
-            placeholder="Enter permission description"
+            placeholder={t('enterPermissionDescription')}
           />
         </Form.Group>
 
         {/* Role Dropdown */}
         <Form.Group controlId="formWorkerRole" className="mt-3">
-          <Form.Label>Assign to Role</Form.Label>
+          <Form.Label>{t('assignToRole')}</Form.Label>
           <Form.Control
             as="select"
             name="worker_role_id"
@@ -148,7 +151,7 @@ const CreatePermission = () => {
             onChange={handleInputChange}
             isInvalid={!formData.worker_role_id && !!errorMessage}
           >
-            <option value="">Choose a role</option>
+            <option value="">{t('chooseRole')}</option>
             {roles.map(role => (
               <option key={role.worker_role_id} value={role.worker_role_id}>
                 {role.worker_role_name}
@@ -161,7 +164,7 @@ const CreatePermission = () => {
         </Form.Group>
 
         <Button variant="primary" type="submit" className="mt-3">
-          Create Permission
+          {t('createPermission')}
         </Button>
       </Form>
     </div>

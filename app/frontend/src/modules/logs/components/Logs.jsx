@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, InputGroup, Form } from 'react-bootstrap';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next'; // Import useTranslation for translations
 import config from '../../../config/config';  // Import URL paths for APIs
 
 const Logs = () => {
+  const { t } = useTranslation('logs'); // Use the translation hook
+
   const [Logs, setLogs] = useState([]); // Initially set to an empty array
   const [currentPage, setCurrentPage] = useState(1);
   const [logsPerPage] = useState(20);
@@ -67,12 +70,12 @@ const Logs = () => {
 
   return (
     <div className="container mt-4">
-      <h2>Error Logs</h2>
+      <h2>{t('error_logs')}</h2>
       
       {/* Search input field for filtering logs */}
       <InputGroup className="mb-3">
         <Form.Control
-          placeholder="Search logs"
+          placeholder={t('search_logs')}  // Use translation for placeholder
           value={searchTerm}  // Bind input value to the searchTerm state
           onChange={handleSearch}  // Trigger handleSearch when input changes
         />
@@ -82,9 +85,9 @@ const Logs = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Log ID</th>
-            <th>Message</th>
-            <th>Actions</th>
+            <th>{t('log_id')}</th>
+            <th>{t('message')}</th>
+            <th>{t('actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -97,7 +100,7 @@ const Logs = () => {
                 <td>
                   {/* Button to open modal and view details of a log */}
                   <Button className='w-100' variant="info" onClick={() => handleShowDetail(log)}>
-                    View Details
+                    {t('view_details')}
                   </Button>
                 </td>
               </tr>
@@ -105,7 +108,7 @@ const Logs = () => {
           ) : (
             // If no logs are found, display a message in the table
             <tr>
-              <td colSpan="3" className="text-center">No logs found</td>
+              <td colSpan="3" className="text-center">{t('no_logs_found')}</td>
             </tr>
           )}
         </tbody>
@@ -128,7 +131,7 @@ const Logs = () => {
       {/* Modal to display selected log details */}
       <Modal show={showDetailModal} onHide={handleCloseDetail}>
         <Modal.Header closeButton>
-          <Modal.Title>Log Details</Modal.Title>
+          <Modal.Title>{t('log_details')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {/* Display the log message of the selected log */}
@@ -137,7 +140,7 @@ const Logs = () => {
         <Modal.Footer>
           {/* Button to close the modal */}
           <Button variant="secondary" onClick={handleCloseDetail}>
-            Close
+            {t('close')}
           </Button>
         </Modal.Footer>
       </Modal>
