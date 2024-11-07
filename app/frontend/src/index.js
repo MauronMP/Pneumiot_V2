@@ -4,6 +4,7 @@ import './index.css'; // Importing custom global CSS styles
 import App from './App'; // Importing the main App component
 import reportWebVitals from './reportWebVitals'; // Importing the web vitals utility to measure performance
 import 'bootstrap/dist/css/bootstrap.min.css'; // Importing Bootstrap CSS for styling and layout
+import './i18n';
 
 // Creating a root DOM element where the app will be rendered
 const root = ReactDOM.createRoot(document.getElementById('root'));
