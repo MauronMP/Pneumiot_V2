@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
 const Worker = require('../../Worker/models/Worker');
 const WorkerAuth = require('../../Worker/models/WorkerAuth');

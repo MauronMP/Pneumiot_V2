@@ -1,0 +1,13 @@
+# Utiliza la imagen oficial de PostgreSQL como base
+FROM postgres:latest
+
+WORKDIR /app
+
+# Define variables de entorno (puedes ajustarlas según tus necesidades)
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=postgres
+ENV POSTGRES_DB=postgres
+
+# Copia los archivos SQL al directorio de inicialización de PostgreSQL
+# PostgreSQL ejecutará automáticamente estos archivos al iniciar si la base de datos es nueva
+COPY app/database/*.sql /docker-entrypoint-initdb.d/
