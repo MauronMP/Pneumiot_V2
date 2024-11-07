@@ -1,0 +1,12 @@
+{
+  "en": {
+    "login": "Login",
+    "logout": "Logout",
+    "projectTitle": "PneumIOT Health Monitoring Project"
+  },
+  "es": {
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "projectTitle": "Proyecto de Monitoreo PneumIOT en Salud"
+  }
+}

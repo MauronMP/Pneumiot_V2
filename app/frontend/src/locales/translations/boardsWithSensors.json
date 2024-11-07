@@ -1,0 +1,24 @@
+{
+  "en": {
+    "loading": "Loading...",
+    "error": "Error",
+    "boardCode": "Board Code",
+    "noSensors": "No sensors available for this board.",
+    "sensor": "Sensor",
+    "sensorId": "Sensor ID",
+    "unit": "Unit",
+    "minValue": "Min Value",
+    "maxValue": "Max Value"
+  },
+  "es": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "boardCode": "Código de la Junta",
+    "noSensors": "No hay sensores disponibles para esta junta.",
+    "sensor": "Sensor",
+    "sensorId": "ID del Sensor",
+    "unit": "Unidad",
+    "minValue": "Valor Mínimo",
+    "maxValue": "Valor Máximo"
+  }
+}

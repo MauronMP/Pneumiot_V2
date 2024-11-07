@@ -1,0 +1,38 @@
+{
+  "en": {
+    "loading_patient_details": "Loading patient details...",
+    "patient_details": "Patient's Details",
+    "patient_information": "Patient Information",
+    "dni": "DNI",
+    "admission_date": "Admission Date",
+    "discharge_date": "Discharge Date",
+    "not_available": "Not available",
+    "board_information": "Board Information",
+    "board_code": "Board Code",
+    "associated_sensors": "Associated Sensors",
+    "sensor_type": "Sensor type",
+    "sensor_id": "Sensor ID",
+    "unit": "Unit",
+    "min_value": "Min Value",
+    "max_value": "Max Value",
+    "no_sensors_found": "No sensors found for this patient."
+  },
+  "es": {
+    "loading_patient_details": "Cargando detalles del paciente...",
+    "patient_details": "Detalles del Paciente",
+    "patient_information": "Información del Paciente",
+    "dni": "DNI",
+    "admission_date": "Fecha de Admisión",
+    "discharge_date": "Fecha de Alta",
+    "not_available": "No disponible",
+    "board_information": "Información del dispositivo",
+    "board_code": "Código del dispositivo",
+    "associated_sensors": "Sensores Asociados",
+    "sensor_type": "Tipo de Sensor",
+    "sensor_id": "ID del Sensor",
+    "unit": "Unidad",
+    "min_value": "Valor Mínimo",
+    "max_value": "Valor Máximo",
+    "no_sensors_found": "No se encontraron sensores para este paciente."
+  }
+}

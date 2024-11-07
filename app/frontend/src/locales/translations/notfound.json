@@ -1,0 +1,10 @@
+{
+  "en": {
+    "notFoundTitle": "404 - Page Not Found",
+    "notFoundMessage": "The page you are looking for does not exist."
+  },
+  "es": {
+    "notFoundTitle": "404 - Página No Encontrada",
+    "notFoundMessage": "La página que buscas no existe."
+  }
+}

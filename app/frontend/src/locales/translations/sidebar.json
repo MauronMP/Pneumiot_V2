@@ -1,0 +1,40 @@
+{
+  "en": {
+    "hello": "Hello!",
+    "adminPanel": "Admin Panel",
+    "workers": "Workers",
+    "addWorkers": "Add Workers",
+    "seeWorkers": "See Workers",
+    "permissions": "Permissions",
+    "createPermissions": "Create Permissions",
+    "seePermissions": "See Permissions",
+    "logs": "Logs",
+    "patients": "Patients",
+    "addPatient": "Add Patient",
+    "seePatient": "See Patient",
+    "devices": "Devices",
+    "sensors": "Sensors",
+    "addSensor": "Add Sensor",
+    "seeSensors": "See Sensors",
+    "profile": "Profile"
+  },
+  "es": {
+    "hello": "¡Hola!",
+    "adminPanel": "Panel de Administración",
+    "workers": "Trabajadores",
+    "addWorkers": "Agregar Trabajadores",
+    "seeWorkers": "Ver Trabajadores",
+    "permissions": "Permisos",
+    "createPermissions": "Crear Permisos",
+    "seePermissions": "Ver Permisos",
+    "logs": "Registros",
+    "patients": "Pacientes",
+    "addPatient": "Agregar Paciente",
+    "seePatient": "Ver Paciente",
+    "devices": "Dispositivos",
+    "sensors": "Sensores",
+    "addSensor": "Agregar Sensor",
+    "seeSensors": "Ver Sensores",
+    "profile": "Perfil"
+  }
+}

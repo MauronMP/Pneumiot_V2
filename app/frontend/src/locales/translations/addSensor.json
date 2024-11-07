@@ -1,0 +1,36 @@
+{
+  "en": {
+    "formTitle": "Sensor Creation Form",
+    "sensorCodeLabel": "Sensor Code (GUID)",
+    "sensorNameLabel": "Sensor Name",
+    "sensorNamePlaceholder": "Enter the sensor name",
+    "unitLabel": "Unit",
+    "selectUnit": "Select a unit",
+    "minValueLabel": "Minimum Value",
+    "minValuePlaceholder": "Minimum value",
+    "maxValueLabel": "Maximum Value",
+    "maxValuePlaceholder": "Maximum value",
+    "createSensorButton": "Create Sensor",
+    "creatingSensor": "Creating...",
+    "alertInvalidForm": "Please complete all fields correctly. The minimum value must be less than the maximum value.",
+    "alertSensorCreated": "Sensor created successfully",
+    "alertError": "Error creating the sensor"
+  },
+  "es": {
+    "formTitle": "Formulario de Creación de Sensor",
+    "sensorCodeLabel": "Código del Sensor (GUID)",
+    "sensorNameLabel": "Nombre del Sensor",
+    "sensorNamePlaceholder": "Ingrese el nombre del sensor",
+    "unitLabel": "Unidad",
+    "selectUnit": "Seleccione una unidad",
+    "minValueLabel": "Valor Mínimo",
+    "minValuePlaceholder": "Valor mínimo",
+    "maxValueLabel": "Valor Máximo",
+    "maxValuePlaceholder": "Valor máximo",
+    "createSensorButton": "Crear Sensor",
+    "creatingSensor": "Creando...",
+    "alertInvalidForm": "Por favor complete todos los campos correctamente. El valor mínimo debe ser menor que el valor máximo.",
+    "alertSensorCreated": "Sensor creado con éxito",
+    "alertError": "Error al crear el sensor"
+  }
+}

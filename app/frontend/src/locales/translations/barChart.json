@@ -1,0 +1,12 @@
+{
+  "en": {
+    "measuresByHour": "Measures by hour",
+    "average": "Average",
+    "barChartDescription": "Bar chart showing average measures per hour"
+  },
+  "es": {
+    "measuresByHour": "Medidas por hora",
+    "average": "Promedio",
+    "barChartDescription": "Gráfico de barras que muestra el promedio de medidas por hora"
+  }
+}

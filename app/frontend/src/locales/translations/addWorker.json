@@ -1,0 +1,40 @@
+{
+  "en": {
+    "addWorker": "Add New Worker",
+    "errorFetchingRoles": "Error fetching worker roles",
+    "allFieldsRequired": "All fields are required!",
+    "invalidEmail": "Invalid email!",
+    "invalidDni": "Wrong DNI. It must have 8 digits and one character.",
+    "passwordsDoNotMatch": "Passwords do not match!",
+    "errorCreatingWorker": "There was an error creating the new worker",
+    "enterName": "Enter Name",
+    "enterSurname": "Enter Surname",
+    "enterEmail": "Enter Email",
+    "enterDni": "Enter DNI",
+    "chooseRole": "Choose a role",
+    "enterPassword": "Enter Password",
+    "confirmPassword": "Confirm Password",
+    "addWorkerButton": "Add Worker",
+    "success": "Success",
+    "workerAddedSuccess": "Worker added successfully!"
+  },
+  "es": {
+    "addWorker": "Agregar nuevo trabajador",
+    "errorFetchingRoles": "Error al obtener los roles de trabajadores",
+    "allFieldsRequired": "¡Todos los campos son obligatorios!",
+    "invalidEmail": "¡Correo electrónico inválido!",
+    "invalidDni": "DNI incorrecto. Debe tener 8 dígitos y un carácter.",
+    "passwordsDoNotMatch": "¡Las contraseñas no coinciden!",
+    "errorCreatingWorker": "Hubo un error al crear el nuevo trabajador",
+    "enterName": "Ingrese el nombre",
+    "enterSurname": "Ingrese el apellido",
+    "enterEmail": "Ingrese el correo electrónico",
+    "enterDni": "Ingrese el DNI",
+    "chooseRole": "Elija un rol",
+    "enterPassword": "Ingrese la contraseña",
+    "confirmPassword": "Confirme la contraseña",
+    "addWorkerButton": "Agregar trabajador",
+    "success": "Éxito",
+    "workerAddedSuccess": "¡Trabajador agregado con éxito!"
+  }
+}

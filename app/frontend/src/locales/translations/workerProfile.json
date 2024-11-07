@@ -1,0 +1,38 @@
+{
+  "es": {
+    "workerDni": "DNI del trabajador",
+    "workerName": "Nombre del trabajador",
+    "workerSurname": "Apellido del trabajador",
+    "workerEmail": "Correo electrónico del trabajador",
+    "role": "Rol del trabajador",
+    "editProfileButton": "Editar perfil",
+    "modalTitle": "Editar perfil",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "saveChanges": "Guardar cambios",
+    "cancel": "Cancelar",
+    "toastSuccess": "Perfil actualizado exitosamente.",
+    "toastError": "Hubo un error al actualizar el perfil.",
+    "toastErrorRoles": "Hubo un error al obtener los roles.",
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "requiredFields": "Por favor, complete todos los campos requeridos."
+  },
+  "en": {
+    "workerDni": "Worker DNI",
+    "workerName": "Worker Name",
+    "workerSurname": "Worker Surname",
+    "workerEmail": "Worker Email",
+    "role": "Worker Role",
+    "editProfileButton": "Edit Profile",
+    "modalTitle": "Edit Profile",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "toastSuccess": "Profile updated successfully.",
+    "toastError": "There was an error updating the profile.",
+    "toastErrorRoles": "There was an error fetching roles.",
+    "passwordMismatch": "Passwords do not match.",
+    "requiredFields": "Please fill in all required fields."
+  }
+}

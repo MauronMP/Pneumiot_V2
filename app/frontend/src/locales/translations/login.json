@@ -1,0 +1,20 @@
+{
+  "en": {
+    "login": "Login",
+    "emailOrDni": "Email/DNI",
+    "password": "Password",
+    "enterEmailOrDni": "Enter email or DNI",
+    "enterPassword": "Enter password",
+    "loginFailed": "Login failed. Please try again.",
+    "errorOccurred": "An error occurred. Please try again."
+  },
+  "es": {
+    "login": "Iniciar sesión",
+    "emailOrDni": "Correo/DNI",
+    "password": "Contraseña",
+    "enterEmailOrDni": "Ingrese correo o DNI",
+    "enterPassword": "Ingrese contraseña",
+    "loginFailed": "El inicio de sesión falló. Intente de nuevo.",
+    "errorOccurred": "Ocurrió un error. Intente de nuevo."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "en": {
+    "error_logs": "Error Logs",
+    "search_logs": "Search logs",
+    "log_id": "Log ID",
+    "message": "Message",
+    "actions": "Actions",
+    "view_details": "View Details",
+    "no_logs_found": "No logs found",
+    "log_details": "Log Details",
+    "close": "Close"
+  },
+  "es": {
+    "error_logs": "Registros de Errores",
+    "search_logs": "Buscar registros",
+    "log_id": "ID del Log",
+    "message": "Mensaje",
+    "actions": "Acciones",
+    "view_details": "Ver Detalles",
+    "no_logs_found": "No se encontraron registros",
+    "log_details": "Detalles del Log",
+    "close": "Cerrar"
+  }
+}

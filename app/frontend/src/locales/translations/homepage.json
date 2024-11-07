@@ -1,0 +1,24 @@
+{
+  "en": {
+    "loading": "Loading data...",
+    "error": "Error loading data",
+    "welcomeMessage": "Welcome to Pneumiot",
+    "leadText": "An advanced system for managing patients, devices, and clinical staff.",
+    "description": "We provide an all-in-one solution for real-time patient monitoring and medical device tracking.",
+    "patients": "Patients",
+    "boards": "Devices",
+    "workers": "Workers",
+    "sensors": "Sensors"
+  },
+  "es": {
+    "loading": "Cargando datos...",
+    "error": "Error al cargar los datos",
+    "welcomeMessage": "Bienvenido a Pneumiot",
+    "leadText": "Un sistema avanzado para gestionar pacientes, dispositivos y personal clínico.",
+    "description": "Proporcionamos una solución todo en uno para el monitoreo en tiempo real de pacientes y seguimiento de dispositivos médicos.",
+    "patients": "Pacientes",
+    "boards": "Dispositivos",
+    "workers": "Trabajadores",
+    "sensors": "Sensores"
+  }
+}

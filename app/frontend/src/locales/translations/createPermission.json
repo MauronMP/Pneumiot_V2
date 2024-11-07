@@ -1,0 +1,32 @@
+{
+  "en": {
+    "createNewPermission": "Create New Permission",
+    "permissionName": "Permission Name",
+    "permissionDescription": "Permission Description",
+    "assignToRole": "Assign to Role",
+    "chooseRole": "Choose a role",
+    "permissionNameRequired": "Permission name cannot be empty.",
+    "permissionNameExists": "Permission name already exists. Please choose a different name.",
+    "roleRequired": "Please select a role to assign this permission.",
+    "enterPermissionName": "Enter permission name",
+    "enterPermissionDescription": "Enter permission description",
+    "createPermission": "Create Permission",
+    "permissionCreatedSuccess": "Permission created and assigned to role successfully!",
+    "permissionCreateError": "Failed to create and assign permission. Please try again."
+  },
+  "es": {
+    "createNewPermission": "Crear Nuevo Permiso",
+    "permissionName": "Nombre del Permiso",
+    "permissionDescription": "Descripción del Permiso",
+    "assignToRole": "Asignar a un Rol",
+    "chooseRole": "Elige un rol",
+    "permissionNameRequired": "El nombre del permiso no puede estar vacío.",
+    "permissionNameExists": "El nombre del permiso ya existe. Por favor elige un nombre diferente.",
+    "roleRequired": "Por favor selecciona un rol para asignar este permiso.",
+    "enterPermissionName": "Ingrese el nombre del permiso",
+    "enterPermissionDescription": "Ingrese la descripción del permiso",
+    "createPermission": "Crear Permiso",
+    "permissionCreatedSuccess": "¡Permiso creado y asignado al rol con éxito!",
+    "permissionCreateError": "Error al crear y asignar el permiso. Por favor intente nuevamente."
+  }
+}

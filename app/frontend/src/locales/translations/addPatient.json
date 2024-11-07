@@ -1,0 +1,34 @@
+{
+  "en": {
+    "register_patient": "Register Patient",
+    "patient_dni": "Patient's DNI",
+    "board_code": "Board Code (Automatically Generated)",
+    "admission_date": "Admission Date",
+    "admission_date_note": "If not provided, today's date will be used.",
+    "discharge_date": "Discharge Date",
+    "discharge_date_note": "If empty, the patient will not have a discharge date assigned.",
+    "admission_date_error": "Admission date cannot be earlier than today.",
+    "admission_discharge_same_error": "Admission date and discharge date cannot be the same.",
+    "admission_later_than_discharge_error": "Admission date cannot be later than the discharge date.",
+    "discharge_earlier_than_admission_error": "Discharge date cannot be earlier than the admission date.",
+    "registration_error": "There was an error registering the patient.",
+    "registering": "Registering",
+    "registration_success": "Patient successfully registered."
+  },
+  "es": {
+    "register_patient": "Registrar Paciente",
+    "patient_dni": "DNI del Paciente",
+    "board_code": "Código de la Sala (Generado Automáticamente)",
+    "admission_date": "Fecha de Admisión",
+    "admission_date_note": "Si no se proporciona, se utilizará la fecha de hoy.",
+    "discharge_date": "Fecha de Alta",
+    "discharge_date_note": "Si está vacío, no se asignará una fecha de alta al paciente.",
+    "admission_date_error": "La fecha de admisión no puede ser anterior a hoy.",
+    "admission_discharge_same_error": "La fecha de admisión y la fecha de alta no pueden ser iguales.",
+    "admission_later_than_discharge_error": "La fecha de admisión no puede ser posterior a la fecha de alta.",
+    "discharge_earlier_than_admission_error": "La fecha de alta no puede ser anterior a la fecha de admisión.",
+    "registration_error": "Hubo un error al registrar el paciente.",
+    "registering": "Registrando",
+    "registration_success": "Paciente registrado con éxito."
+  }
+}
