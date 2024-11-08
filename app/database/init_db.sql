@@ -54,6 +54,24 @@ CREATE TABLE IF NOT EXISTS pneumiot.patient (
     FOREIGN KEY (board_id) REFERENCES pneumiot.board(board_id) ON DELETE RESTRICT
 );
 
+CREATE TABLE patient_aditional_info (
+    patient_info_id SERIAL PRIMARY KEY,
+    patient_id INT NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    genero VARCHAR(10) CHECK (genero IN ('M', 'F', 'Otro')),
+    telefono VARCHAR(20),
+    direccion VARCHAR(150),
+    alergias TEXT,
+    condiciones_medicas TEXT,
+    grupo_sanguineo VARCHAR(5),
+    contacto_emergencia VARCHAR(100),
+    telefono_emergencia VARCHAR(20),
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_patient_id FOREIGN KEY (patient_id) REFERENCES patient (patient_id) ON DELETE CASCADE
+);
+
 -- Creation of the measurements table --
 CREATE TABLE IF NOT EXISTS pneumiot.measurements(
     measurement_id SERIAL NOT NULL,

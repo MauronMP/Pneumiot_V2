@@ -6,6 +6,7 @@ const sensorRoutes = require('../../modules/Sensor/routes/frontend/sensorRoutes'
 const boardRoutes = require('../../modules/Board/routes/frontend/boardRoutes');
 const boardSensorRoutes = require('../../modules/Board/routes/frontend/boardSensorRoutes');
 const patientRoutes = require('../../modules/Patient/routes/frontend/patientRoutes.js');
+const patientInfoRoutes = require('../../modules/Patient/routes/frontend/patientAditionalInfo.js');
 const measurementRoutes = require('../../modules/Measurements/routes/frontend/measurementRoutes');
 const sensorLogRoutes = require('../../modules/Sensor/routes/frontend/sensorLogRoutes');
 const permissionRoutes = require('../../modules/Permission/routes/frontend/permissionRoutes');
@@ -27,6 +28,7 @@ router.use('/sensors', sensorRoutes);
 router.use('/boards', boardRoutes);
 router.use('/board-sensors', boardSensorRoutes);
 router.use('/patients', patientRoutes);
+router.use('/patientsInfo', patientInfoRoutes);
 router.use('/measurements', measurementRoutes);
 router.use('/sensor-logs', sensorLogRoutes);
 router.use('/permissions', permissionRoutes);
