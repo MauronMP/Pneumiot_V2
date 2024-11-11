@@ -234,3 +234,290 @@ CREATE TABLE IF NOT EXISTS pneumiot.log (
 	log_message varchar(264) NULL,
 	PRIMARY KEY(log_id)
 );
+
+-- Procedure to calculate daily averages for measurements
+CREATE OR REPLACE PROCEDURE pneumiot.calculate_daily_average()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_patient_id INT;  -- Variable to store patient_id
+    v_board_id INT;    -- Variable to store board_id
+    v_sensor_id INT;   -- Variable to store sensor_id
+    v_avg_value NUMERIC(4, 2);  -- Variable to store the average sensor value
+    v_index_rate_id INT;  -- Variable to store the index rate ID based on the average
+    v_day_date DATE := CURRENT_DATE - INTERVAL '1 day';  -- Previous day for daily calculation
+    v_year INT := EXTRACT(YEAR FROM v_day_date);  -- Extract the year from the previous day
+    v_month INT := EXTRACT(MONTH FROM v_day_date);  -- Extract the month from the previous day
+    v_daily_day INT := EXTRACT(DAY FROM v_day_date);  -- Extract the day of the month
+BEGIN
+    -- Loop through each combination of patient_id, board_id, and sensor_id
+    FOR v_patient_id IN (SELECT DISTINCT patient_id FROM pneumiot.measurements) LOOP
+        FOR v_board_id IN (SELECT DISTINCT board_id FROM pneumiot.measurements WHERE patient_id = v_patient_id) LOOP
+            FOR v_sensor_id IN (SELECT DISTINCT sensor_id FROM pneumiot.measurements WHERE patient_id = v_patient_id AND board_id = v_board_id) LOOP
+                -- Calculate the average sensor_value for the previous day
+                SELECT AVG(sensor_value)::NUMERIC(4, 2)
+                INTO v_avg_value
+                FROM pneumiot.measurements
+                WHERE patient_id = v_patient_id
+                  AND board_id = v_board_id
+                  AND sensor_id = v_sensor_id
+                  AND log_time_local >= v_day_date
+                  AND log_time_local < CURRENT_DATE;
+
+                -- Assign index_rate_id based on the average value and sensor_id
+                CASE v_sensor_id
+                    WHEN 1 THEN  -- Temperature (sensor_id = 1)
+                        IF v_avg_value < 18 OR v_avg_value > 27 THEN
+                            v_index_rate_id := 3;  -- Risky
+                        ELSIF v_avg_value >= 20 AND v_avg_value <= 24 THEN
+                            v_index_rate_id := 1;  -- Very Good
+                        ELSE
+                            v_index_rate_id := 2;  -- Normal
+                        END IF;
+                    WHEN 2 THEN  -- Humidity (sensor_id = 2)
+                        IF v_avg_value < 30 OR v_avg_value > 70 THEN
+                            v_index_rate_id := 3;  -- Risky
+                        ELSIF (v_avg_value >= 30 AND v_avg_value < 40) OR (v_avg_value >= 60 AND v_avg_value < 70) THEN
+                            v_index_rate_id := 2;  -- Normal
+                        ELSE
+                            v_index_rate_id := 1;  -- Very Good
+                        END IF;
+                    WHEN 3 THEN  -- PM2.5 (sensor_id = 3)
+                        IF v_avg_value > 25 THEN
+                            v_index_rate_id := 3;  -- Risky
+                        ELSIF v_avg_value >= 0 AND v_avg_value <= 10 THEN
+                            v_index_rate_id := 1;  -- Very Good
+                        ELSE
+                            v_index_rate_id := 2;  -- Normal
+                        END IF;
+                    WHEN 4 THEN  -- PPM (sensor_id = 4)
+                        IF v_avg_value > 0.05 THEN
+                            v_index_rate_id := 3;  -- Risky
+                        ELSIF v_avg_value >= 0 AND v_avg_value <= 0.02 THEN
+                            v_index_rate_id := 1;  -- Very Good
+                        ELSE
+                            v_index_rate_id := 2;  -- Normal
+                        END IF;
+                    ELSE
+                        v_index_rate_id := 2;  -- Default to Normal if no valid sensor_id
+                END CASE;
+
+                -- Insert the results into the daily_average table
+                INSERT INTO pneumiot.daily_average (
+                    patient_id, 
+                    board_id, 
+                    sensor_id, 
+                    average_measure, 
+                    index_rate_id, 
+                    daily_day, 
+                    month_id, 
+                    year, 
+                    day_date
+                ) VALUES (
+                    v_patient_id, 
+                    v_board_id, 
+                    v_sensor_id, 
+                    v_avg_value, 
+                    v_index_rate_id, 
+                    v_daily_day, 
+                    v_month, 
+                    v_year, 
+                    v_day_date
+                );
+            END LOOP;
+        END LOOP;
+    END LOOP;
+END;
+$$;
+
+-- Procedure to calculate monthly averages for measurements
+CREATE OR REPLACE PROCEDURE pneumiot.calculate_monthly_average()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_patient_id INT;  -- Variable to store patient_id
+    v_board_id INT;    -- Variable to store board_id
+    v_sensor_id INT;   -- Variable to store sensor_id
+    v_avg_value NUMERIC(4, 2);  -- Variable to store the average sensor value
+    v_index_rate_id INT;  -- Variable to store the index rate ID based on the average
+    v_first_day_of_last_month DATE := (CURRENT_DATE - INTERVAL '1 month')::DATE;  -- First day of the last month
+    v_last_day_of_last_month DATE := (CURRENT_DATE - INTERVAL '1 day')::DATE;  -- Last day of the last month
+    v_month_number INT := EXTRACT(MONTH FROM v_first_day_of_last_month);  -- Extract the month of last month
+    v_year INT := EXTRACT(YEAR FROM v_first_day_of_last_month);  -- Extract the year of last month
+BEGIN
+    -- Loop through each combination of patient_id, board_id, and sensor_id
+    FOR v_patient_id IN (SELECT DISTINCT patient_id FROM pneumiot.measurements) LOOP
+        FOR v_board_id IN (SELECT DISTINCT board_id FROM pneumiot.measurements WHERE patient_id = v_patient_id) LOOP
+            FOR v_sensor_id IN (SELECT DISTINCT sensor_id FROM pneumiot.measurements WHERE patient_id = v_patient_id AND board_id = v_board_id) LOOP
+                -- Calculate the average sensor_value for the previous month
+                SELECT AVG(sensor_value)::NUMERIC(4, 2)
+                INTO v_avg_value
+                FROM pneumiot.measurements
+                WHERE patient_id = v_patient_id
+                  AND board_id = v_board_id
+                  AND sensor_id = v_sensor_id
+                  AND log_time_local >= v_first_day_of_last_month
+                  AND log_time_local <= v_last_day_of_last_month;
+
+                -- Assign index_rate_id based on the average value and sensor_id
+                CASE v_sensor_id
+                    WHEN 1 THEN  -- Temperature (sensor_id = 1)
+                        IF v_avg_value < 18 OR v_avg_value > 27 THEN
+                            v_index_rate_id := 3;  -- Risky
+                        ELSIF v_avg_value >= 20 AND v_avg_value <= 24 THEN
+                            v_index_rate_id := 1;  -- Very Good
+                        ELSE
+                            v_index_rate_id := 2;  -- Normal
+                        END IF;
+                    WHEN 2 THEN  -- Humidity (sensor_id = 2)
+                        IF v_avg_value < 30 OR v_avg_value > 70 THEN
+                            v_index_rate_id := 3;  -- Risky
+                        ELSIF (v_avg_value >= 30 AND v_avg_value < 40) OR (v_avg_value >= 60 AND v_avg_value < 70) THEN
+                            v_index_rate_id := 2;  -- Normal
+                        ELSE
+                            v_index_rate_id := 1;  -- Very Good
+                        END IF;
+                    WHEN 3 THEN  -- PM2.5 (sensor_id = 3)
+                        IF v_avg_value > 25 THEN
+                            v_index_rate_id := 3;  -- Risky
+                        ELSIF v_avg_value >= 0 AND v_avg_value <= 10 THEN
+                            v_index_rate_id := 1;  -- Very Good
+                        ELSE
+                            v_index_rate_id := 2;  -- Normal
+                        END IF;
+                    WHEN 4 THEN  -- PPM (sensor_id = 4)
+                        IF v_avg_value > 0.05 THEN
+                            v_index_rate_id := 3;  -- Risky
+                        ELSIF v_avg_value >= 0 AND v_avg_value <= 0.02 THEN
+                            v_index_rate_id := 1;  -- Very Good
+                        ELSE
+                            v_index_rate_id := 2;  -- Normal
+                        END IF;
+                    ELSE
+                        v_index_rate_id := 2;  -- Default to Normal if no valid sensor_id
+                END CASE;
+
+                -- Insert the results into the monthly_average table for the last month
+                INSERT INTO pneumiot.monthly_average (
+                    patient_id, 
+                    board_id, 
+                    sensor_id, 
+                    average_measure, 
+                    index_rate_id, 
+                    month_number, 
+                    year_date
+                ) VALUES (
+                    v_patient_id, 
+                    v_board_id, 
+                    v_sensor_id, 
+                    v_avg_value, 
+                    v_index_rate_id, 
+                    v_month_number, 
+                    v_year
+                );
+            END LOOP;
+        END LOOP;
+    END LOOP;
+END;
+$$;
+
+-- Procedure to calculate hourly averages for measurements
+CREATE OR REPLACE PROCEDURE pneumiot.calculate_hourly_average()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_patient_id INT;  -- Variable to store patient_id
+    v_board_id INT;    -- Variable to store board_id
+    v_sensor_id INT;   -- Variable to store sensor_id
+    v_avg_value NUMERIC(8, 5);  -- Variable to store the average sensor value with 5 decimals
+    v_index_rate_id INT;  -- Variable to store the index rate ID based on the average
+    v_hour_time INT;  -- Variable to store the hour (0 to 23)
+    v_day_date DATE := CURRENT_DATE - INTERVAL '1 day';  -- Previous day for hourly calculation
+    v_start_hour TIMESTAMP;  -- Variable to store the start time of the hour
+    v_end_hour TIMESTAMP;  -- Variable to store the end time of the hour
+BEGIN
+    -- Loop through each combination of patient_id, board_id, and sensor_id
+    FOR v_patient_id IN (SELECT DISTINCT patient_id FROM pneumiot.measurements) LOOP
+        FOR v_board_id IN (SELECT DISTINCT board_id FROM pneumiot.measurements WHERE patient_id = v_patient_id) LOOP
+            FOR v_sensor_id IN (SELECT DISTINCT sensor_id FROM pneumiot.measurements WHERE patient_id = v_patient_id AND board_id = v_board_id) LOOP
+                -- Loop through each hour of the previous day (from 0 to 23)
+                FOR v_hour_time IN 0..23 LOOP
+                    -- Define the time range for the hour
+                    v_start_hour := (v_day_date + INTERVAL '1 day' * v_hour_time)::TIMESTAMP;
+                    v_end_hour := (v_day_date + INTERVAL '1 day' * (v_hour_time + 1))::TIMESTAMP;
+
+                    -- Calculate the average sensor_value for that specific hour
+                    SELECT AVG(sensor_value)::NUMERIC(8, 5)
+                    INTO v_avg_value
+                    FROM pneumiot.measurements
+                    WHERE patient_id = v_patient_id
+                      AND board_id = v_board_id
+                      AND sensor_id = v_sensor_id
+                      AND log_time_local >= v_start_hour
+                      AND log_time_local < v_end_hour;
+
+                    -- If v_avg_value is NULL, skip the insertion
+                    IF v_avg_value IS NOT NULL THEN
+                        -- Assign index_rate_id based on the average value and sensor_id
+                        CASE v_sensor_id
+                            WHEN 1 THEN  -- Temperature (sensor_id = 1)
+                                IF v_avg_value < 18 OR v_avg_value > 27 THEN
+                                    v_index_rate_id := 3;  -- Risky
+                                ELSIF v_avg_value >= 20 AND v_avg_value <= 24 THEN
+                                    v_index_rate_id := 1;  -- Very Good
+                                ELSE
+                                    v_index_rate_id := 2;  -- Normal
+                                END IF;
+                            WHEN 2 THEN  -- Humidity (sensor_id = 2)
+                                IF v_avg_value < 30 OR v_avg_value > 70 THEN
+                                    v_index_rate_id := 3;  -- Risky
+                                ELSIF (v_avg_value >= 30 AND v_avg_value < 40) OR (v_avg_value >= 60 AND v_avg_value < 70) THEN
+                                    v_index_rate_id := 2;  -- Normal
+                                ELSE
+                                    v_index_rate_id := 1;  -- Very Good
+                                END IF;
+                            WHEN 3 THEN  -- PM2.5 (sensor_id = 3)
+                                IF v_avg_value > 25 THEN
+                                    v_index_rate_id := 3;  -- Risky
+                                ELSIF v_avg_value >= 0 AND v_avg_value <= 10 THEN
+                                    v_index_rate_id := 1;  -- Very Good
+                                ELSE
+                                    v_index_rate_id := 2;  -- Normal
+                                END IF;
+                            WHEN 4 THEN  -- PPM (sensor_id = 4)
+                                IF v_avg_value > 0.05 THEN
+                                    v_index_rate_id := 3;  -- Risky
+                                ELSIF v_avg_value >= 0 AND v_avg_value <= 0.02 THEN
+                                    v_index_rate_id := 1;  -- Very Good
+                                ELSE
+                                    v_index_rate_id := 2;  -- Normal
+                                END IF;
+                            ELSE
+                                v_index_rate_id := 2;  -- Default to Normal if no valid sensor_id
+                        END CASE;
+
+                        -- Insert the results into the hourly_average table for each hour
+                        INSERT INTO pneumiot.hourly_average (
+                            patient_id, 
+                            board_id, 
+                            sensor_id, 
+                            average_measure, 
+                            index_rate_id, 
+                            hour_time, 
+                            day_date
+                        ) VALUES (
+                            v_patient_id, 
+                            v_board_id, 
+                            v_sensor_id, 
+                            v_avg_value, 
+                            v_index_rate_id, 
+                            v_hour_time, 
+                            v_day_date
+                        );
+                    END IF;
+                END LOOP;
+            END LOOP;
+        END LOOP;
+    END LOOP;
+END;
+$$;
