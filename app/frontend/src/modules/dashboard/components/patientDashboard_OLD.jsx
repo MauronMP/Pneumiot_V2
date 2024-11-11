@@ -213,7 +213,7 @@ const PatientDashboard = () => {
         let newEndDate = endDate;
         let newErrorMessage = '';
         let isDisabled = false; // Flag para habilitar/deshabilitar botones
-
+    
         if (type === 'start') {
             newStartDate = value;
             if (new Date(value) >= todayDate) {
@@ -230,21 +230,22 @@ const PatientDashboard = () => {
             if (new Date(value) < new Date(newStartDate)) {
                 newErrorMessage = 'La fecha final no puede ser anterior a la fecha inicial.';
                 isDisabled = true; // Bloquear botones
-
+    
                 // Espera de 3 segundos antes de redirigir a la misma página
                 setTimeout(() => {
                     window.location.reload(); // Recargar la página
                 }, 2000); // 3000 ms = 3 segundos
             }
         }
-
+    
         setErrorMessage(newErrorMessage);
-        if (!errorMessage) {
+        if(!errorMessage){
             setStartDate(newStartDate);
             setEndDate(newEndDate);
             setIsSubmitDisabled(isDisabled); // Actualizar el estado de los botones
-        }
+        }  
     };
+    
 
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -259,52 +260,71 @@ const PatientDashboard = () => {
     }, [boardId, sensorId, startDate, endDate, timeView, isSubmitDisabled, selectedYear]); // Añade selectedYear como dependencia
 
     return (
-        <div className="container-fluid" style={{ backgroundColor: "#F7FAFC", color: "#2D3748", display: "flex", flexDirection: "column" }}>
-            <div className="row g-3 flex-grow-1">
-                {/* Main card for the form */}
-                <div className="col-12 mt-4">
-                    <div className="card shadow-sm border-0 rounded-4" style={{ backgroundColor: "#FFFFFF", borderColor: "#E2E8F0" }}>
+        <div className="container-fluid">
+            <div className="row g-4">
+                {/* Column for statistics */}
+                <div className="col-md-2 col-sm-12">
+                    <div className="card mb-3 shadow-sm text-center border-success bg-light">
                         <div className="card-body">
-                            <h2 className="card-title mb-4 text-center" style={{ color: "#2D3748" }}>Patient Average Measures</h2>
+                            <h6 className="card-title">Average Values</h6>
+                            <p className="card-text">{avgValue !== null ? avgValue.toFixed(2) : 'Loading...'}</p>
+                        </div>
+                    </div>
+                    <div className="card mb-3 shadow-sm text-center border-danger bg-light">
+                        <div className="card-body">
+                            <h6 className="card-title">Maximum</h6>
+                            <p className="card-text">{maxValue !== null ? maxValue.toFixed(2) : 'Loading...'}</p>
+                        </div>
+                    </div>
+                    <div className="card mb-3 shadow-sm text-center border-success bg-light">
+                        <div className="card-body">
+                            <h6 className="card-title">Minimum</h6>
+                            <p className="card-text">{minValue !== null ? minValue.toFixed(2) : 'Loading...'}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Column for form and charts */}
+                <div className="col-md-10 col-sm-12">
+                    <div className="card shadow-sm">
+                        <div className="card-body">
+                            <h2 className="card-title mb-4 text-center">Average Measures from Patient</h2>
                             <div className="d-flex flex-column gap-4">
                                 {/* Row for selects */}
-                                <div className="row g-3">
+                                <div className="row g-4">
                                     {/* Board Select with Icon */}
-                                    <div className="col-md-4 col-12">
-                                        <label htmlFor="boardSelect" className="form-label" style={{ color: "#4A5568" }}>
-                                            <FaMicrochip className="me-2" style={{ color: "#38B2AC" }} /> Board Identified
+                                    <div className="col-md-4 col-sm-12">
+                                        <label htmlFor="boardSelect" className="form-label">
+                                            <FaMicrochip className="me-2 text-primary" /> Board Identified
                                         </label>
                                         <div className="input-group">
-                                            <span className="input-group-text" style={{ backgroundColor: "#EDF2F7", borderColor: "#E2E8F0" }}>
-                                                <FaMicrochip style={{ color: "#38B2AC" }} />
+                                            <span className="input-group-text bg-light">
+                                                <FaMicrochip className="text-primary" />
                                             </span>
                                             <select
                                                 id="boardSelect"
-                                                className="form-select shadow-sm rounded-end"
+                                                className="form-select"
                                                 value={boardId}
                                                 onChange={e => setBoardId(e.target.value)}
-                                                style={{ backgroundColor: "#FFFFFF", borderColor: "#E2E8F0", color: "#2D3748" }}
                                             >
                                                 <option value="">{boardCode || 'Select Board'}</option>
                                             </select>
                                         </div>
                                     </div>
-
                                     {/* Sensor Select with Icon */}
-                                    <div className="col-md-4 col-12">
-                                        <label htmlFor="sensorSelect" className="form-label" style={{ color: "#4A5568" }}>
-                                            <FaThermometerHalf className="me-2" style={{ color: "#38B2AC" }} /> Select a Sensor
+                                    <div className="col-md-4 col-sm-12">
+                                        <label htmlFor="sensorSelect" className="form-label">
+                                            <FaThermometerHalf className="me-2 text-danger" /> Select a Sensor
                                         </label>
                                         <div className="input-group">
-                                            <span className="input-group-text" style={{ backgroundColor: "#EDF2F7", borderColor: "#E2E8F0" }}>
-                                                <FaThermometerHalf style={{ color: "#38B2AC" }} />
+                                            <span className="input-group-text bg-light">
+                                                <FaThermometerHalf className="text-danger" />
                                             </span>
                                             <select
                                                 id="sensorSelect"
-                                                className="form-select shadow-sm rounded-end"
+                                                className="form-select"
                                                 value={sensorId}
                                                 onChange={e => setSensorId(e.target.value)}
-                                                style={{ backgroundColor: "#FFFFFF", borderColor: "#E2E8F0", color: "#2D3748" }}
                                             >
                                                 <option value="">Select one sensor</option>
                                                 {sensors.map(sensor => (
@@ -315,22 +335,20 @@ const PatientDashboard = () => {
                                             </select>
                                         </div>
                                     </div>
-
                                     {/* Time View Select with Icon */}
-                                    <div className="col-md-3 col-12">
-                                        <label htmlFor="timeViewSelect" className="form-label" style={{ color: "#4A5568" }}>
-                                            <FaClock className="me-2" style={{ color: "#63B3ED" }} /> Select Time View
+                                    <div className="col-md-3 col-sm-12">
+                                        <label htmlFor="timeViewSelect" className="form-label">
+                                            <FaClock className="me-2 text-warning" /> Select Time View
                                         </label>
                                         <div className="input-group">
-                                            <span className="input-group-text" style={{ backgroundColor: "#EDF2F7", borderColor: "#E2E8F0" }}>
-                                                <FaClock style={{ color: "#63B3ED" }} />
+                                            <span className="input-group-text bg-light">
+                                                <FaClock className="text-warning" />
                                             </span>
                                             <select
                                                 id="timeViewSelect"
-                                                className="form-select shadow-sm rounded-end"
+                                                className="form-select"
                                                 value={timeView}
                                                 onChange={e => handleTimeViewChange(e.target.value)}
-                                                style={{ backgroundColor: "#FFFFFF", borderColor: "#E2E8F0", color: "#2D3748" }}
                                             >
                                                 <option value="Hour">Hour</option>
                                                 <option value="Day">Day</option>
@@ -340,24 +358,25 @@ const PatientDashboard = () => {
                                     </div>
                                 </div>
 
-                                {/* Conditional row for time view and date selection */}
-                                <div className="row g-3 align-items-end mb-4">
+                                {/* Row for time view and conditional inputs */}
+                                <div className="row g-4 align-items-end mb-4">
+                                    
+
                                     {/* Year Select if Month is selected */}
                                     {timeView === 'Month' && (
-                                        <div className="col-md-3 col-12">
-                                            <label htmlFor="yearSelect" className="form-label" style={{ color: "#4A5568" }}>
-                                                <FaCalendarAlt className="me-2" style={{ color: "#63B3ED" }} /> Select a Year
+                                        <div className="col-md-3 col-sm-12">
+                                            <label htmlFor="yearSelect" className="form-label">
+                                                <FaCalendarAlt className="me-2 text-success" /> Select a Year
                                             </label>
                                             <div className="input-group">
-                                                <span className="input-group-text" style={{ backgroundColor: "#EDF2F7", borderColor: "#E2E8F0" }}>
-                                                    <FaCalendarAlt style={{ color: "#63B3ED" }} />
+                                                <span className="input-group-text bg-light">
+                                                    <FaCalendarAlt className="text-success" />
                                                 </span>
                                                 <select
                                                     id="yearSelect"
-                                                    className="form-select shadow-sm rounded-end"
+                                                    className="form-select"
                                                     value={selectedYear}
                                                     onChange={e => handleYearChange(e.target.value)}
-                                                    style={{ backgroundColor: "#FFFFFF", borderColor: "#E2E8F0", color: "#2D3748" }}
                                                 >
                                                     {Array.from(
                                                         { length: new Date().getFullYear() - 2022 },
@@ -372,48 +391,50 @@ const PatientDashboard = () => {
                                         </div>
                                     )}
 
-                                    {/* Start and End Date Inputs */}
+                                    {/* Date inputs for Start and End Date */}
                                     {timeView !== 'Month' && (
                                         <>
-                                            <div className="col-md-4 col-12">
-                                                <label htmlFor="startDate" className="form-label" style={{ color: "#4A5568" }}>
-                                                    <FaCalendarAlt className="me-2" style={{ color: "#63B3ED" }} />
-                                                    {(timeView === 'Day') && <span>Start Date</span>}
-                                                    {(timeView === 'Hour') && <span>Select one day</span>}
+                                            <div className="col-md-4 col-sm-12">
+                                                <label htmlFor="startDate" className="form-label">
+                                                    <FaCalendarAlt className="me-2 text-info" /> 
+                                                    {(timeView == 'Day') && ( 
+                                                        <span>Start Date</span> 
+                                                    )}
+                                                    {(timeView == 'Hour') && ( 
+                                                        <span>Select one day</span> 
+                                                    )}
                                                 </label>
                                                 <div className="input-group">
-                                                    <span className="input-group-text" style={{ backgroundColor: "#EDF2F7", borderColor: "#E2E8F0" }}>
-                                                        <FaCalendarAlt style={{ color: "#63B3ED" }} />
+                                                    <span className="input-group-text bg-light">
+                                                        <FaCalendarAlt className="text-info" />
                                                     </span>
                                                     <input
                                                         type="date"
                                                         id="startDate"
-                                                        className="form-control shadow-sm rounded-end"
+                                                        className="form-control"
                                                         value={startDate}
                                                         onChange={e => handleDateChange('start', e.target.value)}
                                                         max={getYesterdayDate()}
-                                                        style={{ backgroundColor: "#FFFFFF", borderColor: "#E2E8F0", color: "#2D3748" }}
                                                     />
                                                 </div>
                                             </div>
 
                                             {(timeView === 'Day' || isSubmitDisabled) && (
-                                                <div className="col-md-4 col-12">
-                                                    <label htmlFor="endDate" className="form-label" style={{ color: "#4A5568" }}>
-                                                        <FaCalendarAlt className="me-2" style={{ color: "#63B3ED" }} /> End Date
+                                                <div className="col-md-4 col-sm-12">
+                                                    <label htmlFor="endDate" className="form-label">
+                                                        <FaCalendarAlt className="me-2 text-info" /> End Date
                                                     </label>
                                                     <div className="input-group">
-                                                        <span className="input-group-text" style={{ backgroundColor: "#EDF2F7", borderColor: "#E2E8F0" }}>
-                                                            <FaCalendarAlt style={{ color: "#63B3ED" }} />
+                                                        <span className="input-group-text bg-light">
+                                                            <FaCalendarAlt className="text-info" />
                                                         </span>
                                                         <input
                                                             type="date"
                                                             id="endDate"
-                                                            className="form-control shadow-sm rounded-end"
+                                                            className="form-control"
                                                             value={endDate}
                                                             onChange={e => handleDateChange('end', e.target.value)}
                                                             max={getYesterdayDate()}
-                                                            style={{ backgroundColor: "#FFFFFF", borderColor: "#E2E8F0", color: "#2D3748" }}
                                                         />
                                                     </div>
                                                 </div>
@@ -422,53 +443,22 @@ const PatientDashboard = () => {
                                     )}
                                 </div>
 
-                                {/* Error Message */}
-                                {errorMessage && (
-                                    <div className="alert alert-danger" style={{ backgroundColor: "#F56565", color: "#1A202C" }}>
-                                        {errorMessage}
-                                    </div>
-                                )}
+                                {/* Error message */}
+                                {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
                             </div>
                         </div>
+                        {/* Charts */}
+
                     </div>
-                </div>
 
-                {/* Chart section */}
-                <div className="col-12 mt-5">
-                    <div className="card-body">
-                        {/* Row for both Statistics and Charts */}
-                        <div className="row g-4">
-                            {/* Column for statistics */}
-                            <div className="col-md-2 col-12">
-                                <div className="card mb-3 shadow-sm text-center border-success bg-light">
-                                    <div className="card-body">
-                                        <h6 className="card-title">Average Values</h6>
-                                        <p className="card-text">{avgValue !== null ? avgValue.toFixed(2) : 'Loading...'}</p>
-                                    </div>
-                                </div>
-                                <div className="card mb-3 shadow-sm text-center border-danger bg-light">
-                                    <div className="card-body">
-                                        <h6 className="card-title">Maximum</h6>
-                                        <p className="card-text">{maxValue !== null ? maxValue.toFixed(2) : 'Loading...'}</p>
-                                    </div>
-                                </div>
-                                <div className="card mb-3 shadow-sm text-center border-success bg-light">
-                                    <div className="card-body">
-                                        <h6 className="card-title">Minimum</h6>
-                                        <p className="card-text">{minValue !== null ? minValue.toFixed(2) : 'Loading...'}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Column for charts */}
-                            <div className="col-md-10 col-12">
-                                {/* Conditional Rendering for Charts */}
+                        <div className="row mt-2 g-5">
+                            <div className="col-12">
                                 {timeView === 'Hour' && <BarChart data={barChartData} />}
                                 {timeView === 'Day' && <Calendar data={calendarData} startDate={startDate} endDate={endDate} />}
                                 {timeView === 'Month' && <BarChartYear data={barChartDataYear} />}
                             </div>
                         </div>
-                    </div>
+
                 </div>
             </div>
         </div>

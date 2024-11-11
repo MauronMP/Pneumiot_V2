@@ -17,47 +17,47 @@ const PatientAditionalInfo = sequelize.define('PatientAditionalInfo', {
     },
     onDelete: 'CASCADE',
   },
-  nombre: {
+  patient_name: {
     type: DataTypes.STRING(100),
     allowNull: false,
   },
-  apellido: {
+  patient_surname: {
     type: DataTypes.STRING(100),
     allowNull: false,
   },
-  fecha_nacimiento: {
+  date_birth: {
     type: DataTypes.DATE,
     allowNull: false,
   },
-  genero: {
+  genre: {
     type: DataTypes.STRING(10),
     allowNull: false,
     validate: {
       isIn: [['M', 'F', 'Otro']],
     },
   },
-  telefono: {
+  telephone_number: {
     type: DataTypes.STRING(20),
   },
-  direccion: {
+  direction: {
     type: DataTypes.STRING(150),
   },
-  alergias: {
+  alergies: {
     type: DataTypes.TEXT,
   },
-  condiciones_medicas: {
+  medical_condition: {
     type: DataTypes.TEXT,
   },
-  grupo_sanguineo: {
+  blood_type: {
     type: DataTypes.STRING(5),
   },
-  contacto_emergencia: {
+  emergency_contact: {
     type: DataTypes.STRING(100),
   },
-  telefono_emergencia: {
+  emergency_phone_number: {
     type: DataTypes.STRING(20),
   },
-  fecha_registro: {
+  admission_date: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },

@@ -1,6 +1,6 @@
 {
   "en": {
-    "allWorkers": "All Workers",
+    "allWorkers": "All workers section",
     "searchPlaceholder": "Search by DNI or email",
     "searchAriaLabel": "Search workers",
     "dni": "DNI",
@@ -16,6 +16,14 @@
     "cancel": "Cancel",
     "saveChanges": "Save changes",
     "editWorker": "Edit worker",
+    "workerDni": "Worker DNI",
+    "workerName": "Worker Name",
+    "workerSurname": "Worker Surname",
+    "workerEmail": "Worker Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "workerRole": "Worker Role",
+    "selectRole": "Select a role",
     "dniValidationError": "DNI must be an 8-digit number followed by a letter.",
     "nameRequired": "Name is required.",
     "surnameRequired": "Surname is required.",
@@ -23,8 +31,7 @@
     "passwordRequired": "Password is required.",
     "confirmPasswordRequired": "Confirm password is required.",
     "passwordMismatch": "Passwords do not match.",
-    "roleRequired": "Role is required.",
-    "selectRole": "Select a role"
+    "roleRequired": "Role is required."
   },
   "es": {
     "allWorkers": "Todos los trabajadores",
@@ -43,6 +50,14 @@
     "cancel": "Cancelar",
     "saveChanges": "Guardar cambios",
     "editWorker": "Editar trabajador",
+    "workerDni": "DNI del trabajador",
+    "workerName": "Nombre del trabajador",
+    "workerSurname": "Apellido del trabajador",
+    "workerEmail": "Correo del trabajador",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "workerRole": "Rol del trabajador",
+    "selectRole": "Seleccionar un rol",
     "dniValidationError": "El DNI debe ser un número de 8 dígitos seguido de una letra.",
     "nameRequired": "El nombre es obligatorio.",
     "surnameRequired": "El apellido es obligatorio.",
@@ -50,7 +65,6 @@
     "passwordRequired": "La contraseña es obligatoria.",
     "confirmPasswordRequired": "Se requiere confirmar la contraseña.",
     "passwordMismatch": "Las contraseñas no coinciden.",
-    "roleRequired": "El rol es obligatorio.",
-    "selectRole": "Selecciona un rol"
-  }
+    "roleRequired": "El rol es obligatorio."
+  }  
 }

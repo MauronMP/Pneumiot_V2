@@ -1,4 +1,5 @@
 const PatientAditionalInfo = require('../models/PatientAditionalInfo');
+const Patient = require('../models/Patient');
 const { createLog } = require('../../Log/services/LogService');
 
 const logAction = async (action, message) => {
@@ -56,7 +57,40 @@ const deleteAditionalInfo = async (patientId) => {
   }
 };
 
+// Servicio para obtener la información completa del paciente
+const getPatientCompleteInfo = async () => {
+  try {
+    // Usando Sequelize para hacer la consulta JOIN
+    const patientsInfo = await PatientAditionalInfo.findAll({
+      include: [{
+        model: Patient,
+        attributes: ['patient_id', 'patient_dni', 'admission_date', 'discharge_date'],
+      }],
+      attributes: [
+        'patient_id',
+        'patient_name',
+        'patient_surname',
+        'date_birth',
+      ],
+    });
+
+    // Transformación de los datos obtenidos para aplanar el JSON
+    return patientsInfo.map((info) => ({
+      patient_id: info.patient_id,
+      patient_name: info.patient_name,
+      patient_surname: info.patient_surname,
+      date_birth: info.date_birth,
+      patient_dni: info.Patient.patient_dni,
+      admission_date: info.Patient.admission_date,
+      discharge_date: info.Patient.discharge_date,
+    }));
+  } catch (error) {
+    throw new Error(`Error al obtener información completa del paciente: ${error.message}`);
+  }
+};
+
 module.exports = {
+  getPatientCompleteInfo,
   getAditionalInfoByPatientId,
   createAditionalInfo,
   updateAditionalInfo,

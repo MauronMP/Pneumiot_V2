@@ -64,7 +64,7 @@ const HomePage = () => {
     }
 
     return (
-        <div>
+        <div className="d-flex flex-column">
             {/* Header section */}
             <div className="jumbotron bg-light text-dark p-5 shadow-lg rounded">
                 <div className="container">
@@ -76,11 +76,11 @@ const HomePage = () => {
             </div>
 
             {/* Cards for displaying counts with icons */}
-            <div className="container mt-5">
-                <div className="row text-center">
+            <div className="container mt-5"> {/* Aumentamos el margen superior a mt-5 */}
+                <div className="row justify-content-center">
                     {/* Card for patient count */}
-                    <div className="col-md-3 mb-4">
-                        <div className="card h-100 border-0 shadow-sm">
+                    <div className="col-md-3 col-sm-6 mb-4 d-flex justify-content-center">
+                        <div className="card w-100 h-100 border-0 shadow-sm text-center">
                             <div className="card-body">
                                 <FaUserInjured size={50} className="mb-3 text-primary" />
                                 <h5 className="card-title">{t('patients')}</h5>
@@ -90,8 +90,8 @@ const HomePage = () => {
                     </div>
 
                     {/* Card for board count */}
-                    <div className="col-md-3 mb-4">
-                        <div className="card h-100 border-0 shadow-sm">
+                    <div className="col-md-3 col-sm-6 mb-4 d-flex justify-content-center">
+                        <div className="card w-100 h-100 border-0 shadow-sm text-center">
                             <div className="card-body">
                                 <FaClipboardList size={50} className="mb-3 text-success" />
                                 <h5 className="card-title">{t('boards')}</h5>
@@ -101,8 +101,8 @@ const HomePage = () => {
                     </div>
 
                     {/* Card for worker count */}
-                    <div className="col-md-3 mb-4">
-                        <div className="card h-100 border-0 shadow-sm">
+                    <div className="col-md-3 col-sm-6 mb-4 d-flex justify-content-center">
+                        <div className="card w-100 h-100 border-0 shadow-sm text-center">
                             <div className="card-body">
                                 <FaUserMd size={50} className="mb-3 text-warning" />
                                 <h5 className="card-title">{t('workers')}</h5>
@@ -112,8 +112,8 @@ const HomePage = () => {
                     </div>
 
                     {/* Card for sensor count */}
-                    <div className="col-md-3 mb-4">
-                        <div className="card h-100 border-0 shadow-sm">
+                    <div className="col-md-3 col-sm-6 mb-4 d-flex justify-content-center">
+                        <div className="card w-100 h-100 border-0 shadow-sm text-center">
                             <div className="card-body">
                                 <FaHeartbeat size={50} className="mb-3 text-danger" />
                                 <h5 className="card-title">{t('sensors')}</h5>

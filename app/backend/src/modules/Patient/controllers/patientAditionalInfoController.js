@@ -53,7 +53,18 @@ const deleteAditionalInfo = async (req, res) => {
   }
 };
 
+// Controlador para obtener la información completa del paciente
+const getPatientCompleteInfo = async (req, res) => {
+  try {
+    const patientInfo = await patientAditionalInfoService.getPatientCompleteInfo();
+    res.status(200).json(patientInfo);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
+  getPatientCompleteInfo,
   getAditionalInfoByPatientId,
   createAditionalInfo,
   updateAditionalInfo,

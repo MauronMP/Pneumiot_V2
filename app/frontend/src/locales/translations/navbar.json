@@ -16,7 +16,8 @@
     "sensors": "Sensors",
     "addSensor": "Add Sensor",
     "seeSensors": "See Sensors",
-    "profile": "Profile"
+    "profile": "Profile",
+    "projectTitle": "PneumIOT"
   },
   "es": {
     "hello": "¡Hola!",
@@ -35,6 +36,7 @@
     "sensors": "Sensores",
     "addSensor": "Agregar Sensor",
     "seeSensors": "Ver Sensores",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "projectTitle": "PneumIOT"
   }
 }

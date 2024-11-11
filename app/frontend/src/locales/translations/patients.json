@@ -1,7 +1,7 @@
 {
   "en": {
     "patientsList": "Patients List",
-    "searchByDniOrDate": "Search by DNI or date (dd-mm-yyyy)",
+    "searchByDniOrDate": "Search by DNI, name, surname or date (dd-mm-yyyy)",
     "dni": "DNI",
     "admissionDate": "Admission Date",
     "dischargeDate": "Discharge Date",
@@ -18,11 +18,14 @@
     "errorFetchingPatients": "Error fetching patients data",
     "errorExportingData": "Error exporting data",
     "errorDischargingPatient": "Error discharging the patient",
-    "noDataForExport": "No data available to export"
+    "noDataForExport": "No data available to export",
+    "patientName": "Name",
+    "patientSurname": "Surname",
+    "patientBirthDate": "Birth date"
   },
   "es": {
     "patientsList": "Lista de Pacientes",
-    "searchByDniOrDate": "Buscar por DNI o fecha (dd-mm-yyyy)",
+    "searchByDniOrDate": "Buscar por DNI, nombre, apellidos o fecha (dd-mm-yyyy)",
     "dni": "DNI",
     "admissionDate": "Fecha de Admisión",
     "dischargeDate": "Fecha de Alta",
@@ -39,6 +42,9 @@
     "errorFetchingPatients": "Error al obtener los datos de los pacientes",
     "errorExportingData": "Error al exportar los datos",
     "errorDischargingPatient": "Error al dar de alta al paciente",
-    "noDataForExport": "No hay datos disponibles para exportar"
+    "noDataForExport": "No hay datos disponibles para exportar",
+    "patientName": "Nombre",
+    "patientSurname": "Apellido",
+    "patientBirthDate": "Fecha de nacimiento"
   }
 }

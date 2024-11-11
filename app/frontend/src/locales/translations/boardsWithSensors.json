@@ -2,23 +2,29 @@
   "en": {
     "loading": "Loading...",
     "error": "Error",
-    "boardCode": "Board Code",
+    "boardCode": "Board code",
     "noSensors": "No sensors available for this board.",
     "sensor": "Sensor",
     "sensorId": "Sensor ID",
     "unit": "Unit",
-    "minValue": "Min Value",
-    "maxValue": "Max Value"
+    "minValue": "Min value",
+    "maxValue": "Max value",
+    "allBoards": "All boards",
+    "searchByBoardCode": "Search by board code",
+    "search": "Search"
   },
   "es": {
     "loading": "Cargando...",
     "error": "Error",
-    "boardCode": "Código de la Junta",
-    "noSensors": "No hay sensores disponibles para esta junta.",
+    "boardCode": "Código del dispositivo",
+    "noSensors": "No hay sensores disponibles para este dispositivo.",
     "sensor": "Sensor",
-    "sensorId": "ID del Sensor",
+    "sensorId": "ID del sensor",
     "unit": "Unidad",
-    "minValue": "Valor Mínimo",
-    "maxValue": "Valor Máximo"
+    "minValue": "Valor mínimo",
+    "maxValue": "Valor máximo",
+    "allBoards": "Todos los dispositivos",
+    "searchByBoardCode": "Busca por el código del dispositivo",
+    "search": "Buscador"
   }
 }

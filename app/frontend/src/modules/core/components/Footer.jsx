@@ -1,17 +1,16 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { useTranslation } from 'react-i18next';
 
-const Footer = () => {
-  const { t } = useTranslation('footer');
+const FooterComponent = () => {
+  const { t } = useTranslation('footer'); // Obtener la traducción para 'footer'
 
   return (
-    <footer className="bg-dark text-white text-center py-4">
-      <div className="container">
+    <footer className="bg-dark text-light py-3 mt-auto">
+      <div className="text-center">
         <p className="mb-0">{t('footerText')}</p>
       </div>
     </footer>
   );
 };
 
-export default Footer;
+export default FooterComponent;

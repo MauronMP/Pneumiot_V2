@@ -3,10 +3,11 @@ import { Table, Button, Form, InputGroup, Modal, Col, Row } from 'react-bootstra
 import axios from 'axios';
 import config from '../../../config/config';  // Import URL paths for APIs
 import { useTranslation } from 'react-i18next';  // Import i18next
+import { FaIdCard, FaUserEdit, FaEnvelope, FaLock, FaUserShield } from 'react-icons/fa'; // Import icons
 
 const SeeWorkers = () => {
   const { t } = useTranslation('seeWorker');  // Hook for translations
-  
+
   // State to manage workers data, search term, filtered workers, modals, and form data
   const [workers, setWorkers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -211,13 +212,16 @@ const SeeWorkers = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h2 className="text-center mb-4">{t('allWorkers')}</h2>
+    <div className="container">
+      <Row className="mb-4 align-items-center">
+        {/* Título que ocupa 1/3 del espacio */}
+        <Col xs={12} md={3}>
+          <h3 className="text-start">{t('allWorkers')}</h3>
+        </Col>
 
-      {/* Search Bar */}
-      <Row className="justify-content-center">
-        <Col xs={12} sm={8} md={6}>
-          <InputGroup className="mb-4">
+        {/* Barra de búsqueda que ocupa 2/3 del espacio */}
+        <Col xs={12} md={9}>
+          <InputGroup>
             <Form.Control
               placeholder={t('searchPlaceholder')}
               aria-label={t('searchAriaLabel')}
@@ -228,6 +232,7 @@ const SeeWorkers = () => {
           </InputGroup>
         </Col>
       </Row>
+
 
       {/* Workers Table */}
       <Table striped bordered hover responsive="md">
@@ -265,7 +270,11 @@ const SeeWorkers = () => {
       </Table>
 
       {/* Delete Confirmation Modal */}
-      <Modal show={showDeleteModal} onHide={handleCancelDelete}>
+      <Modal
+        show={showDeleteModal}
+        onHide={handleCancelDelete}
+        centered  // Esto centra el modal en la pantalla
+      >
         <Modal.Header closeButton>
           <Modal.Title>{t('deleteConfirmation')}</Modal.Title>
         </Modal.Header>
@@ -281,111 +290,133 @@ const SeeWorkers = () => {
       </Modal>
 
       {/* Edit Worker Modal */}
-      <Modal show={showEditModal} onHide={handleCancelEdit}>
+      <Modal show={showEditModal} onHide={handleCancelEdit} centered size="lg">
         <Modal.Header closeButton>
           <Modal.Title>{t('editWorker')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            {/* Worker DNI */}
-            <Form.Group controlId="worker_dni">
-              <Form.Label>{t('dni')}</Form.Label>
-              <Form.Control
-                type="text"
-                name="worker_dni"
-                value={formData.worker_dni}
-                onChange={handleFormChange}
-                isInvalid={!!errors.worker_dni}
-              />
-              <Form.Control.Feedback type="invalid">{errors.worker_dni}</Form.Control.Feedback>
-            </Form.Group>
+            <Row className="mb-4">
+              <Col md={4}>
+                <Form.Label><FaIdCard size={20} className="mx-2" /> {t('workerDni')}</Form.Label>
+              </Col>
+              <Col md={8}>
+                <Form.Control
+                  type="text"
+                  name="worker_dni"
+                  value={formData.worker_dni}
+                  onChange={handleFormChange}
+                  isInvalid={!!errors.worker_dni}
+                />
+                <Form.Control.Feedback type="invalid">{errors.worker_dni}</Form.Control.Feedback>
+              </Col>
+            </Row>
 
-            {/* Worker Name */}
-            <Form.Group controlId="worker_name">
-              <Form.Label>{t('name')}</Form.Label>
-              <Form.Control
-                type="text"
-                name="worker_name"
-                value={formData.worker_name}
-                onChange={handleFormChange}
-                isInvalid={!!errors.worker_name}
-              />
-              <Form.Control.Feedback type="invalid">{errors.worker_name}</Form.Control.Feedback>
-            </Form.Group>
+            <Row className="mb-4">
+              <Col md={4}>
+                <Form.Label><FaUserEdit size={20} className="mx-2" /> {t('workerName')}</Form.Label>
+              </Col>
+              <Col md={8}>
+                <Form.Control
+                  type="text"
+                  name="worker_name"
+                  value={formData.worker_name}
+                  onChange={handleFormChange}
+                  isInvalid={!!errors.worker_name}
+                />
+                <Form.Control.Feedback type="invalid">{errors.worker_name}</Form.Control.Feedback>
+              </Col>
+            </Row>
 
-            {/* Worker Surname */}
-            <Form.Group controlId="worker_surname">
-              <Form.Label>{t('surname')}</Form.Label>
-              <Form.Control
-                type="text"
-                name="worker_surname"
-                value={formData.worker_surname}
-                onChange={handleFormChange}
-                isInvalid={!!errors.worker_surname}
-              />
-              <Form.Control.Feedback type="invalid">{errors.worker_surname}</Form.Control.Feedback>
-            </Form.Group>
+            <Row className="mb-4">
+              <Col md={4}>
+                <Form.Label><FaUserEdit size={20} className="mx-2" /> {t('workerSurname')}</Form.Label>
+              </Col>
+              <Col md={8}>
+                <Form.Control
+                  type="text"
+                  name="worker_surname"
+                  value={formData.worker_surname}
+                  onChange={handleFormChange}
+                  isInvalid={!!errors.worker_surname}
+                />
+                <Form.Control.Feedback type="invalid">{errors.worker_surname}</Form.Control.Feedback>
+              </Col>
+            </Row>
 
-            {/* Worker Email */}
-            <Form.Group controlId="worker_email">
-              <Form.Label>{t('email')}</Form.Label>
-              <Form.Control
-                type="email"
-                name="worker_email"
-                value={formData.worker_email}
-                onChange={handleFormChange}
-                isInvalid={!!errors.worker_email}
-              />
-              <Form.Control.Feedback type="invalid">{errors.worker_email}</Form.Control.Feedback>
-            </Form.Group>
+            <Row className="mb-4">
+              <Col md={4}>
+                <Form.Label><FaEnvelope size={20} className="mx-2" /> {t('workerEmail')}</Form.Label>
+              </Col>
+              <Col md={8}>
+                <Form.Control
+                  type="email"
+                  name="worker_email"
+                  value={formData.worker_email}
+                  onChange={handleFormChange}
+                  isInvalid={!!errors.worker_email}
+                />
+                <Form.Control.Feedback type="invalid">{errors.worker_email}</Form.Control.Feedback>
+              </Col>
+            </Row>
 
-            {/* Password */}
-            <Form.Group controlId="password">
-              <Form.Label>{t('password')}</Form.Label>
-              <Form.Control
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleFormChange}
-                isInvalid={!!errors.password}
-              />
-              <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-            </Form.Group>
+            <Row className="mb-4">
+              <Col md={4}>
+                <Form.Label><FaLock size={20} className="mx-2" /> {t('password')}</Form.Label>
+              </Col>
+              <Col md={8}>
+                <Form.Control
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleFormChange}
+                  isInvalid={!!errors.password}
+                />
+                <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+              </Col>
+            </Row>
 
-            {/* Confirm Password */}
-            <Form.Group controlId="confirmPassword">
-              <Form.Label>{t('confirmPassword')}</Form.Label>
-              <Form.Control
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleFormChange}
-                isInvalid={!!errors.confirmPassword}
-              />
-              <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
-            </Form.Group>
+            <Row className="mb-4">
+              <Col md={4}>
+                <Form.Label><FaLock size={20} className="mx-2" /> {t('confirmPassword')}</Form.Label>
+              </Col>
+              <Col md={8}>
+                <Form.Control
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleFormChange}
+                  isInvalid={!!errors.confirmPassword}
+                />
+                <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
+              </Col>
+            </Row>
 
-            {/* Worker Role */}
-            <Form.Group controlId="worker_role_id">
-              <Form.Label>{t('role')}</Form.Label>
-              <Form.Control
-                as="select"
-                name="worker_role_id"
-                value={formData.worker_role_id}
-                onChange={handleFormChange}
-                isInvalid={!!errors.worker_role_id}
-              >
-                <option value="">{t('selectRole')}</option>
-                {roles.map(role => (
-                  <option key={role.worker_role_id} value={role.worker_role_id}>
-                    {role.worker_role_name}
-                  </option>
-                ))}
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">{errors.worker_role_id}</Form.Control.Feedback>
-            </Form.Group>
+            <Row className="mb-4">
+              <Col md={4}>
+                <Form.Label><FaUserShield size={20} className="mx-2" /> {t('workerRole')}</Form.Label>
+              </Col>
+              <Col md={8}>
+                <Form.Control
+                  as="select"
+                  name="worker_role_id"
+                  value={formData.worker_role_id}
+                  onChange={handleFormChange}
+                  isInvalid={!!errors.worker_role_id}
+                >
+                  <option value="">{t('selectRole')}</option>
+                  {roles.map(role => (
+                    <option key={role.worker_role_id} value={role.worker_role_id}>
+                      {role.worker_role_name}
+                    </option>
+                  ))}
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">{errors.worker_role_id}</Form.Control.Feedback>
+              </Col>
+            </Row>
           </Form>
         </Modal.Body>
+
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCancelEdit}>
             {t('cancel')}

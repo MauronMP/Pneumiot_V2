@@ -18,6 +18,18 @@ const AddPatient = () => {
   const [error, setError] = useState(null); // General error state for form submission errors
   const [dateError, setDateError] = useState(''); // Error state for date validation
   const [showToast, setShowToast] = useState(false); // State to control showing success toast
+  const [patientName, setPatientName] = useState('');
+  const [patientSurname, setPatientSurname] = useState('');
+  const [dateBirth, setDateBirth] = useState('');
+  const [genre, setGenre] = useState(''); // Género (M, F, Otro)
+  const [telephoneNumber, setTelephoneNumber] = useState('');
+  const [direction, setDirection] = useState('');
+  const [alergies, setAlergies] = useState('');
+  const [medicalCondition, setMedicalCondition] = useState('');
+  const [bloodType, setBloodType] = useState('');
+  const [emergencyContact, setEmergencyContact] = useState('');
+  const [emergencyPhoneNumber, setEmergencyPhoneNumber] = useState('');
+
 
   const navigate = useNavigate(); // Hook to navigate to another page after successful submission
 
@@ -90,16 +102,49 @@ const AddPatient = () => {
       const finalDischargeDate = dischargeDate || null;
 
       // Register the patient with the details provided
-      await axios.post(`${config.frontendBaseUrl}patients/`, {
+      const patientResponse = await axios.post(`${config.frontendBaseUrl}patients/`, {
         patient_dni: dni,
         board_id: boardId,
         admission_date: finalAdmissionDate,
         discharge_date: finalDischargeDate,
+        patient_name: patientName,
+        patient_surname: patientSurname,
+        date_birth: dateBirth,
+        genre: genre,
+        telephone_number: telephoneNumber,
+        direction: direction,
+        alergies: alergies,
+        medical_condition: medicalCondition,
+        blood_type: bloodType,
+        emergency_contact: emergencyContact,
+        emergency_phone_number: emergencyPhoneNumber,
       });
+
+      const patientId = patientResponse.data.patient_id; // Get the patient_id from the response
+
+      // Prepare data for the second API call
+      const patientInfo = {
+        patient_id: patientId,
+        patient_name: patientName,
+        patient_surname: patientSurname,
+        date_birth: dateBirth,
+        genre: genre,
+        telephone_number: telephoneNumber,
+        direction: direction,
+        alergies: alergies,
+        medical_condition: medicalCondition,
+        blood_type: bloodType,
+        emergency_contact: emergencyContact,
+        emergency_phone_number: emergencyPhoneNumber,
+        admission_date: finalAdmissionDate, // Use the final admission date
+      };
+
+      // Make the second API call with the patient info
+      await axios.post('http://localhost:3000/api/frontend/patientsInfo/', patientInfo);
 
       // Show success toast on successful registration
       setShowToast(true);
-      
+
       // Redirect to patients list after a 2-second delay
       setTimeout(() => {
         navigate('/patients');
@@ -113,64 +158,219 @@ const AddPatient = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container-fluid mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-6">
-          <h2 className="text-center">{t('register_patient')}</h2>
+        <div className="col-lg-8"> {/* Aumentamos el ancho del formulario */}
+          <h2 className="text-center mb-4">{t('register_patient')}</h2>
           <form onSubmit={handleSubmit} className="p-4 border rounded bg-light">
-            {/* DNI input field */}
-            <div className="form-group mb-3">
-              <label htmlFor="dni">{t('patient_dni')}</label>
-              <input
-                type="text"
-                className="form-control"
-                id="dni"
-                value={dni}
-                onChange={(e) => setDni(e.target.value)}
-                required
-              />
+            {/* DNI y Código de Pizarra */}
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="dni">{t('patient_dni')}</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="dni"
+                  value={dni}
+                  onChange={(e) => setDni(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="board_code">{t('board_code')}</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="board_code"
+                  value={boardCode}
+                  readOnly
+                />
+              </div>
             </div>
 
-            {/* Board code input (read-only) */}
-            <div className="form-group mb-3">
-              <label htmlFor="board_code">{t('board_code')}</label>
-              <input
-                type="text"
-                className="form-control"
-                id="board_code"
-                value={boardCode}
-                readOnly
-              />
+            {/* Nombre y Apellido */}
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="patient_name">{t('patient_name')}</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="patient_name"
+                  value={patientName}
+                  onChange={(e) => setPatientName(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="patient_surname">{t('patient_surname')}</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="patient_surname"
+                  value={patientSurname}
+                  onChange={(e) => setPatientSurname(e.target.value)}
+                  required
+                />
+              </div>
             </div>
 
-            {/* Admission date input */}
-            <div className="form-group mb-3">
-              <label htmlFor="admission_date">{t('admission_date')}</label>
-              <input
-                type="date"
-                className="form-control"
-                id="admission_date"
-                value={admissionDate}
-                onChange={(e) => setAdmissionDate(e.target.value)}
-              />
-              <small className="form-text text-muted">
-                {t('admission_date_note')}
-              </small>
+            {/* Fecha de Nacimiento y Género */}
+            <div className="row mb-3">
+              <div className="col-md-4">
+                <label htmlFor="date_birth">{t('date_birth')}</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  id="date_birth"
+                  value={dateBirth}
+                  onChange={(e) => setDateBirth(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="col-md-4">
+                <label htmlFor="genre">{t('genre')}</label>
+                <select
+                  className="form-control"
+                  id="genre"
+                  value={genre}
+                  onChange={(e) => setGenre(e.target.value)}
+                  required
+                >
+                  <option value="">{t('select_genre')}</option>
+                  <option value="M">{t('male')}</option>
+                  <option value="F">{t('female')}</option>
+                  <option value="Otro">{t('other')}</option>
+                </select>
+              </div>
+
+              <div className="col-md-4">
+                <label htmlFor="blood_type">{t('blood_type')}</label>
+                <select
+                  className="form-control"
+                  id="blood_type"
+                  value={bloodType}
+                  onChange={(e) => setBloodType(e.target.value)}
+                >
+                  <option value="">{t('select_blood_type')}</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                </select>
+              </div>
             </div>
 
-            {/* Discharge date input */}
-            <div className="form-group mb-3">
-              <label htmlFor="discharge_date">{t('discharge_date')}</label>
-              <input
-                type="date"
-                className="form-control"
-                id="discharge_date"
-                value={dischargeDate}
-                onChange={(e) => setDischargeDate(e.target.value)}
-              />
-              <small className="form-text text-muted">
-                {t('discharge_date_note')}
-              </small>
+            {/* Teléfono y Dirección */}
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="telephone_number">{t('telephone_number')}</label>
+                <input
+                  type="tel"
+                  className="form-control"
+                  id="telephone_number"
+                  value={telephoneNumber}
+                  onChange={(e) => setTelephoneNumber(e.target.value)}
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="direction">{t('direction')}</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="direction"
+                  value={direction}
+                  onChange={(e) => setDirection(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Alergias y Condiciones Médicas */}
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="alergies">{t('alergies')}</label>
+                <textarea
+                  className="form-control"
+                  id="alergies"
+                  value={alergies}
+                  onChange={(e) => setAlergies(e.target.value)}
+                  rows="2"
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="medical_condition">{t('medical_condition')}</label>
+                <textarea
+                  className="form-control"
+                  id="medical_condition"
+                  value={medicalCondition}
+                  onChange={(e) => setMedicalCondition(e.target.value)}
+                  rows="2"
+                />
+              </div>
+            </div>
+
+            {/* Contacto de Emergencia y Teléfono */}
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="emergency_contact">{t('emergency_contact')}</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="emergency_contact"
+                  value={emergencyContact}
+                  onChange={(e) => setEmergencyContact(e.target.value)}
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="emergency_phone_number">{t('emergency_phone_number')}</label>
+                <input
+                  type="tel"
+                  className="form-control"
+                  id="emergency_phone_number"
+                  value={emergencyPhoneNumber}
+                  onChange={(e) => setEmergencyPhoneNumber(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Fechas de Admisión y Alta */}
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="admission_date">{t('admission_date')}</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  id="admission_date"
+                  value={admissionDate}
+                  onChange={(e) => setAdmissionDate(e.target.value)}
+                />
+                <small className="form-text text-muted">
+                  {t('admission_date_note')}
+                </small>
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="discharge_date">{t('discharge_date')}</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  id="discharge_date"
+                  value={dischargeDate}
+                  onChange={(e) => setDischargeDate(e.target.value)}
+                />
+                <small className="form-text text-muted">
+                  {t('discharge_date_note')}
+                </small>
+              </div>
             </div>
 
             {/* Date validation error message */}
@@ -182,13 +382,15 @@ const AddPatient = () => {
                 {t('registering')}...
               </button>
             ) : (
-              <button
-                type="submit"
-                className="btn btn-primary w-100"
-                disabled={dateError !== ''} // Disable button if there are date errors
-              >
-                {t('register_patient')}
-              </button>
+              <div className="d-flex justify-content-center">
+                <button
+                  type="submit"
+                  className="btn btn-primary w-50 mt-4"
+                  disabled={dateError !== ''} // Disable button if there are date errors
+                >
+                  {t('register_patient')}
+                </button>
+              </div>
             )}
 
             {/* General error message if something went wrong */}

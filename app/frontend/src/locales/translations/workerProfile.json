@@ -1,10 +1,10 @@
 {
   "es": {
-    "workerDni": "DNI del trabajador",
-    "workerName": "Nombre del trabajador",
-    "workerSurname": "Apellido del trabajador",
-    "workerEmail": "Correo electrónico del trabajador",
-    "role": "Rol del trabajador",
+    "workerDni": "DNI",
+    "workerName": "Nombre",
+    "workerSurname": "Apellido",
+    "workerEmail": "Correo",
+    "role": "Rol",
     "editProfileButton": "Editar perfil",
     "modalTitle": "Editar perfil",
     "newPassword": "Nueva contraseña",

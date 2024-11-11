@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert, Row, Card, Col, InputGroup } from 'react-bootstrap';
 import axios from 'axios';
 import config from '../../../config/config';  // Import URL paths for APIs
 import { useTranslation } from 'react-i18next'; // Import useTranslation hook
+import { FaKey, FaClipboard, FaUserCog } from 'react-icons/fa';
 
 const CreatePermission = () => {
   const { t } = useTranslation('createPermission'); // Use the 'createPermission' namespace for translations
@@ -109,66 +110,94 @@ const CreatePermission = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h2>{t('createNewPermission')}</h2>
+    <div className="d-flex justify-content-center align-items-center" style={{ width: '50%' }}>
+      <Card className="p-4 shadow-sm" style={{ width: '100%' }}>
+      <h2 className='mb-3'>{t('createNewPermission')}</h2>
       {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
+      
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formPermissionName">
-          <Form.Label>{t('permissionName')}</Form.Label>
-          <Form.Control
-            type="text"
-            name="permission_name"
-            value={formData.permission_name}
-            onChange={handleInputChange}
-            placeholder={t('enterPermissionName')}
-            isInvalid={!!errorMessage}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errorMessage}
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Form.Group controlId="formPermissionDescription" className="mt-3">
-          <Form.Label>{t('permissionDescription')}</Form.Label>
-          <Form.Control
-            as="textarea"
-            name="permission_description"
-            rows={3}
-            value={formData.permission_description}
-            onChange={handleInputChange}
-            placeholder={t('enterPermissionDescription')}
-          />
-        </Form.Group>
-
-        {/* Role Dropdown */}
-        <Form.Group controlId="formWorkerRole" className="mt-3">
-          <Form.Label>{t('assignToRole')}</Form.Label>
-          <Form.Control
-            as="select"
-            name="worker_role_id"
-            value={formData.worker_role_id}
-            onChange={handleInputChange}
-            isInvalid={!formData.worker_role_id && !!errorMessage}
-          >
-            <option value="">{t('chooseRole')}</option>
-            {roles.map(role => (
-              <option key={role.worker_role_id} value={role.worker_role_id}>
-                {role.worker_role_name}
-              </option>
-            ))}
-          </Form.Control>
-          <Form.Control.Feedback type="invalid">
-            {errorMessage}
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Button variant="primary" type="submit" className="mt-3">
-          {t('createPermission')}
-        </Button>
+        
+        {/* Permission Name */}
+        <Row className="mb-3">
+          <Col md={12}>
+            <Form.Group controlId="formPermissionName">
+              <InputGroup>
+                <InputGroup.Text><FaKey /></InputGroup.Text> {/* Icono para Permission Name */}
+                <Form.Control
+                  type="text"
+                  name="permission_name"
+                  value={formData.permission_name}
+                  onChange={handleInputChange}
+                  placeholder={t('enterPermissionName')}
+                  isInvalid={!!errorMessage}
+                />
+              </InputGroup>
+              <Form.Control.Feedback type="invalid">
+                {errorMessage}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+  
+        {/* Permission Description */}
+        <Row className="mb-3">
+          <Col md={12}>
+            <Form.Group controlId="formPermissionDescription">
+              <InputGroup>
+                <InputGroup.Text><FaClipboard /></InputGroup.Text> {/* Icono para Permission Description */}
+                <Form.Control
+                  as="textarea"
+                  name="permission_description"
+                  rows={3}
+                  value={formData.permission_description}
+                  onChange={handleInputChange}
+                  placeholder={t('enterPermissionDescription')}
+                />
+              </InputGroup>
+            </Form.Group>
+          </Col>
+        </Row>
+  
+        {/* Worker Role Dropdown */}
+        <Row className="mb-3">
+          <Col md={12}>
+            <Form.Group controlId="formWorkerRole">
+              <InputGroup>
+                <InputGroup.Text><FaUserCog /></InputGroup.Text> {/* Icono para Worker Role */}
+                <Form.Control
+                  as="select"
+                  name="worker_role_id"
+                  value={formData.worker_role_id}
+                  onChange={handleInputChange}
+                  isInvalid={!formData.worker_role_id && !!errorMessage}
+                >
+                  <option value="">{t('chooseRole')}</option>
+                  {roles.map(role => (
+                    <option key={role.worker_role_id} value={role.worker_role_id}>
+                      {role.worker_role_name}
+                    </option>
+                  ))}
+                </Form.Control>
+              </InputGroup>
+              <Form.Control.Feedback type="invalid">
+                {errorMessage}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+  
+        {/* Submit Button */}
+        <div className="d-flex justify-content-center mt-4">
+          <Button variant="primary" type="submit" className="w-25">
+            {t('createPermission')}
+          </Button>
+        </div>
       </Form>
-    </div>
+      </Card>
+      </div>
   );
+  
 };
 
 export default CreatePermission;
