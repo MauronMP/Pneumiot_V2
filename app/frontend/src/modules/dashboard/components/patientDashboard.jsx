@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import BarChart from '../charts/barChart';
+import LineChart  from '../charts/ElineChart';
+import BarChart   from '../charts/EbarChart';
 import Calendar from '../charts/calendarChart';
+import CalendarChart from '../charts/EcalendarDate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/customStyles.css'; // Asegúrate de que la ruta sea correcta
 import BarChartYear from '../charts/barChartYear';
@@ -463,9 +465,9 @@ const PatientDashboard = () => {
                             {/* Column for charts */}
                             <div className="col-md-10 col-12">
                                 {/* Conditional Rendering for Charts */}
-                                {timeView === 'Hour' && <BarChart data={barChartData} />}
-                                {timeView === 'Day' && <Calendar data={calendarData} startDate={startDate} endDate={endDate} />}
-                                {timeView === 'Month' && <BarChartYear data={barChartDataYear} />}
+                                {timeView === 'Hour' &&  <LineChart />}
+                                {timeView === 'Day' && < CalendarChart/>}
+                                {timeView === 'Month' && <BarChart />}
                             </div>
                         </div>
                     </div>
