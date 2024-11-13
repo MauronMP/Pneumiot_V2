@@ -1,17 +1,24 @@
 import React from "react";
 import ReactECharts from "echarts-for-react";
 
-const LineChart = () => {
-  // Datos de ejemplo generados para un solo día (14-10-2024) desde las 00:00 hasta las 23:00
-  const hourlyData = Array.from({ length: 24 }, (v, i) => [
-    `${String(i).padStart(2, "0")}:00`, // Hora formateada
-    Math.floor(Math.random() * 300), // Valores de AQI entre 0 y 300
-  ]);
+const LineChart = ({ data }) => {
+  // Mapeo de index_rate_id a colores
+  const indexRateColors = {
+    1: "#93CE07", // Verde para index_rate_id 1
+    2: "#FBDB0F", // Naranja para index_rate_id 2
+    3: "#FD0100", // Rojo para index_rate_id 3
+  };
+
+  // Transformar los datos para extraer las horas y las mediciones de humedad
+  const hourlyData = data.map(item => ({
+    hour: `${String(item.hour_time).padStart(2, "0")}:00`, // Hora formateada
+    humidity: parseFloat(item.average_measure), // Valor de la humedad
+    indexRateId: item.index_rate_id, // index_rate_id
+  }));
 
   // Configuración del gráfico
   const getOption = () => {
     return {
-     
       tooltip: {
         trigger: "axis",
       },
@@ -22,7 +29,7 @@ const LineChart = () => {
       },
       xAxis: {
         type: "category",
-        data: hourlyData.map((item) => item[0]), // Eje X con horas
+        data: hourlyData.map((item) => item.hour), // Eje X con horas
         axisLabel: {
           interval: 0,
           rotate: 45, // Rotar etiquetas para legibilidad
@@ -31,36 +38,28 @@ const LineChart = () => {
       yAxis: {
         type: "value",
       },
-      toolbox: {
-        right: 10,
-        feature: {
-          restore: {},
-          saveAsImage: {},
-        },
-      },
-      visualMap: {
-        top: 50,
-        right: 10,
-        pieces: [
-          { gt: 0, lte: 100, color: "#93CE07" }, // Verde
-          { gt: 100, lte: 200, color: "#FBDB0F" }, // Naranja
-          { gt: 200, color: "#FD0100" }, // Rojo
-        ],
-        outOfRange: {
-          color: "#999",
-        },
-      },
       series: [
         {
-          name: "Beijing AQI",
+          name: "Humidity",
           type: "line",
-          data: hourlyData.map((item) => item[1]), // Datos de AQI
+          data: hourlyData.map((item) => ({
+            value: item.humidity, // Datos de humedad en el eje Y
+            itemStyle: {
+              color: indexRateColors[item.indexRateId] || "#999", // Asignar color según index_rate_id
+            },
+            symbol: "circle", // Usar círculos como símbolo para los puntos
+            symbolSize: 15, // Tamaño de los puntos (círculos)
+            lineStyle: {
+              color: "black", // La línea será negra
+              width: 8, // Grosor de la línea
+            },
+          })),
           markLine: {
             silent: true,
             lineStyle: { color: "#333" },
             data: [
-              { yAxis: 100 }, // Línea de advertencia
-              { yAxis: 200 }, // Línea de alerta
+              { yAxis: 50 }, // Línea de advertencia
+              { yAxis: 75 }, // Línea de alerta
             ],
           },
         },

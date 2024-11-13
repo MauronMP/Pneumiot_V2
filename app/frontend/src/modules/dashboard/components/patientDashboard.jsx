@@ -465,9 +465,9 @@ const PatientDashboard = () => {
                             {/* Column for charts */}
                             <div className="col-md-10 col-12">
                                 {/* Conditional Rendering for Charts */}
-                                {timeView === 'Hour' &&  <LineChart />}
-                                {timeView === 'Day' && < CalendarChart/>}
-                                {timeView === 'Month' && <BarChart />}
+                                {timeView === 'Hour' &&  <LineChart data={barChartData}/>}
+                                {timeView === 'Day' && <CalendarChart data={calendarData} startDate={startDate} endDate={endDate}/>}
+                                {timeView === 'Month' && <BarChart data={barChartDataYear}  />}
                             </div>
                         </div>
                     </div>

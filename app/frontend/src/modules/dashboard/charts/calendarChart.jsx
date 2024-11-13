@@ -3,57 +3,64 @@ import React from 'react';
 import { ResponsiveCalendar } from '@nivo/calendar';
 // Importando la función utilitaria para obtener los colores según el indexRateId
 import { getColor } from '../../../utils/colorUtils';
-import Legend from './legend'; 
+import Legend from './legend';
 
 const CalendarChart = ({ data, startDate, endDate }) => {
     // Comprobar si los datos están vacíos o no disponibles
     if (!data || data.length === 0) {
-        return <div>No hay datos disponibles para mostrar.</div>; // Mensaje si no hay datos
+        return <div>No hay datos disponibles para mostrar.</div>;
     }
 
     // Transformar los datos entrantes para ajustarse al formato esperado por ResponsiveCalendar
-    const transformedData = data.map(item => ({
-        day: item.day,  // Asegurarse de que 'day' corresponda a 'day_date'
-        value: item.value, // Valor para cada día
-        color: getColor(item.indexRateId), // Obtener el color basado en indexRateId
-    }));
-
-    // Crear la data para el ResponsiveCalendar, utilizando solo 'day' y 'value'
-    const calendarData = transformedData.map(({ day, value, color }) => ({
-        day,
-        value,
-        color, // Incluir el color calculado
+    const calendarData = data.map(item => ({
+        day: item.day,               // Fecha en formato 'YYYY-MM-DD'
+        value: item.value,           // Valor para cada día
+        color: getColor(item.indexRateId), // Color basado en indexRateId
     }));
 
     return (
-        <div style={{ height: '400px' }}>
-            <Legend /> 
-            {/* Componente ResponsiveCalendar */}
+        <div style={{ height: '400px', width: '100%' }}>
+            <Legend />
             <ResponsiveCalendar
-                data={calendarData} // Pasar los datos transformados al calendario
-                from={startDate} // Usar startDate desde las props
-                to={endDate}     // Usar endDate desde las props
-                emptyColor="#eeeeee" // Color para los días sin datos
-                margin={{ top: 10, right: 40, bottom: 40, left: 40 }} // Márgenes para el calendario
-                yearSpacing={40} // Espaciado entre los años
-                monthBorderColor="#ffffff" // Color del borde de los meses
-                dayBorderColor="#ffffff" // Color del borde de los días
+                data={calendarData}
+                from={startDate}       // Fecha de inicio
+                to={endDate}           // Fecha de fin
+                emptyColor="#eeeeee"   // Color para los días sin datos
+                margin={{ top: 10, right: 40, bottom: 40, left: 40 }}
+                yearSpacing={40}       // Espaciado entre los años
+                monthBorderColor="#ffffff"
+                dayBorderColor="#ffffff"
                 legends={[
                     {
-                        anchor: 'bottom', // Posicionar la leyenda en la parte inferior
-                        direction: 'row', // Colocar los íconos de la leyenda en fila
-                        translateY: 36, // Desplazar la leyenda hacia abajo
-                        itemCount: 3, // Número de colores en la leyenda
-                        itemWidth: 42, // Ancho de cada item de la leyenda
-                        itemHeight: 36, // Altura de cada item de la leyenda
-                        itemsSpacing: 14, // Espaciado entre los items de la leyenda
+                        anchor: 'bottom',
+                        direction: 'row',
+                        translateY: 36,
+                        itemCount: 3,
+                        itemWidth: 42,
+                        itemHeight: 20,
+                        itemsSpacing: 14,
+                        itemDirection: 'left-to-right',
+                        symbolSize: 20,
+                        symbolShape: 'circle',
                     },
                 ]}
-                // Definir el estilo dinámico para cada día, usando 'color' de los datos transformados
-                dayBorderWidth={1}
-                dayStyle={({ day }) => ({
-                    backgroundColor: day.color, // Aplicar el color correspondiente al día
-                })}
+                // Estilo para cada día, asignando el color correspondiente
+                theme={{
+                    tooltip: {
+                        container: {
+                            background: '#333',
+                            color: '#fff',
+                            fontSize: 12,
+                        },
+                    },
+                }}
+                dayBorderWidth={2}
+                dayColor={({ value, color }) => color}
+                tooltip={({ day, value }) => (
+                    <strong>
+                        {day}: {value !== undefined ? value : 'Sin datos'}
+                    </strong>
+                )}
             />
         </div>
     );
