@@ -1,4 +1,5 @@
 const Sensor = require('../models/Sensor');
+const Unit = require('../../Unit/models/Unit');
 const { createLog } = require('../../Log/services/LogService'); // Import log creation service
 
 // Get all Sensor records
@@ -131,7 +132,41 @@ const countSensors = async (req, res) => {
     }
 };
 
+// Obtener la información de un sensor con su unidad relacionada
+const getSensorInformation = async (sensor_id) => {
+    try {
+        const sensor = await Sensor.findOne({
+            where: { sensor_id },
+            include: {
+                model: Unit, // Incluir la relación con la unidad
+                required: true, // Esto asegura que solo se devuelvan los sensores que tengan una unidad asociada
+            },
+        });
+
+        const currentTime = new Date().toISOString();
+        if (sensor) {
+            await createLog(`[${
+                currentTime
+            }] Sensor with ID ${sensor_id} and its associated unit retrieved successfully.`); // Log successful retrieval
+            return sensor;
+        } else {
+            await createLog(`[${
+                currentTime
+            }] Sensor with ID ${sensor_id} not found.`); // Log if sensor not found
+            return null;
+        }
+    } catch (error) {
+        const currentTime = new Date().toISOString();
+        await createLog(`[${
+            currentTime
+        }] Error retrieving Sensor with ID ${sensor_id} and its unit: ${error.message}`); // Log error
+        throw error; // Rethrow the error
+    }
+};
+
+
 module.exports = {
+    getSensorInformation,
     countSensors,
     getAllSensors,
     getSensorById,

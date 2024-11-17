@@ -1,5 +1,31 @@
 BEGIN;
 
+-- Insertar un board con el board_id 1
+INSERT INTO pneumiot.board (board_code)
+VALUES ('Board_1');
+
+
+
+-- Insert for PM2.5 Sensor (PSM5003)
+INSERT INTO pneumiot.units (unit_abbreviation, unit_description) 
+VALUES 
+('PM2.5', 'PM2.5 Sensor (PSM5003): The concentration of fine particles, with levels categorized as Very Good (0 - 10 μg/m³), Normal (10 - 25 μg/m³), and Risky (> 25 μg/m³).');
+
+-- Insert for Ozone Sensor (MQ-131)
+INSERT INTO pneumiot.units (unit_abbreviation, unit_description) 
+VALUES 
+('O3', 'Ozone Sensor (MQ-131): Indoor ozone levels categorized as Very Good (0 - 0.02 ppm), Normal (0.02 - 0.05 ppm), and Risky (> 0.05 ppm).');
+
+-- Insert for Temperature Sensor (DHT11)
+INSERT INTO pneumiot.units (unit_abbreviation, unit_description) 
+VALUES 
+('Temp', 'Temperature Sensor (DHT11): Indoor temperature levels categorized as Very Good (20°C - 24°C), Normal (24°C - 27°C), and Risky (< 18°C or > 27°C).');
+
+-- Insert for Humidity Sensor (DHT11)
+INSERT INTO pneumiot.units (unit_abbreviation, unit_description) 
+VALUES 
+('Hum', 'Humidity Sensor (DHT11): Indoor relative humidity categorized as Very Good (40% - 60%), Normal (30% - 40% or 60% - 70%), and Risky (< 30% or > 70%).');
+
 
 -- Insert data from table permissions
 INSERT INTO pneumiot.permissions (permission_name, permission_description) VALUES
@@ -48,94 +74,64 @@ INSERT INTO pneumiot.index_rate (rate, rate_description) VALUES
 
 INSERT INTO pneumiot.sensor
 (sensor_id, sensor_code, sensor_type, unit_id, min_value, max_value)
-VALUES(1, 'b76375d2-3b39-4714-b27c-0e7b26a3eac3', 'Temperature', 1, -99.0, 99.0);
+VALUES(1, 'b76375d2-3b39-4714-b27c-0e7b26a3eac3', 'Temperature', 3, -99.0, 99.0);
 INSERT INTO pneumiot.sensor
 (sensor_id, sensor_code, sensor_type, unit_id, min_value, max_value)
-VALUES(2, '2e687bfc-4714-4970-8d18-0e7b26a3eac3', 'Humidity', 2, 0.0, 99.9);
+VALUES(2, '2e687bfc-4714-4970-8d18-0e7b26a3eac3', 'Humidity', 4, 0.0, 99.9);
 INSERT INTO pneumiot.sensor
 (sensor_id, sensor_code, sensor_type, unit_id, min_value, max_value)
-VALUES(3, '7cef5fc0-c621-4970-8d18-87f474e67020', 'PM2.5', 3, 0.0, 99.9);
+VALUES(3, '7cef5fc0-c621-4970-8d18-87f474e67020', 'PM2.5', 1, 0.0, 99.9);
 INSERT INTO pneumiot.sensor
 (sensor_id, sensor_code, sensor_type, unit_id, min_value, max_value)
-VALUES(4, '7cef5fc0-17c2-4eb8-9d8b-11b08841f0e6', 'PPM', 4, 0.0, 99.999);
+VALUES(4, '7cef5fc0-17c2-4eb8-9d8b-11b08841f0e6', 'PPM', 2, 0.0, 99.999);
 
-INSERT INTO pneumiot.units
-(unit_id, unit_abbreviation, unit_description)
-VALUES(1, 'C       ', 'Celsius');
-INSERT INTO pneumiot.units
-(unit_id, unit_abbreviation, unit_description)
-VALUES(2, '%       ', 'Porcentaje');
-INSERT INTO pneumiot.units
-(unit_id, unit_abbreviation, unit_description)
-VALUES(3, 'μg/m³   ', 'Air particles');
-INSERT INTO pneumiot.units
-(unit_id, unit_abbreviation, unit_description)
-VALUES(4, 'ppm     ', 'Parts per million');
 
--- Procedure para generar datos de mediciones
-CREATE OR REPLACE PROCEDURE pneumiot.generate_measurements()
-LANGUAGE plpgsql
-AS $$
-DECLARE
-    v_log_time TIMESTAMP := '2024-10-01 00:00:00';
-    v_end_time TIMESTAMP := '2024-11-30 23:59:00';
-    v_patient_id INT;
-    v_board_id INT;
-    v_sensor_id INT;
-    v_sensor_value FLOAT;
-BEGIN
-    -- Loop para cada minuto entre el rango de fechas
-    WHILE v_log_time <= v_end_time LOOP
-        -- Loop para cada combinación de patient_id y board_id
-        FOR v_patient_id IN 1..2 LOOP
-            FOR v_board_id IN 1..2 LOOP
-                -- Loop para cada sensor_id (1 a 4)
-                FOR v_sensor_id IN 1..4 LOOP
-                    -- Asignar el valor de sensor_value basado en el rango del sensor_id
-                    CASE v_sensor_id
-                        WHEN 1 THEN
-                            -- Temperature: Rango [15.0, 27.0]
-                            v_sensor_value := 15 + RANDOM() * (27 - 15);
-                        WHEN 2 THEN
-                            -- Humidity: Rango [30.0, 80.0]
-                            v_sensor_value := 30 + RANDOM() * (80 - 30);
-                        WHEN 3 THEN
-                            -- PM2.5: Rango [0.0, 28.0]
-                            v_sensor_value := RANDOM() * 28;
-                        WHEN 4 THEN
-                            -- PPM: Rango [0.0, 0.09]
-                            v_sensor_value := RANDOM() * 0.09;
-                        ELSE
-                            v_sensor_value := 0.0;  -- Valor por defecto en caso de error (no debería ocurrir)
-                    END CASE;
+-- Asociar los sensores con board_id 1 en la tabla board_sensor
+INSERT INTO pneumiot.board_sensor (board_id, sensor_id)
+VALUES 
+(1, 1), -- Sensor 1 asociado al board 1
+(1, 2), -- Sensor 2 asociado al board 1
+(1, 3), -- Sensor 3 asociado al board 1
+(1, 4); -- Sensor 4 asociado al board 1
 
-                    -- Insertar registro
-                    INSERT INTO pneumiot.measurements (
-                        patient_id, 
-                        board_id, 
-                        sensor_id, 
-                        sensor_value, 
-                        log_time_utc, 
-                        log_time_local
-                    ) VALUES (
-                        v_patient_id,
-                        v_board_id,
-                        v_sensor_id,
-                        v_sensor_value,
-                        v_log_time AT TIME ZONE 'UTC',
-                        v_log_time
-                    );
-                END LOOP;
-            END LOOP;
-        END LOOP;
 
-        -- Incrementar el tiempo en 1 minuto
-        v_log_time := v_log_time + INTERVAL '1 minute';
-    END LOOP;
-END;
-$$;
+-- Insertar un paciente con board_id 1
+INSERT INTO pneumiot.patient (patient_dni, board_id, admission_date)
+VALUES 
+('1234567890', 1, CURRENT_TIMESTAMP); -- Aquí se coloca un DNI ficticio y la fecha actual de ingreso
 
--- Ejecutar el procedimiento para generar datos de mediciones
-CALL pneumiot.generate_measurements();
+-- Insertar información adicional del paciente con patient_id 1
+INSERT INTO pneumiot.patient_aditional_info (
+    patient_id, 
+    patient_name, 
+    patient_surname, 
+    date_birth, 
+    genre, 
+    telephone_number, 
+    direction, 
+    alergies, 
+    medical_condition, 
+    blood_type, 
+    emergency_contact, 
+    emergency_phone_number, 
+    admission_date
+)
+VALUES 
+(
+    1,  -- Asignar el patient_id 1 al paciente que ya existe
+    'John',  -- Nombre ficticio del paciente
+    'Doe',  -- Apellido ficticio del paciente
+    '1990-05-15',  -- Fecha de nacimiento ficticia (YYYY-MM-DD)
+    'M',  -- Género masculino
+    '555-1234567',  -- Número de teléfono ficticio
+    '1234 Elm Street, Springfield, USA',  -- Dirección ficticia
+    'None',  -- Alergias ficticias (ninguna)
+    'Hypertension',  -- Condición médica ficticia
+    'O+',  -- Tipo de sangre ficticio
+    'Jane Doe',  -- Contacto de emergencia ficticio
+    '555-7654321',  -- Teléfono de contacto de emergencia ficticio
+    CURRENT_TIMESTAMP  -- Fecha de ingreso (actual)
+);
+
 
 COMMIT;

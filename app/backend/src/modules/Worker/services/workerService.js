@@ -22,12 +22,29 @@ const fetchAllWorkersWithRole = async (worker_id) => {
 // Create a new worker record
 const createWorker = async (workerData) => {
     try {
+        console.log("Worker data being created:", workerData);
+
+        // Intento de crear el registro
         const newWorker = await Worker.create(workerData);
-        await LogService.createLog(`[${getCurrentTimestamp()}] Worker created successfully: ${JSON.stringify(workerData)}`); // Log success with timestamp
+
+        console.log("New worker created:", newWorker);
+        await LogService.createLog(`[${getCurrentTimestamp()}] Worker created successfully: ${JSON.stringify(workerData)}`);
+
         return newWorker;
     } catch (error) {
-        await LogService.createLog(`[${getCurrentTimestamp()}] Error creating worker: ${error.message}`); // Log error with timestamp
-        throw new Error('Error creating worker');
+        console.error(`[${getCurrentTimestamp()}] Error details:`, error);
+
+        // Revisamos el tipo de error
+        if (error.name === "SequelizeUniqueConstraintError") {
+            console.error("Unique constraint error on worker_dni or other fields.");
+            throw new Error('Duplicate entry for worker_dni or other unique field');
+        } else if (error.name === "SequelizeForeignKeyConstraintError") {
+            console.error("Foreign key constraint error, invalid worker_role_id.");
+            throw new Error('Invalid worker_role_id');
+        } else {
+            console.error("General error while creating worker:", error.message);
+            throw new Error('Error creating worker');
+        }
     }
 };
 

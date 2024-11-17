@@ -71,8 +71,24 @@ const countSensors = async (req, res) => {
     await sensorService.countSensors(req, res);
 };
 
+// Obtener información de un sensor y su unidad asociada
+const getSensorInformation = async (req, res) => {
+    try {
+        const { id } = req.params; // Obtener el ID del parámetro de la URL
+        const sensor = await sensorService.getSensorInformation(id);
+        if (sensor) {
+            res.status(200).json(sensor); // Retorna el sensor con su unidad asociada
+        } else {
+            res.status(404).json({ message: 'Sensor not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 module.exports = {
+    getSensorInformation,
     countSensors,
     getAllSensors,
     getSensorById,

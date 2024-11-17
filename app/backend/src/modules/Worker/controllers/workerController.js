@@ -35,9 +35,33 @@ const getWorkerById = async (req, res) => {
 
 const createWorker = async (req, res) => {
     try {
+        // Log para ver el cuerpo de la solicitud
+        console.log("Request Body:", req.body);
+
         const { worker_dni, worker_email, worker_name, worker_surname, worker_role_id, passwd_auth } = req.body;
-        
-        // Crea el trabajador
+
+        // Validación de datos
+        if (!worker_dni || !worker_email || !worker_name || !worker_surname || !worker_role_id || !passwd_auth) {
+            console.error("Missing required fields:", {
+                worker_dni,
+                worker_email,
+                worker_name,
+                worker_surname,
+                worker_role_id,
+                passwd_auth
+            });
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        // Intento de crear el trabajador
+        console.log("Creating worker with data:", {
+            worker_dni,
+            worker_email,
+            worker_name,
+            worker_surname,
+            worker_role_id
+        });
+
         const newWorker = await workerService.createWorker({
             worker_dni,
             worker_email,
@@ -46,11 +70,18 @@ const createWorker = async (req, res) => {
             worker_role_id
         });
 
-        // Crea la autenticación para el trabajador
+        console.log("Worker created:", newWorker);
+
+        // Intento de crear la autenticación para el trabajador
+        console.log("Creating worker auth for worker_id:", newWorker.worker_id);
+        
         const newWorkerAuth = await workerAuthService.createWorkerAuth(newWorker.worker_id, passwd_auth);
+
+        console.log("Worker Auth created:", newWorkerAuth);
 
         res.status(201).json({ newWorker, newWorkerAuth });
     } catch (error) {
+        console.error("Error in createWorker:", error);
         res.status(500).json({ message: error.message });
     }
 };

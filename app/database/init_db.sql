@@ -8,7 +8,7 @@ CREATE SCHEMA IF NOT EXISTS pneumiot;
 Create table if not exists pneumiot.units(
     unit_id Serial not null,
     unit_abbreviation char(8) not null,
-    unit_description CHARACTER VARYING(64),
+    unit_description CHARACTER VARYING(256),
     PRIMARY KEY(unit_id)
 );
 
@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS pneumiot.sensor(
     sensor_code CHARACTER VARYING(64) NOT NULL,
     sensor_type CHARACTER VARYING(64) NOT NULL,
     unit_id int NOT NULL,
-    min_value numeric(4,2) NOT NULL,
-    max_value numeric(4,2) NOT NULL,
+    min_value float NOT NULL,
+    max_value float NOT NULL,
     PRIMARY KEY(sensor_id),
     FOREIGN KEY(unit_id) REFERENCES pneumiot.units(unit_id) ON DELETE RESTRICT
 );
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS pneumiot.patient_aditional_info (
     emergency_contact VARCHAR(100),
     emergency_phone_number VARCHAR(20),
     admission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_patient_id FOREIGN KEY (patient_id) REFERENCES patient (patient_id) ON DELETE CASCADE
+    CONSTRAINT fk_patient_id FOREIGN KEY (patient_id) REFERENCES pneumiot.patient (patient_id) ON DELETE CASCADE
 );
 
 -- Creation of the measurements table --
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS pneumiot.measurements(
     patient_id INT not null,
     board_id INT NOT NULL,
     sensor_id INT NOT NULL,
-    sensor_value numeric(4,2) NOT NULL,
+    sensor_value float NOT NULL,
     log_time_utc TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text),
     log_time_local TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(measurement_id),
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS pneumiot.hourly_average(
     patient_id int not null,
     board_id int not null,
     sensor_id int NOT NULL,
-    average_measure numeric(4,2) NOT NULL,
+    average_measure float NOT NULL,
     index_rate_id int not null,
     hour_time int NOT NULL,
     day_date date NOT NULL,
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS pneumiot.daily_average(
     patient_id int not null,
     board_id int not null,
     sensor_id int not null,
-    average_measure numeric(4,2) NOT NULL,
+    average_measure float NOT NULL,
     index_rate_id int not null,
     daily_day int NOT NULL,
     month_id int NOT NULL,
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS pneumiot.monthly_average(
     patient_id int not null,
     board_id int not null,
     sensor_id int not null,
-    average_measure numeric(4,2) NOT NULL,
+    average_measure float NOT NULL,
     index_rate_id int not null,
     month_number int NOT NULL,
     year_date int NOT NULL,

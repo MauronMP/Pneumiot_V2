@@ -3,6 +3,7 @@ const sensorController = require('../../controllers/sensorController');
 
 const router = express.Router();
 
+router.get('/sensorInformation/:id', sensorController.getSensorInformation); // Nueva ruta
 router.get('/count', sensorController.countSensors);
 router.get('/', sensorController.getAllSensors);         // Obtener todos los sensores
 router.get('/:id', sensorController.getSensorById);     // Obtener un sensor por ID
