@@ -1,0 +1,103 @@
+{
+    "en": {
+      "tooltip": {
+        "optimal_condition": "Values are within ideal ranges, no concerns.",
+      "acceptable_condition": "Values are normal, though there may be room for improvement.",
+      "critical_condition": "Values are too high or low, outside of the acceptable range.",
+        "hour": "Hour",
+        "day": "Day",
+        "month": "Month",
+        "average": "Average",
+        "risk_level": "Risk Level",
+        "1": "Optimal",
+        "2": "Acceptable",
+        "3": "Critical",
+        "unknown": "Unknown"
+      },
+      "chart": {
+        "humidity": "Humidity"
+      },
+      "legend": {
+        "optimal_condition": "Optimal condition",
+        "acceptable_condition": "Acceptable condition",
+        "critical_condition": "Critical condition"
+      },
+      "months": {
+        "jan": "Jan",
+        "feb": "Feb",
+        "mar": "Mar",
+        "apr": "Apr",
+        "may": "May",
+        "jun": "Jun",
+        "jul": "Jul",
+        "aug": "Aug",
+        "sep": "Sep",
+        "oct": "Oct",
+        "nov": "Nov",
+        "dec": "Dec",
+        "jan_full": "January",
+        "feb_full": "February",
+        "mar_full": "March",
+        "apr_full": "April",
+        "may_full": "May",
+        "jun_full": "June",
+        "jul_full": "July",
+        "aug_full": "August",
+        "sep_full": "September",
+        "oct_full": "October",
+        "nov_full": "November",
+        "dec_full": "December"
+      }
+    },
+    "es": {
+      "tooltip": {
+        "optimal_condition": "Los valores están dentro de los rangos ideales, sin preocupaciones.",
+        "acceptable_condition": "Los valores son normales, aunque podría haber espacio para mejorar.",
+        "critical_condition": "Los valores son demasiado altos o bajos, fuera del rango aceptable.",
+        "hour": "Hora",
+        "day": "Día",
+        "month": "Mes",
+        "average": "Media",
+        "risk_level": "Índice de Riesgo",
+        "1": "Condición óptima",
+        "2": "Condición aceptable",
+        "3": "Condición crítica",
+        "unknown": "Desconocido"
+      },
+      "chart": {
+        "humidity": "Humedad"
+      },
+      "legend": {
+        "optimal_condition": "Óptimo",
+        "acceptable_condition": "Aceptable",
+        "critical_condition": "Crítico"
+      },
+      "months": {
+        "jan": "Ene",
+        "feb": "Feb",
+        "mar": "Mar",
+        "apr": "Abr",
+        "may": "May",
+        "jun": "Jun",
+        "jul": "Jul",
+        "aug": "Ago",
+        "sep": "Sep",
+        "oct": "Oct",
+        "nov": "Nov",
+        "dec": "Dic",
+        "jan_full": "Enero",
+        "feb_full": "Febrero",
+        "mar_full": "Marzo",
+        "apr_full": "Abril",
+        "may_full": "Mayo",
+        "jun_full": "Junio",
+        "jul_full": "Julio",
+        "aug_full": "Agosto",
+        "sep_full": "Septiembre",
+        "oct_full": "Octubre",
+        "nov_full": "Noviembre",
+        "dec_full": "Diciembre"
+      }
+    }
+  }
+  

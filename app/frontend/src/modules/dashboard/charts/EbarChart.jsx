@@ -1,14 +1,28 @@
 import React, { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
+import { useTranslation } from 'react-i18next'; // Importando el hook de traducción
+import RiskLevelLegend from './chartLegend';
 
-const BarChart = ({ data }) => {
+const BarChart = ({ data, headerText }) => {
   const chartRef = useRef(null);
+  const { t } = useTranslation('chartLegend'); // Obtener la función de traducción
 
   useEffect(() => {
-    // Genera los meses abreviados
-    const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    // Abreviaciones de los meses
+    const monthsAbbrev = [
+      t('months.jan'), t('months.feb'), t('months.mar'), t('months.apr'),
+      t('months.may'), t('months.jun'), t('months.jul'), t('months.aug'),
+      t('months.sep'), t('months.oct'), t('months.nov'), t('months.dec')
+    ];
 
-    // Inicializar arrays para los valores y el index_rate_id
+    // Nombres completos de los meses
+    const monthsFull = [
+      t('months.jan_full'), t('months.feb_full'), t('months.mar_full'), t('months.apr_full'),
+      t('months.may_full'), t('months.jun_full'), t('months.jul_full'), t('months.aug_full'),
+      t('months.sep_full'), t('months.oct_full'), t('months.nov_full'), t('months.dec_full')
+    ];
+
+    // Inicializar los arrays para los valores y los index_rate_id
     const values = Array(12).fill(0); // Inicializamos todos los valores a 0
     const index_rate_ids = Array(12).fill(1); // Inicializamos index_rate_id a 1 por defecto
 
@@ -19,7 +33,7 @@ const BarChart = ({ data }) => {
       index_rate_ids[monthIndex] = item.index_rate_id;
     });
 
-    // Colores para las barras según el index_rate_id
+    // Función de colores para las barras según el index_rate_id
     const getColorByIndexRateId = (index_rate_id) => {
       if (index_rate_id === 1) return '#93CE07'; // Verde
       if (index_rate_id === 2) return '#FBDB0F'; // Amarillo
@@ -29,7 +43,6 @@ const BarChart = ({ data }) => {
     // Configuración del gráfico
     const option = {
       title: {
-        text: 'Valores Medios Mensuales',
         left: 'center',
         top: '20px',
         textStyle: {
@@ -40,7 +53,17 @@ const BarChart = ({ data }) => {
       },
       tooltip: {
         trigger: 'item',
-        formatter: '{b}<br/>Valor: {c}',
+        formatter: (params) => {
+          const monthAbbrev = params.name; // Abreviación del mes
+          const value = params.value;
+          const indexRateId = index_rate_ids[params.dataIndex];
+          const riskText = t(`tooltip.${indexRateId}`) || t('tooltip.unknown'); // Usar traducciones para el nivel de riesgo
+
+          // Encontramos el nombre completo del mes desde el array `monthsFull`
+          const monthFull = monthsFull[monthsAbbrev.indexOf(monthAbbrev)];
+
+          return `${t('tooltip.month')}: ${monthFull}<br/>${t('tooltip.average')}: ${value}<br/>${t('tooltip.risk_level')}: ${riskText}`;
+        },
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
         textStyle: {
           color: '#fff',
@@ -52,7 +75,11 @@ const BarChart = ({ data }) => {
         orient: 'vertical',
         right: 10,
         top: 'center',
-        data: ['0-100 (Verde)', '101-200 (Amarillo)', '>200 (Rojo)'],
+        data: [
+          t('legend.optimal_condition'),
+          t('legend.acceptable_condition'),
+          t('legend.critical_condition'),
+        ],
         icon: 'rect',
         itemWidth: 14,
         itemHeight: 14,
@@ -60,23 +87,10 @@ const BarChart = ({ data }) => {
           fontSize: 14,
           color: '#333',
         },
-        formatter: (name) => {
-          return `{color| } ${name}`;
-        },
-        rich: {
-          color: {
-            height: 12,
-            backgroundColor: (params) => {
-              if (params.name === '0-100 (Verde)') return '#93CE07';
-              if (params.name === '101-200 (Amarillo)') return '#FBDB0F';
-              return '#FD0100';
-            },
-          },
-        },
       },
       xAxis: {
         type: 'category',
-        data: months,
+        data: monthsAbbrev, // Usamos las abreviaciones en el eje X
         axisLine: {
           lineStyle: {
             color: '#999',
@@ -105,7 +119,7 @@ const BarChart = ({ data }) => {
       },
       series: [
         {
-          name: 'Valor Medio',
+          name: t('chart.humidity'),
           type: 'bar',
           data: values,
           itemStyle: {
@@ -133,22 +147,24 @@ const BarChart = ({ data }) => {
       backgroundColor: '#f9f9f9',
     };
 
-    // Inicializa el gráfico
+    // Inicializar el gráfico
     const chart = echarts.init(chartRef.current);
     chart.setOption(option);
 
-    // Maneja el cambio de tamaño de la ventana
+    // Manejo del cambio de tamaño de la ventana
     window.addEventListener('resize', () => chart.resize());
 
-    // Limpieza al desmontar el componente
+    // Cleanup al desmontar el componente
     return () => {
       window.removeEventListener('resize', () => chart.resize());
       chart.dispose();
     };
-  }, [data]);
+  }, [data, t]); // Actualizar el gráfico si los datos o las traducciones cambian
 
   return (
     <div className="container-fluid" style={{ minHeight: '400px' }}>
+      <h3 className='text-center'>{headerText} </h3>
+      <RiskLevelLegend />
       <div ref={chartRef} style={{ width: '100%', height: '40vh' }}></div>
     </div>
   );
