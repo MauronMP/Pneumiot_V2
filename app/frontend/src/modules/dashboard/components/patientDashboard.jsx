@@ -98,12 +98,10 @@ const PatientDashboard = () => {
         if (sensorType && unitAbbreviation) {
             updateHeaderText(sensorType, unitAbbreviation);
         }
-    // eslint-disable-next-line no-use-before-define
-    }, [i18n.language, sensorType, unitAbbreviation, updateHeaderText]); // Dependencies: re-run if the language, sensorType, or unitAbbreviation changes
+    }, [i18n.language, sensorType, unitAbbreviation]); // Dependencies: re-run if the language, sensorType, or unitAbbreviation changes
 
 
     // Function to update the header text based on sensor type, unit abbreviation, and time view
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const updateHeaderText = (sensorTypeParam = sensorType, unitAbbreviationParam = unitAbbreviation) => {
         let title = t('average') + " ";  // Use the translation of "Average"
         title += `${sensorTypeParam} (${unitAbbreviationParam})`;  // Add sensor type and unit abbreviation to the title
@@ -237,7 +235,6 @@ const PatientDashboard = () => {
     }, [patientId, t]);  // Re-run when patientId changes
 
     // Function to fetch bar chart data based on the current sensor and date
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchBarChartData = async () => {
         if (!boardId || !sensorId || !startDate || timeView !== 'Hour') return;  // Early exit if conditions are not met
 
@@ -283,7 +280,6 @@ const PatientDashboard = () => {
     };
 
     // Function to fetch bar chart data for a specific year (monthly averages)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchBarChartDataYear = async () => {
         if (!boardId || !sensorId || timeView !== 'Month') return;  // Early exit if conditions are not met
 
@@ -330,7 +326,6 @@ const PatientDashboard = () => {
     };
 
     // Function to fetch calendar data for the selected time period (daily averages)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchCalendarData = async () => {
         if (timeView === 'Day' && boardId && sensorId && startDate && endDate) {
             // Fetch sensor data and set state for daily averages calendar view
@@ -433,7 +428,7 @@ const PatientDashboard = () => {
         if (boardId && sensorId && !isSubmitDisabled) {
             fetchInitialData();  // Only fetch if conditions are met
         }
-    }, [boardId, sensorId, startDate, endDate, timeView, isSubmitDisabled, selectedYear, fetchBarChartData, fetchCalendarData, fetchBarChartDataYear]);  // Add selectedYear as a dependency to re-fetch when it changes
+    }, [boardId, sensorId, startDate, endDate, timeView, isSubmitDisabled, selectedYear]);  // Add selectedYear as a dependency to re-fetch when it changes
 
     // useEffect to update the dashboard header text with patient name, surname, and DNI
     useEffect(() => {
