@@ -69,7 +69,7 @@ const PatientDashboard = () => {
 
         try {
             // Fetch sensor data from the API using the provided sensorId
-            const response = await fetch(`http://localhost:3000/api/frontend/sensors/sensorInformation/${sensorId}`);
+            const response = await fetch(`${config.frontendBaseUrl}sensors/sensorInformation/${sensorId}`);
             const data = await response.json(); // Parse the JSON data from the response
 
             // Destructure the relevant properties (sensor_type and Unit) from the response data
@@ -169,7 +169,7 @@ const PatientDashboard = () => {
         const fetchBoardData = async () => {
             try {
                 // Fetch the board data using the patientId
-                const boardResponse = await fetch(`http://localhost:3000/api/frontend/patients/boardByPatientId/${patientId}`);
+                const boardResponse = await fetch(`${config.frontendBaseUrl}patients/boardByPatientId/${patientId}`);
                 const boardData = await boardResponse.json();
 
                 // Set board code and ID from the fetched data
@@ -177,7 +177,7 @@ const PatientDashboard = () => {
                 setBoardId(boardData.board_id);
 
                 // Fetch sensor data using the patientId and boardId
-                const sensorsResponse = await fetch(`http://localhost:3000/api/frontend/patients/sensorsByPatientAndBoard/${patientId}/${boardData.board_id}`);
+                const sensorsResponse = await fetch(`${config.frontendBaseUrl}patients/sensorsByPatientAndBoard/${patientId}/${boardData.board_id}`);
                 if (!sensorsResponse.ok) throw new Error('Error fetching sensors');
 
                 const sensorsData = await sensorsResponse.json();
@@ -208,7 +208,7 @@ const PatientDashboard = () => {
         const fetchBoardData = async () => {
             try {
                 // Fetch patient info using the patientId
-                const patientInfoResponse = await fetch(`http://localhost:3000/api/frontend/patientsInfo/${patientId}`);
+                const patientInfoResponse = await fetch(`${config.frontendBaseUrl}patientsInfo/${patientId}`);
                 const patientInfoData = await patientInfoResponse.json();
 
                 // Extract and set patient name and surname
@@ -217,7 +217,7 @@ const PatientDashboard = () => {
                 setPatientSurname(patient_surname);
 
                 // Fetch the patient's DNI using the patientId
-                const patientDniResponse = await fetch(`http://localhost:3000/api/frontend/patients/${patientId}`);
+                const patientDniResponse = await fetch(`${config.frontendBaseUrl}patients/${patientId}`);
                 const patientDniData = await patientDniResponse.json();
 
                 // Extract and set patient DNI
@@ -246,7 +246,7 @@ const PatientDashboard = () => {
 
         try {
             // Fetch bar chart data from the API
-            const barChartResponse = await fetch(`http://localhost:3000/api/frontend/hourly-averages/getdata?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&dayDate=${startDate}`);
+            const barChartResponse = await fetch(`${config.frontendBaseUrl}hourly-averages/getdata?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&dayDate=${startDate}`);
             if (!barChartResponse.ok) throw new Error('Error al obtener datos del BarChart');  // Handle error if fetch fails
 
             const apiData = await barChartResponse.json();
@@ -290,7 +290,7 @@ const PatientDashboard = () => {
         setTimeView(timeView);
 
         // Build the URL with parameters for monthly averages
-        const url = `http://localhost:3000/api/frontend/monthly-averages/monthly?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&yearNumber=${selectedYear}`;
+        const url = `${config.frontendBaseUrl}monthly-averages/monthly?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&yearNumber=${selectedYear}`;
         try {
             // Fetch data for the monthly bar chart
             const barChartResponse = await fetch(url);
@@ -337,7 +337,7 @@ const PatientDashboard = () => {
 
             try {
                 // Fetch daily averages data from the API
-                const calendarResponse = await fetch(`http://localhost:3000/api/frontend/daily-averages/getdata?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&startDate=${startDate}&endDate=${endDate}`);
+                const calendarResponse = await fetch(`${config.frontendBaseUrl}daily-averages/getdata?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&startDate=${startDate}&endDate=${endDate}`);
                 if (!calendarResponse.ok) throw new Error('Error al obtener datos del Calendar');
                 const apiData = await calendarResponse.json();
 

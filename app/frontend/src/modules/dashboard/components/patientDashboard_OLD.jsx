@@ -61,13 +61,13 @@ const PatientDashboard = () => {
     useEffect(() => {
         const fetchBoardData = async () => {
             try {
-                const boardResponse = await fetch(`http://localhost:3000/api/frontend/patients/boardByPatientId/${patientId}`);
+                const boardResponse = await fetch(`${config.frontendBaseUrl}patients/boardByPatientId/${patientId}`);
                 const boardData = await boardResponse.json();
 
                 setBoardCode(boardData.board_code);
                 setBoardId(boardData.board_id);
 
-                const sensorsResponse = await fetch(`http://localhost:3000/api/frontend/patients/sensorsByPatientAndBoard/${patientId}/${boardData.board_id}`);
+                const sensorsResponse = await fetch(`${config.frontendBaseUrl}patients/sensorsByPatientAndBoard/${patientId}/${boardData.board_id}`);
                 if (!sensorsResponse.ok) throw new Error('Error fetching sensors');
 
                 const sensorsData = await sensorsResponse.json();
@@ -89,9 +89,9 @@ const PatientDashboard = () => {
     const fetchBarChartData = async () => {
         if (!boardId || !sensorId || !startDate || timeView !== 'Hour') return;
 
-        console.log(`http://localhost:3000/api/frontend/hourly-averages/getdata?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&dayDate=${startDate}`);
+        console.log(`${config.frontendBaseUrl}hourly-averages/getdata?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&dayDate=${startDate}`);
         try {
-            const barChartResponse = await fetch(`http://localhost:3000/api/frontend/hourly-averages/getdata?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&dayDate=${startDate}`);
+            const barChartResponse = await fetch(`${config.frontendBaseUrl}hourly-averages/getdata?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&dayDate=${startDate}`);
             if (!barChartResponse.ok) throw new Error('Error al obtener datos del BarChart');
 
             const apiData = await barChartResponse.json();
@@ -128,7 +128,7 @@ const PatientDashboard = () => {
         if (!boardId || !sensorId || timeView !== 'Month') return;
 
         // Construimos la URL con los parámetros correctos para los promedios mensuales
-        const url = `http://localhost:3000/api/frontend/monthly-averages/monthly?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&yearNumber=${selectedYear}`;
+        const url = `${config.frontendBaseUrl}monthly-averages/monthly?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&yearNumber=${selectedYear}`;
         console.log(url); // Verificar la URL
 
         try {
@@ -170,7 +170,7 @@ const PatientDashboard = () => {
     const fetchCalendarData = async () => {
         if (timeView === 'Day' && boardId && sensorId && startDate && endDate) {
             try {
-                const calendarResponse = await fetch(`http://localhost:3000/api/frontend/daily-averages/getdata?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&startDate=${startDate}&endDate=${endDate}`);
+                const calendarResponse = await fetch(`${config.frontendBaseUrl}daily-averages/getdata?patientId=${patientId}&boardId=${boardId}&sensorId=${sensorId}&startDate=${startDate}&endDate=${endDate}`);
                 if (!calendarResponse.ok) throw new Error('Error al obtener datos del Calendar');
 
                 const apiData = await calendarResponse.json();

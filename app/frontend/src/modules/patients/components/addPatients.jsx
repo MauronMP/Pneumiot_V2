@@ -33,9 +33,17 @@ const AddPatient = () => {
 
   const navigate = useNavigate(); // Hook to navigate to another page after successful submission
 
+  const generateUUID = () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  };
+    
   // useEffect hook to generate a unique board code on component mount
   useEffect(() => {
-    setBoardCode(crypto.randomUUID()); // Generate a unique UUID for the board
+    setBoardCode(generateUUID());
   }, []);
 
   // Function to validate the admission and discharge dates
@@ -140,7 +148,7 @@ const AddPatient = () => {
       };
 
       // Make the second API call with the patient info
-      await axios.post('http://localhost:3000/api/frontend/patientsInfo/', patientInfo);
+      await axios.post(`${config.frontendBaseUrl}patientsInfo/`, patientInfo);
 
       // Show success toast on successful registration
       setShowToast(true);
