@@ -206,11 +206,6 @@ const SeeWorkers = () => {
     }));
   };
 
-  // Handle the view details action for a selected worker
-  const handleViewDetails = (worker_id) => {
-    console.log(`Viewing details of worker with ID: ${worker_id}`);
-  };
-
   return (
     <div className="container">
       <Row className="mb-4 align-items-center">

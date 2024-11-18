@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaFingerprint, FaTemperatureHigh, FaExclamationCircle } from 'react-icons/fa'; // Importar los íconos relevantes para los sensores
-import { IoMdSwitch } from 'react-icons/io'; // Importar otro ícono (IoMdSwitch no utilizado, pero puede usarse para futuras funcionalidades)
 import { useTranslation } from 'react-i18next'; // Importar useTranslation para la localización
 import config from '../../../config/config';  // Importar las rutas de las API
 
@@ -46,7 +45,7 @@ const EditPatient = () => {
     useEffect(() => {
         fetchPatientDetails(); // Obtener los datos del paciente
         fetchSensorDetails(); // Obtener los datos asociados a los sensores
-    }, [patientId]); // El array de dependencias asegura que este efecto se ejecute solo cuando cambie el patientId
+    }, [fetchPatientDetails, fetchSensorDetails, patientId]); // El array de dependencias asegura que este efecto se ejecute solo cuando cambie el patientId
 
     // Si los datos del paciente aún están cargando, mostrar un mensaje de carga
     if (!patientData) {

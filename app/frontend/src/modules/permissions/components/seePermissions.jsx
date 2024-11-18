@@ -29,7 +29,7 @@ const SeePermissions = () => {
       .catch(err => {
         console.error(t('errorFetchingPermissions'), err);
       });
-  }, []);
+  }, [t]);
 
   // Maneja el cambio en el valor de búsqueda y filtra los permisos
   const handleSearch = (e) => {

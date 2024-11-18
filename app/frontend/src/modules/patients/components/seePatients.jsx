@@ -102,7 +102,7 @@ const PatientsPage = () => {
             .catch(err => {
                 console.error(t('errorFetchingPatients'), err);
             });
-    }, []);
+    }, [t]);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);

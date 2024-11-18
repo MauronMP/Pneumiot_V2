@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Alert, Card, InputGroup, Row, Col, Toast, ToastContainer } from 'react-bootstrap'; // Import necessary Bootstrap components
+import { Form, Button, Alert, Card, InputGroup, Row, Col } from 'react-bootstrap'; // Import necessary Bootstrap components
 import { useNavigate } from 'react-router-dom'; // For navigation after form submission
 import axios from 'axios'; // Axios to handle HTTP requests
 import { FaUser, FaEnvelope, FaIdCard, FaLock, FaKey, FaUsers } from 'react-icons/fa'; // FontAwesome icons for UI
@@ -27,7 +27,7 @@ const AddWorker = () => {
   const [error, setError] = useState('');
 
   // State to control visibility of the success toast notification
-  const [showToast, setShowToast] = useState(false);
+  const [, setShowToast] = useState(false);
 
   // Hook to navigate programmatically after form submission
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const AddWorker = () => {
     axios.get(`${config.frontendBaseUrl}worker-roles/`) // Get roles from the API
       .then(response => setRoles(response.data)) // Store roles in the state
       .catch(err => setError(t('errorFetchingRoles'))); // Use translated error message
-  }, []);
+  }, [t]);
 
   // Function to handle form input changes
   const handleChange = (e) => {

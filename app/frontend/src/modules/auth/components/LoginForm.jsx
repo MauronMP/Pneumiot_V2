@@ -5,8 +5,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';  // Ensure Bootstrap CSS is appli
 import config from '../../../config/config';  // Import URL paths for apis
 import { useTranslation } from 'react-i18next'; 
 
-const LOGIN_EXPIRY_TIME = 60 * 60 * 1000;  // 1 hour in milliseconds (used to track login session expiry)
-
 const LoginForm = () => {
   const [emailOrDni, setemailOrDni] = useState('');  // State to store the email or DNI entered by the user
   const [password, setPassword] = useState('');  // State to store the password entered by the user

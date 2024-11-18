@@ -60,6 +60,7 @@ const CreateSensor = () => {
     setLoading(true);
 
     try {
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.post(`${config.frontendBaseUrl}sensors`, formData);
 
       // Mostrar el Toast al crear el sensor
