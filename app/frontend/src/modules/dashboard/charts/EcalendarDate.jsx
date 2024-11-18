@@ -36,6 +36,7 @@ const CalendarChart = ({ data, headerText }) => {
   };
 
   // Definir las opciones del gráfico
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const option = {
     title: {
       top: 0,
@@ -124,7 +125,7 @@ const CalendarChart = ({ data, headerText }) => {
       chartInstance.dispose();
       window.removeEventListener('resize', handleResize);
     };
-  }, [isMobile, data, i18n.language]); // Actualizar el gráfico cuando cambie el idioma
+  }, [isMobile, data, i18n.language, option]); // Actualizar el gráfico cuando cambie el idioma
 
   return (
     <div

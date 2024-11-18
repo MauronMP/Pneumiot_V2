@@ -47,6 +47,7 @@ const AddPatient = () => {
   }, []);
 
   // Function to validate the admission and discharge dates
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const validateDates = () => {
     const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
 
@@ -81,7 +82,7 @@ const AddPatient = () => {
   // Run validation whenever admission or discharge dates change
   useEffect(() => {
     validateDates();
-  }, [admissionDate, dischargeDate]);
+  }, [admissionDate, dischargeDate, validateDates]);
 
   // Handle form submission
   const handleSubmit = async (e) => {

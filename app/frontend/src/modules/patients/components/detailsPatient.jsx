@@ -13,6 +13,7 @@ const EditPatient = () => {
     const [boardCode, setBoardCode] = useState(null); // Estado para almacenar el código de la placa (asignada al paciente)
 
     // Función para obtener los detalles del paciente desde la API utilizando el patientId
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchPatientDetails = async () => {
         try {
             // Obtener los datos desde el endpoint de la API
@@ -25,6 +26,7 @@ const EditPatient = () => {
     };
 
     // Función para obtener los detalles de los sensores asociados al paciente
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchSensorDetails = async () => {
         try {
             // Obtener los datos de los sensores utilizando el patientId
