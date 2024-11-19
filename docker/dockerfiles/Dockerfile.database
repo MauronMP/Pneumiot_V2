@@ -1,31 +1,28 @@
 # Utiliza la imagen oficial de PostgreSQL como base
 FROM postgres:latest
 
-# Directorio de trabajo
+# Instalar cron
+RUN apt-get update && apt-get install -y cron
+
+# Copiar el archivo de cronjobs
+COPY docker/cronjob/cronjobs /etc/cron.d/my_cron_jobs
+
+# Dar permisos adecuados al archivo de cron
+RUN chmod 0644 /etc/cron.d/my_cron_jobs
+
+# Añadir el cronjob a crontab
+RUN crontab /etc/cron.d/my_cron_jobs
+
+# Cambiar al directorio de trabajo /app
 WORKDIR /app
 
-# Define variables de entorno (puedes ajustarlas según tus necesidades)
+# Define variables de entorno
 ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=postgres
 ENV POSTGRES_DB=postgres
 
-# Copia los archivos SQL al directorio de inicialización de PostgreSQL
+# Copiar archivos SQL al directorio de inicialización de PostgreSQL
 COPY app/database/*.sql /docker-entrypoint-initdb.d/
 
-# Instalar cron
-RUN apt-get update && apt-get install -y cron
-
-# Copiar los cronjobs a la ubicación de cron
-COPY ./docker/cronjobs /etc/cron.d/my_cron_jobs
-
-# Cambiar los permisos del archivo de cronjobs
-RUN chmod 0644 /etc/cron.d/my_cron_jobs
-
-# Aplicar el archivo cron
-RUN crontab /etc/cron.d/my_cron_jobs
-
-# Crear un directorio para los logs de cron
-RUN mkdir -p /var/log/cron
-
-# Iniciar cron en segundo plano junto con PostgreSQL
+# Iniciar cron junto con PostgreSQL
 CMD cron && docker-entrypoint.sh postgres

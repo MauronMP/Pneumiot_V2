@@ -1,8 +1,8 @@
 # Ejecutar daily_average todos los días a la medianoche (12:00 AM) del día siguiente
-0 0 * * * psql -U postgres -d pneumiot -c "CALL pneumiot.calculate_daily_average();" > /var/log/cron.log 2>&1
+0 0 * * * psql -U postgres -d postgres -c "CALL pneumiot.calculate_daily_average();" > /var/log/cron.log 2>&1
 
 # Ejecutar hourly_average todos los días a la medianoche (12:00 AM) del día siguiente
-0 0 * * * psql -U postgres -d pneumiot -c "CALL pneumiot.calculate_hourly_average();" > /var/log/cron.log 2>&1
+0 0 * * * psql -U postgres -d postgres -c "CALL pneumiot.calculate_hourly_average();" > /var/log/cron.log 2>&1
 
 # Ejecutar monthly_average el primer día de cada mes a las 12:00 AM
-0 0 1 * * psql -U postgres -d pneumiot -c "CALL pneumiot.calculate_monthly_average();" > /var/log/cron.log 2>&1
+0 0 1 * * psql -U postgres -d postgres -c "CALL pneumiot.calculate_monthly_average();" > /var/log/cron.log 2>&1
