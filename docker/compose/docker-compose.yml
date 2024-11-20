@@ -2,36 +2,39 @@ version: "3.9"
 
 services:
   frontend:
-    build:
-      context: ../../
-      dockerfile: docker/dockerfiles/Dockerfile.frontend
+    image: spl720/pneumiot_frontend:latest
     ports:
       - "80:3000"
     depends_on:
       - backend
     networks:
       - app-network
+    environment:
+      REACT_APP_API_BASE_URL: ${REACT_APP_API_BASE_URL}
+      REACT_APP_FRONTEND_BASE_URL: ${REACT_APP_FRONTEND_BASE_URL}
+      REACT_APP_API_V1: ${REACT_APP_API_V1}
 
   backend:
-    build:
-      context: ../../
-      dockerfile: docker/dockerfiles/Dockerfile.backend
+    image: spl720/pneumiot_backend:latest
     ports:
       - "3000:3000"
     depends_on:
       - database
     networks:
       - app-network
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
 
   database:
-    build:
-      context: ../../
-      dockerfile: docker/dockerfiles/Dockerfile.database
+    image: spl720/pneumiot_database:latest
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
